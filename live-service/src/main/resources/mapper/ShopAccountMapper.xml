@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ShopAccountMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ShopAccount">
+    <id column="wxPayMoney" jdbcType="DECIMAL" property="wxPayMoney" />
+    <result column="wxPayTotal" jdbcType="BIGINT" property="wxPayTotal" />
+    <result column="wxRefundTatalMoney" jdbcType="DECIMAL" property="wxRefundTatalMoney" />
+    <result column="wxRefundTatal" jdbcType="BIGINT" property="wxRefundTatal" />
+    <result column="yuePayMoney" jdbcType="DECIMAL" property="yuePayMoney" />
+    <result column="yuePayTatal" jdbcType="BIGINT" property="yuePayTatal" />
+    <result column="yueRefundTatalMoney" jdbcType="DECIMAL" property="yueRefundTatalMoney" />
+    <result column="yueRefundTatal" jdbcType="BIGINT" property="yueRefundTatal" />
+    <result column="toDayRefundTatalMoney" jdbcType="DECIMAL" property="toDayRefundTatalMoney" />
+    <result column="toDayRefundTatal" jdbcType="BIGINT" property="toDayRefundTatal" />
+    <result column="hisRefundTatalMoney" jdbcType="DECIMAL" property="hisRefundTatalMoney" />
+    <result column="hisRefundTatal" jdbcType="BIGINT" property="hisRefundTatal" />
+  </resultMap>
+  <!--商户对账统计-->
+  <select id="findShopAccountTotal" parameterType="com.xq.live.vo.in.ShopAccountInVo" resultType="com.xq.live.model.ShopAccount">
+    select
+      sum(
+        case when pay_type = 1
+          <if test="startTime != null and startTime != ''">
+            and cash_time <![CDATA[ >= ]]> DATE_FORMAT(#{startTime, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+          </if>
+          <if test="endTime != null and endTime != ''">
+            and cash_time <![CDATA[ <= ]]> DATE_FORMAT(#{endTime, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+          </if>
+        then ifnull(cash_amount, 0) else 0 end
+        ) wxPayMoney,
+      sum(
+        case when pay_type = 1
+          <if test="startTime != null and startTime != ''">
+            and cash_time <![CDATA[ >= ]]> DATE_FORMAT(#{startTime, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+          </if>
+          <if test="endTime != null and endTime != ''">
+            and cash_time <![CDATA[ <= ]]> DATE_FORMAT(#{endTime, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+          </if>
+        then 1 else 0 end
+        ) wxPayTotal,
+      sum(
+        case when pay_type = 2
+          <if test="startTime != null and startTime != ''">
+              and refund_time <![CDATA[ >= ]]> DATE_FORMAT(#{startTime, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+          </if>
+          <if test="endTime != null and endTime != ''">
+              and refund_time <![CDATA[ <= ]]> DATE_FORMAT(#{endTime, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+          </if>
+        then ifnull(refund_amount, 0) else 0 end
+        ) wxRefundTatalMoney,
+      sum(
+        case when pay_type = 2
+          <if test="startTime != null and startTime != ''">
+              and refund_time <![CDATA[ >= ]]> DATE_FORMAT(#{startTime, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+          </if>
+          <if test="endTime != null and endTime != ''">
+              and refund_time <![CDATA[ <= ]]> DATE_FORMAT(#{endTime, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+          </if>
+        then 1 else 0 end
+        ) wxRefundTatal,
+      sum(
+        case when pay_type = 3
+          <if test="startTime != null and startTime != ''">
+              and cash_time <![CDATA[ >= ]]> DATE_FORMAT(#{startTime, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+          </if>
+          <if test="endTime != null and endTime != ''">
+              and cash_time <![CDATA[ <= ]]> DATE_FORMAT(#{endTime, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+          </if>
+        then ifnull(cash_amount, 0) else 0 end
+        ) yuePayMoney,
+      sum(
+        case when pay_type = 3
+          <if test="startTime != null and startTime != ''">
+              and cash_time <![CDATA[ >= ]]> DATE_FORMAT(#{startTime, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+          </if>
+          <if test="endTime != null and endTime != ''">
+              and cash_time <![CDATA[ <= ]]> DATE_FORMAT(#{endTime, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+          </if>
+        then 1 else 0 end
+        ) yuePayTatal,
+      sum(
+        case when pay_type = 4
+          <if test="startTime != null and startTime != ''">
+              and refund_time <![CDATA[ >= ]]> DATE_FORMAT(#{startTime, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+          </if>
+          <if test="endTime != null and endTime != ''">
+              and refund_time <![CDATA[ <= ]]> DATE_FORMAT(#{endTime, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+          </if>
+        then ifnull(refund_amount, 0) else 0 end
+        ) yueRefundTatalMoney,
+      sum(
+        case when pay_type = 4
+          <if test="startTime != null and startTime != ''">
+              and refund_time <![CDATA[ >= ]]> DATE_FORMAT(#{startTime, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+          </if>
+          <if test="endTime != null and endTime != ''">
+              and refund_time <![CDATA[ <= ]]> DATE_FORMAT(#{endTime, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+          </if>
+        then 1 else 0 end
+        ) yueRefundTatal,
+      sum(
+        case when (pay_type = 2 or pay_type = 4) and DATE(refund_time) = CURDATE()
+        then ifnull(refund_amount, 0) else 0 end
+        ) toDayRefundTatalMoney,
+      sum(
+        case when (pay_type = 2 or pay_type = 4) and DATE(refund_time) = CURDATE()
+        then 1 else 0 end
+        ) toDayRefundTatal,
+      sum(
+        case when (pay_type = 2 or pay_type = 4) and DATE(refund_time) <![CDATA[ < ]]> CURDATE()
+        then ifnull(refund_amount, 0) else 0 end
+        ) hisRefundTatalMoney,
+      sum(
+        case when (pay_type = 2 or pay_type = 4) and DATE(refund_time) <![CDATA[ < ]]> CURDATE()
+        then 1 else 0 end
+        ) hisRefundTatal
+    from shop_account_log
+    <where>
+      <if test="userType != null and userType != ''">
+        and user_type = #{userType,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+  <!--提现列表-->
+  <select id="searchShopWithdrawList" resultType="com.xq.live.model.ShopAccount" parameterType="com.xq.live.vo.in.ShopAccountInVo">
+        select
+          cash_apply.id  cashId,
+          cash_apply.user_id userId,
+          shop.id shopId,
+          shop.shop_name shopName,
+          user_bank_info.card_mobile mobile,
+          user_account.account_name accountName,
+          user_bank_info.bank_name bankCardName,
+          cash_apply.account_cardholder_name accountCardholderName,
+          DATE_FORMAT(cash_apply.begin_time,'%Y-%m-%d %H:%i:%s') beginTime,
+          DATE_FORMAT(cash_apply.end_time,'%Y-%m-%d %H:%i:%s') endTime,
+          cash_apply.cash_amount cashAmount,
+          cash_apply.apply_status applyStatus
+      from cash_apply
+      inner join user_account on cash_apply.account_id=user_account.id and user_account.user_account_type=1 and user_account.account_type=3
+      inner join shop on user_account.shop_id=shop.id
+      inner join user_bank_info on user_account.shop_id=user_bank_info.owner_id and user_bank_info.owner_type=2
+      WHERE cash_apply.apply_type=1
+      <if test="cashId!=null">
+           and cash_apply.id = #{cashId,jdbcType=TINYINT}
+      </if>
+       <if test="shopName !=null and shopName!=''">
+          and shop.shop_name like concat('%',#{shopName,jdbcType=VARCHAR},'%')
+       </if>
+      <if test="applyStatus !=null and applyStatus!=''">
+          and cash_apply.apply_status = #{applyStatus,jdbcType=INTEGER}
+      </if>
+      <if test="startTime !=null and startTime!='' and endTime !=null and endTime!=''">
+          and cash_apply.begin_time BETWEEN DATE_FORMAT(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+          and DATE_FORMAT(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+      </if>
+      order by cash_apply.create_time desc
+      limit #{start}, #{rows}
+  </select>
+    <!--查询单条明细-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.xq.live.model.ShopAccount">
+        select
+          cash_apply.id  cashId,
+          cash_apply.user_id userId,
+          shop.id shopId,
+          shop.shop_name shopName,
+          shop.mobile mobile,
+          user_account.account_name accountName,
+          user_account.bank_card_name bankCardName,
+          cash_apply.account_cardholder_name accountCardholderName,
+          DATE_FORMAT(cash_apply.begin_time,'%Y-%m-%d %H:%i:%s') beginTime,
+          DATE_FORMAT(cash_apply.end_time,'%Y-%m-%d %H:%i:%s') endTime,
+          cash_apply.cash_amount cashAmount,
+          cash_apply.apply_status applyStatus
+      from cash_apply
+      inner join user_account on cash_apply.account_id=user_account.id and user_account.account_type=3
+      inner join shop on user_account.shop_id=shop.id
+      WHERE cash_apply.apply_type=1 and cash_apply.id = #{cashId,jdbcType=TINYINT} limit 1
+    </select>
+    <!--提现列表total-->
+    <select id="searchShopWithdrawTotal"  resultType="java.lang.Integer" parameterType="com.xq.live.vo.in.ShopAccountInVo">
+        select
+        count(1)
+        from cash_apply
+        inner join user_account on cash_apply.account_id=user_account.id and user_account.user_account_type=1 and user_account.account_type=3
+        inner join shop on user_account.shop_id=shop.id
+        inner join user_bank_info on user_account.shop_id=user_bank_info.owner_id and user_bank_info.owner_type=2
+        WHERE cash_apply.apply_type=1
+        <if test="cashId!=null">
+            and cash_apply.id = #{cashId,jdbcType=TINYINT}
+        </if>
+        <if test="shopName !=null and shopName!=''">
+            and shop.shop_name like concat('%',#{shopName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="applyStatus !=null and applyStatus!=''">
+            and cash_apply.apply_status = #{applyStatus,jdbcType=INTEGER}
+        </if>
+        <if test="startTime !=null and startTime!='' and endTime !=null and endTime!=''">
+            and cash_apply.begin_time BETWEEN DATE_FORMAT(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+            and DATE_FORMAT(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+        </if>
+    </select>
+
+    <!--审批提现状态-->
+    <update id="updateApproveStatusById" parameterType="com.xq.live.model.ShopAccount">
+        update cash_apply set  apply_status = #{applyStatus,jdbcType=TINYINT}
+        where id=#{cashId,jdbcType=INTEGER}
+    </update>
+
+    <select id="verificationTicketList" parameterType="com.xq.live.vo.in.ShopAccountInVo" resultType="java.lang.Integer">
+        select order_write_off.id from cash_apply
+                inner join shop_cashier on cash_apply.user_id=shop_cashier.cashier_id
+                inner join order_write_off  on shop_cashier.shop_id=order_write_off.shop_id
+                where order_write_off.create_time BETWEEN DATE_FORMAT(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+               and DATE_FORMAT(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+               and cash_apply.id=#{cashId,jdbcType=INTEGER}
+    </select>
+
+    <!--核销票券-->
+    <update id="verificationTicketByTime" parameterType="java.lang.Integer">
+        update order_write_off set  is_dui=1 where id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="verificationOrderList" parameterType="com.xq.live.vo.in.ShopAccountInVo" resultType="java.lang.Integer">
+          select order_info.id from cash_apply
+            inner join shop_cashier on cash_apply.user_id=shop_cashier.cashier_id
+            inner join order_info  on shop_cashier.shop_id=order_info.shop_id
+            where order_info.paid_time BETWEEN DATE_FORMAT(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+            and DATE_FORMAT(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+            and cash_apply.id=#{cashId,jdbcType=INTEGER}
+            and order_info.source_type=2
+    </select>
+    <!--核销订单-->
+    <update id="verificationOrderByTime" parameterType="java.lang.Integer">
+        update order_info set  is_dui=1 where id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                  #{item}
+         </foreach>
+    </update>
+
+    <!--商户账户明细-->
+    <select id="findShopAccountDetailById" parameterType="com.xq.live.vo.in.ShopAccountInVo" resultType="com.xq.live.model.ShopAccountDetail">
+          select
+            order_info.order_code orderCode,
+            order_info.user_name userName,
+            order_write_off.service_amount serviceAmount,
+            order_info.flag_type flagType,
+            order_write_off.is_bill isBill,
+            order_write_off.real_unit_price realUnitPrice,
+            order_write_off.real_shop_unit_price realShopUnitPirce,
+            DATE_FORMAT(order_write_off.create_time,'%Y-%m-%d %H:%i:%s') createTime
+        from order_write_off
+        left join order_info on order_write_off.order_id=order_info.id
+        where order_write_off.shop_id = #{shopId,jdbcType=INTEGER}
+        and order_write_off.create_time BETWEEN DATE_FORMAT(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+        and DATE_FORMAT(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+        order by order_write_off.create_time desc
+        limit #{start}, #{rows}
+    </select>
+
+    <!--商户账户明细-->
+    <select id="findShopAccountDetailByIdTotal" parameterType="com.xq.live.vo.in.ShopAccountInVo" resultType="java.lang.Integer">
+        select
+        count(1)
+        from order_write_off
+        left join order_info on order_write_off.order_id=order_info.id
+        where order_write_off.shop_id = #{shopId,jdbcType=INTEGER}
+        and order_write_off.create_time BETWEEN DATE_FORMAT(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+        and DATE_FORMAT(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+        order by order_write_off.create_time desc
+    </select>
+</mapper>

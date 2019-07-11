@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.CommentMapper">
+    <resultMap id="BaseResultMap" type="com.xq.live.model.Comment">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="ref_id" jdbcType="BIGINT" property="refId"/>
+        <result column="cmt_type" jdbcType="INTEGER" property="cmtType"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="user_ip" jdbcType="VARCHAR" property="userIp"/>
+    </resultMap>
+
+    <resultMap id="CommentOutResultMap" type="com.xq.live.vo.out.CommentOut" extends="BaseResultMap">
+        <result column="is_zan" jdbcType="INTEGER" property="isZan"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, ref_id, cmt_type, content, user_id, user_name, nick_name, create_time, user_ip
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from comment
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from comment
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.xq.live.model.Comment">
+        insert into comment (ref_id, cmt_type,
+        content, user_id, user_name,
+        nick_name, create_time, user_ip
+        )
+        values (#{refId,jdbcType=BIGINT}, #{cmtType,jdbcType=INTEGER},
+        #{content,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR},
+        #{nickName,jdbcType=VARCHAR}, now(), #{userIp,jdbcType=VARCHAR}
+        )
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            select last_insert_id() as id
+        </selectKey>
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.xq.live.model.Comment">
+        insert into comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="refId != null">
+                ref_id,
+            </if>
+            <if test="cmtType != null">
+                cmt_type,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="nickName != null">
+                nick_name,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="userIp != null">
+                user_ip,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="refId != null">
+                #{refId,jdbcType=BIGINT},
+            </if>
+            <if test="cmtType != null">
+                #{cmtType,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="nickName != null">
+                #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userIp != null">
+                #{userIp,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.Comment">
+        update comment
+        <set>
+            <if test="refId != null">
+                ref_id = #{refId,jdbcType=BIGINT},
+            </if>
+            <if test="cmtType != null">
+                cmt_type = #{cmtType,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="nickName != null">
+                nick_name = #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userIp != null">
+                user_ip = #{userIp,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.xq.live.model.Comment">
+    update comment
+    set ref_id = #{refId,jdbcType=BIGINT},
+      cmt_type = #{cmtType,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=BIGINT},
+      user_name = #{userName,jdbcType=VARCHAR},
+      nick_name = #{nickName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      user_ip = #{userIp,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+    <delete id="deleteComment">
+        delete from comment
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="cmtType != null">
+                and cmt_type = #{cmtType}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="refId != null">
+                and ref_id = #{refId}
+            </if>
+        </where>
+    </delete>
+
+    <select id="list" resultMap="CommentOutResultMap">
+        select
+        <include refid="Base_Column_List"/>,
+        (select count(1) from zan where zan.ref_id = comment.id and zan.type = 4
+        <if test="zanUserId != null">
+            and zan.user_id = #{zanUserId}
+        </if>
+        ) as is_zan
+        from comment
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="cmtType != null">
+                and cmt_type = #{cmtType}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="refId != null">
+                and ref_id = #{refId}
+            </if>
+        </where>
+        order by id desc
+        limit #{start}, #{rows}
+    </select>
+
+    <select id="listTotal" resultType="java.lang.Integer">
+        select count(1)
+        from comment
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="cmtType != null">
+                and cmt_type = #{cmtType}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="refId != null">
+                and ref_id = #{refId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

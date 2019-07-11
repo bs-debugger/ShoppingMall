@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.SalePointUserMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.SalePointUser">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="salepoint_id" jdbcType="BIGINT" property="salepointId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="is_admin" jdbcType="TINYINT" property="isAdmin" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="creator_id" jdbcType="BIGINT" property="creatorId" />
+    <result column="updator_id" jdbcType="BIGINT" property="updatorId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, salepoint_id, user_id, parent_id, is_admin, is_deleted, create_time, update_time, 
+    creator_id, updator_id,shop_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from salepoint_user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from salepoint_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.SalePointUser">
+    insert into salepoint_user (id, salepoint_id, user_id, 
+      parent_id, is_admin, is_deleted, 
+      create_time, update_time, creator_id, 
+      updator_id,shop_id)
+    values (#{id,jdbcType=BIGINT}, #{salepointId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{parentId,jdbcType=BIGINT}, #{isAdmin,jdbcType=TINYINT}, 0,
+      now(), now(), #{creatorId,jdbcType=BIGINT},
+      #{updatorId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.SalePointUser">
+    insert into salepoint_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="salepointId != null">
+        salepoint_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="isAdmin != null">
+        is_admin,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="creatorId != null">
+        creator_id,
+      </if>
+      <if test="updatorId != null">
+        updator_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="salepointId != null">
+        #{salepointId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="isAdmin != null">
+        #{isAdmin,jdbcType=TINYINT},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="updatorId != null">
+        #{updatorId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.SalePointUser">
+    update salepoint_user
+    <set>
+      <if test="salepointId != null">
+        salepoint_id = #{salepointId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="isAdmin != null">
+        is_admin = #{isAdmin,jdbcType=TINYINT},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null">
+        creator_id = #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="updatorId != null">
+        updator_id = #{updatorId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.SalePointUser">
+    update salepoint_user
+    set salepoint_id = #{salepointId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      is_admin = #{isAdmin,jdbcType=TINYINT},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      creator_id = #{creatorId,jdbcType=BIGINT},
+      updator_id = #{updatorId,jdbcType=BIGINT},
+      shop_id = #{shopId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select *
+    from salepoint_user
+    where user_id = #{id,jdbcType=BIGINT}
+    and is_deleted=0
+  </select>
+
+  <!--一个用户是否是这个核销点-->
+  <select id="selectByUserIdAndSalepint" parameterType="com.xq.live.vo.in.SalePointUserInVo" resultMap="BaseResultMap">
+    select *
+    from salepoint_user
+    where user_id = #{id,jdbcType=BIGINT}
+    and is_deleted=0
+    AND salepoint_id=#{salepointId,jdbcType=BIGINT}
+  </select>
+  <!--一个核销点的所有用户-->
+  <select id="selectByUserIdAndSalepintList" parameterType="com.xq.live.vo.in.SalePointUserInVo" resultMap="BaseResultMap">
+    select *
+    from salepoint_user
+    where is_deleted=0
+    AND salepoint_id=#{salepointId,jdbcType=BIGINT}
+  </select>
+
+
+</mapper>

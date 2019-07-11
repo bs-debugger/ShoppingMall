@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ActUserMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ActUser">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="act_id" jdbcType="BIGINT" property="actId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="act_user_name" jdbcType="VARCHAR" property="actUserName" />
+    <result column="pic_ids" jdbcType="VARCHAR" property="picIds" />
+    <result column="apply_status" jdbcType="TINYINT" property="applyStatus" />
+    <result column="vote_num" jdbcType="INTEGER" property="voteNum"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_luoxuan" jdbcType="INTEGER" property="isLuoxuan"/>
+    <result column="user_info" jdbcType="VARCHAR" property="userInfo" />
+  </resultMap>
+
+  <resultMap id="ActUserOutMap" type="com.xq.live.vo.out.ActUserOut" extends="BaseResultMap">
+    <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="height" jdbcType="INTEGER" property="height" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="is_vote" jdbcType="INTEGER" property="isVote" />
+
+    <result column="shop_id" jdbcType="BIGINT" property="shopId"/>
+    <result column="group_code" jdbcType="VARCHAR" property="groupCode"/>
+    <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+    <result column="group_vote_num" jdbcType="INTEGER" property="groupVoteNum"/>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, act_id, user_id, user_code, act_user_name, pic_ids, apply_status, vote_num,create_time,
+    update_time,is_luoxuan,user_info
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from act_user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByUserId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from act_user
+    where user_id = #{userId,jdbcType=BIGINT}
+    <if test="actId != null">
+      and act_id = #{actId,jdbcType=BIGINT}
+    </if>
+    and apply_status = 1
+    and is_luoxuan = 0
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from act_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.vo.in.ActUserInVo">
+    insert into act_user (id, act_id, user_id, 
+      user_code, act_user_name, pic_ids, 
+      apply_status, create_time, update_time,user_info
+      )
+    values (#{id,jdbcType=BIGINT}, #{actId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{userCode,jdbcType=VARCHAR}, #{actUserName,jdbcType=VARCHAR}, #{picIds,jdbcType=VARCHAR}, 
+      1, now(), now(), #{userInfo,jdbcType=VARCHAR}
+      )
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.vo.in.ActUserInVo">
+    insert into act_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="actId != null">
+        act_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userCode != null">
+        user_code,
+      </if>
+      <if test="actUserName != null">
+        act_user_name,
+      </if>
+      <if test="picIds != null">
+        pic_ids,
+      </if>
+      <if test="applyStatus != null">
+        apply_status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="userInfo != null">
+        user_info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="actId != null">
+        #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userCode != null">
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="actUserName != null">
+        #{actUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="picIds != null">
+        #{picIds,jdbcType=VARCHAR},
+      </if>
+      <if test="applyStatus != null">
+        #{applyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userInfo != null">
+        #{userInfo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.vo.in.ActUserInVo">
+    update act_user
+    <set>
+      <if test="actId != null">
+        act_id = #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userCode != null">
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="actUserName != null">
+        act_user_name = #{actUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="picIds != null">
+        pic_ids = #{picIds,jdbcType=VARCHAR},
+      </if>
+      <if test="applyStatus != null">
+        apply_status = #{applyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="voteNum != null">
+        vote_num = #{voteNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isLuoxuan != null">
+        is_luoxuan = #{isLuoxuan,jdbcType=TINYINT},
+      </if>
+      <if test="userInfo != null">
+        user_info = #{userInfo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.vo.in.ActUserInVo">
+    update act_user
+    set act_id = #{actId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      act_user_name = #{actUserName,jdbcType=VARCHAR},
+      pic_ids = #{picIds,jdbcType=VARCHAR},
+      apply_status = #{applyStatus,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      user_info = #{userInfo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateForVoteNums" parameterType="com.xq.live.vo.in.ActUserInVo">
+    update act_user
+    <set>
+      <if test="actId != null">
+        act_id = #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userCode != null">
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="actUserName != null">
+        act_user_name = #{actUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="picIds != null">
+        pic_ids = #{picIds,jdbcType=VARCHAR},
+      </if>
+      <if test="applyStatus != null">
+        apply_status = #{applyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="voteNum != null">
+        vote_num = #{voteNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isLuoxuan != null">
+        is_luoxuan = #{isLuoxuan,jdbcType=TINYINT},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+    and apply_status = 1
+    and is_luoxuan = 0
+    <if test="actId != null">
+     and act_id = #{actId,jdbcType=BIGINT}
+    </if>
+  </update>
+
+  <!--批量更新落选状态-->
+  <update id="udateByLuoXuan" parameterType="java.util.List">
+    update act_user
+    set
+    is_luoxuan =1
+    WHERE
+    apply_status=1
+    AND id NOT IN
+    <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+    AND act_id IN
+    <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+      #{item.actId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <!--批量更新第二轮落选状态-->
+  <update id="udateByLuoXuanTwo" parameterType="java.util.List">
+    update act_user
+    set
+    is_luoxuan =1
+    WHERE
+    apply_status=1
+    AND user_id NOT IN
+    <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+      #{item.userId,jdbcType=BIGINT}
+    </foreach>
+    AND act_id IN
+    <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+      #{item.actId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <select id="countByActId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    select count(1) from act_user where act_id = #{actId,jdbcType=BIGINT}
+  </select>
+
+  <select id="findByInVo" resultMap="ActUserOutMap">
+    select
+    a.id, a.act_id, a.user_id, a.user_code, a.act_user_name, a.pic_ids, a.apply_status,a.vote_num, a.create_time,
+    a.update_time,
+    a.user_info,
+    u.icon_url,
+    u.age,
+    u.height,
+    u.nick_name,
+    u.user_name,
+    u.mobile,
+    u.sex,
+    (select count(1) from vote where player_user_id = a.user_id
+    <if test="voteUserId != null and beginTime !=null and endTime !=null">
+      AND  user_id = #{voteUserId}
+      AND  (create_time BETWEEN #{beginTime} and #{endTime})
+    </if>
+    ) as is_vote
+    from act_user a LEFT join user u on a.user_id = u.id
+    <where>
+      1=1
+      <if test="id != null">
+        and a.id = #{id}
+      </if>
+      <if test="actId != null">
+        and a.act_id = #{actId}
+      </if>
+      <if test="userId != null">
+        and a.user_id = #{userId}
+      </if>
+      and a.apply_status != 2
+      and  a.is_luoxuan = 0
+    </where>
+  </select>
+
+  <select id="listForNewAct" resultMap="ActUserOutMap">
+    select
+    a.id, a.act_id, a.user_id, a.user_code, a.act_user_name, a.pic_ids, a.apply_status,a.vote_num, a.create_time,
+    a.update_time,a.is_luoxuan,a.user_info,
+    u.icon_url,
+    u.age,
+    u.height,
+    u.nick_name,
+    u.user_name,
+    u.mobile,
+    u.sex,
+    (select count(1) from vote where player_user_id = a.user_id
+     and act_id = a.act_id
+    <if test="voteUserId != null and beginTime !=null and endTime !=null">
+      AND  user_id = #{voteUserId}
+      AND  (create_time BETWEEN #{beginTime} and #{endTime})
+    </if>
+    ) as is_vote
+    <if test="type == 2">
+      ,k.shop_id,
+      k.group_code,
+      k.group_name,
+      k.group_vote_num
+    </if>
+    FROM
+    act_user a
+    inner join user u on a.user_id = u.id
+    <if test="type == 2">
+      inner join act_group k on a.user_id = k.user_id and a.act_id = k.act_id
+    </if>
+    <where>
+      1=1
+      <if test="id != null">
+        and  a.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="actId != null">
+        AND  a.act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      <if test="searchKey != null and type == null">
+        and( (a.act_user_name like concat('%', #{searchKey,jdbcType=VARCHAR}, '%')
+        or a.user_code = #{searchKey,jdbcType=VARCHAR}))
+      </if>
+      <if test="searchKey != null and type == 2">
+        and( (a.act_user_name like concat('%', #{searchKey,jdbcType=VARCHAR}, '%')
+        or k.group_code = #{searchKey,jdbcType=VARCHAR}))
+      </if>
+      and  a.apply_status = 1
+      and  a.is_luoxuan = 0
+      <if test="type == 2">
+        and k.is_deleted = 0
+      </if>
+    </where>
+    ORDER by
+    <if test="sortType == 1">
+      a.create_time DESC,
+    </if>
+    a.vote_num DESC
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="listTotal" resultType="java.lang.Integer">
+    select count(1)
+    FROM
+    act_user a
+    inner join user u on a.user_id = u.id
+    <if test="type == 2">
+      inner join act_group k on a.user_id = k.user_id and a.act_id = k.act_id
+    </if>
+    <where>
+      1=1
+      <if test="id != null">
+        and  a.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="actId != null">
+        AND  a.act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      <if test="searchKey != null and type == null">
+        and( (a.act_user_name like concat('%', #{searchKey,jdbcType=VARCHAR}, '%')
+        or a.user_code = #{searchKey,jdbcType=VARCHAR}))
+      </if>
+      <if test="searchKey != null and type == 2">
+        and( (a.act_user_name like concat('%', #{searchKey,jdbcType=VARCHAR}, '%')
+        or k.group_code = #{searchKey,jdbcType=VARCHAR}))
+      </if>
+      and  a.apply_status = 1
+      and  a.is_luoxuan = 0
+      <if test="type == 2">
+        and k.is_deleted = 0
+      </if>
+    </where>
+  </select>
+</mapper>

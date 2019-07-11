@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration 
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 命名空间 -->
+	<typeAliases>
+		<typeAlias alias="SysUser" type="com.xq.live.model.SysUser" />
+		<typeAlias alias="SysMenu" type="com.xq.live.model.SysMenu" />
+		<typeAlias alias="SysMenuBtn" type="com.xq.live.model.SysMenuBtn" />
+		<typeAlias alias="SysRole" type="com.xq.live.model.SysRole" />
+		<typeAlias alias="User" type="com.xq.live.model.User" />
+		<typeAlias alias="Sku" type="com.xq.live.model.Sku" />
+		
+		
+		<!-- inVo-->
+		<typeAlias alias="SysUserInVo" type="com.xq.live.vo.SysUserInVo" />
+		<typeAlias alias="UserInVo" type="com.xq.live.vo.UserInVo" />
+	</typeAliases>
+
+	<!-- 映射map -->
+	<mappers>
+		
+	</mappers>
+</configuration>

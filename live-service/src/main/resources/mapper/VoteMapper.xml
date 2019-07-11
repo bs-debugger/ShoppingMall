@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.VoteMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.Vote">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="act_id" jdbcType="BIGINT" property="actId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="player_user_id" jdbcType="BIGINT" property="playerUserId" />
+    <result column="sku_id" jdbcType="BIGINT" property="skuId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="act_goods_sku_id" jdbcType="BIGINT" property="actGoodsSkuId" />
+    <result column="vote_num" jdbcType="INTEGER" property="voteNum" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+  </resultMap>
+
+  <resultMap id="VoteOutResultMap" type="com.xq.live.vo.out.VoteOut" >
+    <id column="id" jdbcType="BIGINT" property="userId" />
+    <result column="total_vote_num" jdbcType="INTEGER" property="totalVoteNum" />
+    <collection property="user" ofType="com.xq.live.model.User">
+      <result column="user_name" jdbcType="VARCHAR" property="userName" />
+      <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+      <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
+    </collection>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, act_id, shop_id, user_id, player_user_id,sku_id,create_time,act_goods_sku_id,vote_num,type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from vote
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="canVote" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vote
+    <where>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="shopId != null">
+        and shop_id is not null
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="actId != null">
+        and act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      <if test="playerUserId != null">
+        and player_user_id is not null
+      </if>
+      <if test="beginTime !=null and endTime !=null">
+        AND  (create_time BETWEEN #{beginTime} and #{endTime})
+      </if>
+    </where>
+  </select>
+
+  <select id="canGetSku" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vote
+    <where>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="shopId != null">
+        and shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="actId != null">
+        and act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      <if test="playerUserId != null">
+        and player_user_id = #{playerUserId,jdbcType=BIGINT}
+      </if>
+      <if test="beginTime !=null and endTime !=null">
+        AND  (create_time BETWEEN #{beginTime} and #{endTime})
+      </if>
+      <if test="actGoodsSkuId != null">
+        and act_goods_sku_id = #{actGoodsSkuId,jdbcType=BIGINT}
+      </if>
+    </where>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from vote
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.Vote">
+    insert into vote (id, act_id, shop_id,
+      user_id,player_user_id, sku_id,create_time,vote_num,type,act_goods_sku_id)
+    values (#{id,jdbcType=BIGINT}, #{actId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT},
+      #{userId,jdbcType=BIGINT},#{playerUserId,jdbcType=BIGINT}, #{skuId,jdbcType=BIGINT},now()
+    ,#{voteNum,jdbcType=INTEGER},#{type,jdbcType=INTEGER},#{actGoodsSkuId,jdbcType=BIGINT})
+      <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+        select last_insert_id() as id
+      </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.Vote">
+    insert into vote
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="actId != null">
+        act_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="playerUserId != null">
+        player_user_id,
+      </if>
+      <if test="skuId != null">
+        sku_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="voteNum != null">
+        vote_num,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="actId != null">
+        #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="playerUserId != null">
+        #{playerUserId,jdbcType=BIGINT},
+      </if>
+      <if test="skuId != null">
+        #{skuId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="voteNum != null">
+        #{voteNum,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.Vote">
+    update vote
+    <set>
+      <if test="actId != null">
+        act_id = #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="playerUserId != null">
+        player_user_id = #{playerUserId,jdbcType=BIGINT},
+      </if>
+      <if test="skuId != null">
+        sku_id = #{skuId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="voteNum != null">
+        vote_num=#{voteNum,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type=#{type,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.Vote">
+    update vote
+    set act_id = #{actId,jdbcType=BIGINT},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      player_user_id = #{playerUserId,jdbcType=BIGINT},
+      sku_id = #{skuId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      vote_num=#{voteNum,jdbcType=INTEGER},
+      type=#{type,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <delete id="deleteByInVo">
+    delete from vote
+    <where>
+      <if test="id != null">
+        id = #{id}
+      </if>
+      <if test="shopId != null">
+        and shop_id = #{shopId}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId}
+      </if>
+      <if test="actId != null">
+        and act_id = #{actId}
+      </if>
+    </where>
+  </delete>
+
+  <select id="countByActId" resultType="java.lang.Integer" parameterType="java.lang.Long">
+    select count(1) from vote where act_id = #{actId,jdbcType=BIGINT}
+  </select>
+
+  <select id="getDaysList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vote
+    where user_id = #{userId,jdbcType=BIGINT}
+    and act_id = #{actId,jdbcType=BIGINT}
+    and type=#{type,jdbcType=INTEGER}
+    and to_days(create_time) = to_days(now())
+  </select>
+
+  <select id="listUserRanking" resultMap="VoteOutResultMap">
+    select * from
+    (select sum(v.vote_num) total_vote_num ,usr.* from vote v
+    left join user usr on usr.id=v.user_id
+    where act_id= #{actId,jdbcType=BIGINT}
+    GROUP BY v.user_id
+    ) a
+    order by a.total_vote_num desc,a.id
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="listUserRankingTotal" resultType="java.lang.Integer">
+      select count(1) from
+      (select sum(v.vote_num) total_vote_num ,usr.* from vote v
+      left join user usr on usr.id=v.user_id
+      where act_id= #{actId,jdbcType=BIGINT}
+      GROUP BY user_id
+      ) a
+      order by a.total_vote_num desc
+  </select>
+
+</mapper>

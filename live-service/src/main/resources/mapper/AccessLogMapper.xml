@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.AccessLogMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.AccessLog">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="ref_id" jdbcType="BIGINT" property="refId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_ip" jdbcType="VARCHAR" property="userIp" />
+    <result column="source" jdbcType="TINYINT" property="source" />
+    <result column="biz_type" jdbcType="TINYINT" property="bizType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, ref_id, user_id, user_name, user_ip, source, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from access_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="checkRecordExist" resultType="java.lang.Integer">
+    select count(1)
+    from access_log
+    <where>
+      <if test="userId != null">
+           user_id = #{userId}
+      </if>
+      <if test="bizType != null">
+         and biz_type = #{bizType}
+      </if>
+      <if test="refId != null">
+        and ref_id = #{refId}
+      </if>
+    </where>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from access_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.AccessLog">
+    insert into access_log (id, ref_id, user_id, user_name,
+      user_ip, source, biz_type, create_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{refId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR},
+      #{userIp,jdbcType=VARCHAR}, #{source,jdbcType=TINYINT}, #{bizType,jdbcType=TINYINT},now()
+      )
+      <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+        select last_insert_id() as id
+      </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.AccessLog">
+    insert into access_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="refId != null">
+        ref_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="userIp != null">
+        user_ip,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="refId != null">
+        #{refId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userIp != null">
+        #{userIp,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.AccessLog">
+    update access_log
+    <set>
+      <if test="refId != null">
+        ref_id = #{refId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userIp != null">
+        user_ip = #{userIp,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.AccessLog">
+    update access_log
+    set
+      ref_id = #{refId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      user_name = #{userName,jdbcType=VARCHAR},
+      user_ip = #{userIp,jdbcType=VARCHAR},
+      source = #{source,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="countViewNum" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select count(1) from access_log
+    <where>
+      <if test="bizType != null">
+        and biz_type = #{bizType}
+      </if>
+      <if test="refId != null">
+        and ref_id = #{refId}
+      </if>
+    </where>
+  </select>
+</mapper>

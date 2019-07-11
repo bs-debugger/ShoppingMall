@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/util      
+    http://www.springframework.org/schema/util/spring-util-3.2.xsd    
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+
+    <!--主要作用于@Controller激活该模式下面是一种简写形式 它会自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter，
+        是spring MVC为@Controllers分发请求所必须的 -->
+    <mvc:annotation-driven conversion-service="conversionService"/>
+
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="registerDefaultFormatters" value="false"/>
+        <property name="formatterRegistrars">
+            <set>
+                <bean class="org.springframework.format.datetime.DateFormatterRegistrar">
+                    <property name="formatter" ref="dateFormatter">
+                    </property>
+                </bean>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="dateFormatter" class="org.springframework.format.datetime.DateFormatter">
+        <property name="pattern" value="yyyy-MM-dd HH:mm:ss"></property>
+    </bean>
+
+    <!-- 扫描controller（controller层注入） -->
+    <context:component-scan base-package="com.xq.live.web.controller"/>
+
+    <mvc:interceptors>
+        <!-- 国际化操作拦截器 如果采用基于（请求/Session/Cookie）则必需配置 -->
+        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
+        <bean class="com.xq.live.web.interceptor.AuthInterceptor"/>
+        <bean class="com.xq.live.web.interceptor.ExceptionInterceptor"/>
+    </mvc:interceptors>
+
+    <!-- 静态资源访问 -->
+    <mvc:default-servlet-handler/>
+
+    <!-- 配置JSON视图 -->
+    <bean id="mappingJacksonHttpMessageConverter"
+          class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/html;charset=UTF-8</value><!-- 避免IE出现下载JSON文件的情况 -->
+                <value>application/json;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="stringHttpMessageConverter"
+          class="org.springframework.http.converter.StringHttpMessageConverter"/>
+    <bean id="requestMappingHandlerAdapter"
+          class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="mappingJacksonHttpMessageConverter"/>
+                <ref bean="stringHttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 配置JSP视图 -->
+    <bean id="internalResourceViewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass"
+                  value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+        <property name="order" value="1"/>
+    </bean>
+
+    <!-- 配置FreeMark视图 -->
+    <bean id="freeMarkerViewResolver"
+          class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+        <property name="viewClass"
+                  value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+        <property name="suffix" value=".ftl"/>
+        <property name="cache" value="true"/>
+        <property name="exposeSessionAttributes" value="true"/>
+        <property name="exposeRequestAttributes" value="true"/>
+        <property name="exposeSpringMacroHelpers" value="true"/>
+        <!-- 在页面中使用${rc.contextPath}就可获得contextPath -->
+        <property name="requestContextAttribute" value="rc"/>
+        <property name="order" value="0"/>
+    </bean>
+
+    <bean id="freemarkConfig"
+          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:com/xq/live/conf/freemark.properties"/>
+    </bean>
+
+    <bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape"/>
+
+    <bean id="FreeMarkerConfigurer"
+          class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="/WEB-INF/pages/"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="freemarkerSettings" ref="freemarkConfig"/>
+        <property name="freemarkerVariables">
+            <map>
+                <entry key="xml_escape" value-ref="fmXmlEscape"/>
+            </map>
+        </property>
+    </bean>
+
+
+
+    <!--multipartResolver 支持分段文件上传 使用时form需要加上enctype="multipart/form-data"属性,且form的method设置为POST-->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="500400000"/>
+        <property name="maxInMemorySize" value="4096"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+    <!-- 国际化配置 -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="cookieName" value="clientlanguage"/>
+        <property name="cookieMaxAge" value="94608000"/>
+    </bean>
+
+    <!-- 简单的异常处理 -->
+    <bean id="exceptionResolver"
+          class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <!-- 映射目录为/WEB-INF/views/error/upload_error.jsp -->
+                <prop
+                        key="org.springframework.web.multipart.MaxUploadSizeExceededException">/error/upload_error
+                </prop>
+            </props>
+        </property>
+    </bean>
+
+</beans>

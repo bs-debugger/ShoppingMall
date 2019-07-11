@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ActSkuMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ActSku">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="act_id" jdbcType="BIGINT" property="actId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="sku_id" jdbcType="BIGINT" property="skuId" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="pr_id" jdbcType="BIGINT" property="prId"/>
+    <result column="apply_status" jdbcType="TINYINT" property="applyStatus" />
+    <result column="is_luoxuan" jdbcType="TINYINT" property="isLuoxuan" />
+    <result column="vote_num" jdbcType="INTEGER" property="voteNum" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <resultMap id="ActSkuOutResultMap" extends="BaseResultMap" type="com.xq.live.vo.out.ActSkuOut">
+    <result column="pr_sku_id" jdbcType="BIGINT" property="prSkuId" />
+    <result column="pr_sku_code" jdbcType="VARCHAR" property="prSkuCode" />
+    <result column="pr_sku_name" jdbcType="VARCHAR" property="prSkuName" />
+    <result column="rule_type" jdbcType="INTEGER" property="ruleType" />
+    <result column="rule_desc" jdbcType="VARCHAR" property="ruleDesc" />
+    <result column="man_amount" jdbcType="DECIMAL" property="manAmount" />
+    <result column="jian_amount" jdbcType="DECIMAL" property="jianAmount" />
+    <result column="act_sku_code" jdbcType="VARCHAR" property="actSkuCode" />
+    <result column="act_sku_name" jdbcType="VARCHAR" property="actSkuName" />
+    <result column="sell_price" jdbcType="DECIMAL" property="sellPrice" />
+    <result column="in_price" jdbcType="DECIMAL" property="inPrice" />
+    <result column="agio_price" jdbcType="DECIMAL" property="agioPrice" />
+    <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+    <result column="sku_info" jdbcType="VARCHAR" property="skuInfo" />
+    <result column="is_vote" jdbcType="INTEGER" property="isVote" />
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, act_id, shop_id, sku_id, sku_code,pr_id, apply_status, is_luoxuan, vote_num, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from act_sku
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from act_sku
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.vo.in.ActSkuInVo">
+    insert into act_sku (id, act_id, shop_id, sku_id,
+      sku_code,pr_id, apply_status, is_luoxuan,
+      vote_num, create_time, update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{actId,jdbcType=BIGINT},#{shopId,jdbcType=BIGINT}, #{skuId,jdbcType=BIGINT},
+      #{skuCode,jdbcType=VARCHAR},  #{prId,jdbcType=BIGINT},1, 0,
+      0, now(), now()
+      )
+    <selectKey resultType="java.lang.Long" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.vo.in.ActSkuInVo">
+    insert into act_sku
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="actId != null">
+        act_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="skuId != null">
+        sku_id,
+      </if>
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="prId != null">
+        pr_id,
+      </if>
+      <if test="applyStatus != null">
+        apply_status,
+      </if>
+      <if test="isLuoxuan != null">
+        is_luoxuan,
+      </if>
+      <if test="voteNum != null">
+        vote_num,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="actId != null">
+        #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="skuId != null">
+        #{skuId,jdbcType=BIGINT},
+      </if>
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="prId != null">
+        #{prId,jdbcType=BIGINT},
+      </if>
+      <if test="applyStatus != null">
+        #{applyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="isLuoxuan != null">
+        #{isLuoxuan,jdbcType=TINYINT},
+      </if>
+      <if test="voteNum != null">
+        #{voteNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.vo.in.ActSkuInVo">
+    update act_sku
+    <set>
+      <if test="actId != null">
+        act_id = #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="skuId != null">
+        sku_id = #{skuId,jdbcType=BIGINT},
+      </if>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="prId != null">
+       pr_id = #{prId,jdbcType=BIGINT},
+      </if>
+      <if test="applyStatus != null">
+        apply_status = #{applyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="isLuoxuan != null">
+        is_luoxuan = #{isLuoxuan,jdbcType=TINYINT},
+      </if>
+      <if test="voteNum != null">
+        vote_num = #{voteNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.vo.in.ActSkuInVo">
+    update act_sku
+    set act_id = #{actId,jdbcType=BIGINT},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      sku_id = #{skuId,jdbcType=BIGINT},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      pr_id = #{prId,jdbcType=BIGINT},
+      apply_status = #{applyStatus,jdbcType=TINYINT},
+      is_luoxuan = #{isLuoxuan,jdbcType=TINYINT},
+      vote_num = #{voteNum,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="listForNewAct" resultMap="ActSkuOutResultMap">
+    select
+    a.id, a.act_id, a.sku_id, a.sku_code,a.pr_id,a.apply_status,a.vote_num, a.create_time,
+    a.update_time,a.is_luoxuan,a.shop_id,
+    pr.sku_id as pr_sku_id,
+    pr.sku_code as pr_sku_code,
+    pr.sku_name as pr_sku_name,
+    pr.rule_type,
+    pr.rule_desc,
+    pr.shop_id,
+    pr.man_amount,
+    pr.jian_amount,
+    s.sku_code as act_sku_code,
+    s.sku_name as act_sku_name,
+    s.sell_price,
+    s.in_price,
+    s.agio_price,
+    s.pic_url,
+    s.sku_info,
+    (select count(1) from vote where sku_id = a.sku_id
+      and act_id = a.act_id
+    <if test="voteUserId != null and beginTime !=null and endTime !=null">
+      AND  user_id = #{voteUserId}
+      AND  (create_time BETWEEN #{beginTime} and #{endTime})
+    </if>
+    ) as is_vote
+    FROM
+    act_sku a
+    inner join promotion_rules pr on a.pr_id = pr.id
+    inner join sku s on a.sku_id = s.id
+    inner join shop sp on a.shop_id=sp.id
+    <where>
+      1=1
+      <if test="id != null">
+        and  a.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="actId != null">
+        AND  a.act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      <if test="shopId != null">
+        AND  a.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="searchKey != null">
+        and
+        ((s.sku_name like concat('%', #{searchKey,jdbcType=VARCHAR}, '%')
+        or a.sku_code = #{searchKey,jdbcType=VARCHAR}))
+      </if>
+      and  a.apply_status = 1
+      <if test="flag == null">
+        and  a.is_luoxuan = 0
+      </if>
+      and  s.is_deleted = 0
+      <if test="city != null">
+        and  sp.city like concat('%', #{city,jdbcType=VARCHAR}, '%')
+      </if>
+    </where>
+    ORDER by
+    <if test="sortType == 1">
+      a.create_time DESC,
+    </if>
+    a.vote_num DESC
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="listTotal" resultType="java.lang.Integer">
+    select
+    count(1)
+    FROM
+    act_sku a
+    inner join promotion_rules pr on a.pr_id = pr.id
+    inner join sku s on a.sku_id = s.id
+    inner join shop sp on a.shop_id=sp.id
+    <where>
+      1=1
+      <if test="id != null">
+        and  a.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="actId != null">
+        AND  a.act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      <if test="shopId != null">
+        AND  a.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="searchKey != null">
+        and( (s.sku_name like concat('%', #{searchKey,jdbcType=VARCHAR}, '%')
+        or a.sku_code = #{searchKey,jdbcType=VARCHAR}))
+      </if>
+      and  a.apply_status = 1
+      <if test="flag == null">
+        and  a.is_luoxuan = 0
+      </if>
+      and  s.is_deleted = 0
+      <if test="city != null">
+        and  sp.city like concat('%', #{city,jdbcType=VARCHAR}, '%')
+      </if>
+
+    </where>
+    ORDER by
+    <if test="sortType == 1">
+      a.create_time DESC,
+    </if>
+    a.vote_num DESC
+  </select>
+
+  <select id="findByInVo" resultMap="ActSkuOutResultMap">
+    select
+    a.id, a.act_id, a.sku_id, a.sku_code,a.pr_id,a.apply_status,a.vote_num, a.create_time,
+    a.update_time,a.is_luoxuan,a.shop_id,
+    pr.sku_id as pr_sku_id,
+    pr.sku_code as pr_sku_code,
+    pr.sku_name as pr_sku_name,
+    pr.rule_type,
+    pr.rule_desc,
+    pr.shop_id,
+    pr.man_amount,
+    pr.jian_amount,
+    s.sku_code as act_sku_code,
+    s.sku_name as act_sku_name,
+    s.sell_price,
+    s.in_price,
+    s.agio_price,
+    s.pic_url,
+    s.sku_info,
+    (select count(1) from vote where sku_id = a.sku_id
+    and act_id = a.act_id
+    <if test="voteUserId != null and beginTime !=null and endTime !=null">
+      AND  user_id = #{voteUserId}
+      AND  (create_time BETWEEN #{beginTime} and #{endTime})
+    </if>
+    ) as is_vote
+    FROM
+    act_sku a
+    inner join promotion_rules pr on a.pr_id = pr.id
+    inner join sku s on a.sku_id = s.id
+    <where>
+      1=1
+      <if test="id != null">
+        and  a.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="actId != null">
+        AND  a.act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      <if test="shopId != null">
+        AND  a.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="skuId != null">
+        and a.sku_id = #{skuId,jdbcType=BIGINT}
+      </if>
+      <if test="searchKey != null">
+        and( (s.sku_name like concat('%', #{searchKey,jdbcType=VARCHAR}, '%')
+        or a.sku_code = #{searchKey,jdbcType=VARCHAR}))
+      </if>
+      and  a.apply_status != 2
+      and  a.is_luoxuan = 0
+      and  s.is_deleted = 0
+    </where>
+  </select>
+
+  <select id="countByActId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    select count(1) from act_sku where act_id = #{actId,jdbcType=BIGINT}
+  </select>
+
+  <!--落选商家-->
+  <update id="updateLuoXuan" parameterType="java.util.List">
+    update act_sku
+    set
+    is_luoxuan = 1,
+    update_time = now()
+    WHERE 1=1
+    AND id NOT IN
+    <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+
+  <!--按票数排序查看-->
+  <select id="listActSkuOut" resultMap="ActSkuOutResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from act_sku
+    <where>
+      1=1
+      <if test="actId != null">
+        AND  act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      and is_luoxuan = 0
+      AND apply_status = 1
+    </where>
+    ORDER by vote_num DESC
+  </select>
+
+
+
+
+</mapper>

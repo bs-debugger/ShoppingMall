@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ShopEnterAuditLogMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ShopEnterAuditLog">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="shop_enter_id" jdbcType="BIGINT" property="shopEnterId" />
+    <result column="memo" jdbcType="VARCHAR" property="memo" />
+    <result column="pictures" jdbcType="VARCHAR" property="pictures" />
+    <result column="send_msg" jdbcType="BIT" property="sendMsg" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, shop_enter_id, memo, pictures, send_msg, status, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shop_enter_audit_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from shop_enter_audit_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.ShopEnterAuditLog">
+    insert into shop_enter_audit_log (id, shop_enter_id, memo, 
+      pictures, send_msg, status, 
+      create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{shopEnterId,jdbcType=BIGINT}, #{memo,jdbcType=VARCHAR}, 
+      #{pictures,jdbcType=VARCHAR}, #{sendMsg,jdbcType=BIT}, #{status,jdbcType=BIT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.ShopEnterAuditLog">
+    insert into shop_enter_audit_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="shopEnterId != null">
+        shop_enter_id,
+      </if>
+      <if test="memo != null">
+        memo,
+      </if>
+      <if test="pictures != null">
+        pictures,
+      </if>
+      <if test="sendMsg != null">
+        send_msg,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="shopEnterId != null">
+        #{shopEnterId,jdbcType=BIGINT},
+      </if>
+      <if test="memo != null">
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="pictures != null">
+        #{pictures,jdbcType=VARCHAR},
+      </if>
+      <if test="sendMsg != null">
+        #{sendMsg,jdbcType=BIT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.ShopEnterAuditLog">
+    update shop_enter_audit_log
+    <set>
+      <if test="shopEnterId != null">
+        shop_enter_id = #{shopEnterId,jdbcType=BIGINT},
+      </if>
+      <if test="memo != null">
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="pictures != null">
+        pictures = #{pictures,jdbcType=VARCHAR},
+      </if>
+      <if test="sendMsg != null">
+        send_msg = #{sendMsg,jdbcType=BIT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.ShopEnterAuditLog">
+    update shop_enter_audit_log
+    set shop_enter_id = #{shopEnterId,jdbcType=BIGINT},
+      memo = #{memo,jdbcType=VARCHAR},
+      pictures = #{pictures,jdbcType=VARCHAR},
+      send_msg = #{sendMsg,jdbcType=BIT},
+      status = #{status,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

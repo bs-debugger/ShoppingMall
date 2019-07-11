@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xq.live.dao.SmsInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.xq.live.model.SmsInfo" >
+    <id column="sms_id" property="smsId" jdbcType="BIGINT" />
+    <result column="sms_content" property="smsContent" jdbcType="VARCHAR" />
+    <result column="sms_type" property="smsType" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sms_id, sms_content, sms_type, update_time, create_time, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sms_info
+    where sms_id = #{smsId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sms_info
+    where sms_id = #{smsId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.SmsInfo" >
+    insert into sms_info (sms_id, sms_content, sms_type, 
+      update_time, create_time, is_deleted
+      )
+    values (#{smsId,jdbcType=BIGINT}, #{smsContent,jdbcType=VARCHAR}, #{smsType,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.SmsInfo" >
+    insert into sms_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="smsId != null" >
+        sms_id,
+      </if>
+      <if test="smsContent != null" >
+        sms_content,
+      </if>
+      <if test="smsType != null" >
+        sms_type,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="smsId != null" >
+        #{smsId,jdbcType=BIGINT},
+      </if>
+      <if test="smsContent != null" >
+        #{smsContent,jdbcType=VARCHAR},
+      </if>
+      <if test="smsType != null" >
+        #{smsType,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.SmsInfo" >
+    update sms_info
+    <set >
+      <if test="smsContent != null" >
+        sms_content = #{smsContent,jdbcType=VARCHAR},
+      </if>
+      <if test="smsType != null" >
+        sms_type = #{smsType,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+    </set>
+    where sms_id = #{smsId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.SmsInfo" >
+    update sms_info
+    set sms_content = #{smsContent,jdbcType=VARCHAR},
+      sms_type = #{smsType,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=INTEGER}
+    where sms_id = #{smsId,jdbcType=BIGINT}
+  </update>
+
+  <!--根据类型查找短信内容模板-->
+  <select id="findSmsTemplateByType" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List" />
+    from sms_info
+    where sms_type = #{smsType,jdbcType=INTEGER} AND is_deleted=0
+  </select>
+</mapper>

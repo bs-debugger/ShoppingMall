@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ActivityRecommendMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ActivityRecommend">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="activity_layout_id" jdbcType="INTEGER" property="activityLayoutId" />
+    <result column="link_url" jdbcType="VARCHAR" property="linkUrl" />
+    <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
+    <result column="shop_cate" jdbcType="VARCHAR" property="shopCate" />
+    <result column="goods_sku_id" jdbcType="BIGINT" property="goodsSkuId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="act_id" jdbcType="BIGINT" property="actId" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="sort" jdbcType="TINYINT" property="sort" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="is_jump" jdbcType="BIT" property="isJump" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, activity_layout_id, link_url, img_url, shop_cate, goods_sku_id, shop_id, act_id, 
+    city, remark, sort, status, is_jump, is_deleted, create_time, update_time
+  </sql>
+  <sql id="Activity_Recommend_Out">
+    ac.id recommend_id, al.type, al.position, ac.activity_layout_id, ac.link_url, ac.img_url, ac.goods_sku_id, ac.shop_id, ac.act_id, ac.city, ac.remark, ac.sort, ac.is_jump
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from activity_recommend
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="findActivityRecommend" parameterType="com.xq.live.vo.in.ActivityLayoutInVo" resultType="com.xq.live.vo.out.ActivityRecommendOut">
+    select
+    <include refid="Activity_Recommend_Out" />
+    from activity_layout al
+    left join activity_recommend ac on al.id = ac.activity_layout_id
+    where al.status = true
+        and al.is_deleted = false
+        and ac.status = true
+        and ac.is_deleted = false
+        and al.city = #{city, jdbcType=VARCHAR}
+    order by al.sort, ac.sort asc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from activity_recommend
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <update id="removeByLayoutId">
+    update activity_recommend set is_deleted = true, update_time = now()
+    where activity_layout_id = #{activityLayoutId,jdbcType=INTEGER} and city = #{city,jdbcType=VARCHAR} and is_deleted = false
+  </update>
+  <insert id="insert" parameterType="com.xq.live.model.ActivityRecommend">
+    insert into activity_recommend (id, activity_layout_id, link_url, 
+      img_url, shop_cate, goods_sku_id, 
+      shop_id, act_id, city, 
+      remark, sort, status, is_jump, is_deleted,
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{activityLayoutId,jdbcType=INTEGER}, #{linkUrl,jdbcType=VARCHAR}, 
+      #{imgUrl,jdbcType=VARCHAR}, #{shopCate,jdbcType=VARCHAR}, #{goodsSkuId,jdbcType=BIGINT},
+      #{shopId,jdbcType=BIGINT}, #{actId,jdbcType=BIGINT}, #{city,jdbcType=VARCHAR},
+      #{remark,jdbcType=VARCHAR}, #{sort,jdbcType=TINYINT}, #{status,jdbcType=BIT}, #{isJump,jdbcType=BIT}, #{isDeleted,jdbcType=BIT},
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.ActivityRecommend">
+    insert into activity_recommend
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="activityLayoutId != null">
+        activity_layout_id,
+      </if>
+      <if test="linkUrl != null">
+        link_url,
+      </if>
+      <if test="imgUrl != null">
+        img_url,
+      </if>
+      <if test="shopCate != null">
+        shop_cate,
+      </if>
+      <if test="goodsSkuId != null">
+        goods_sku_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="actId != null">
+        act_id,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="isJump != null">
+        is_jump,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="activityLayoutId != null">
+        #{activityLayoutId,jdbcType=INTEGER},
+      </if>
+      <if test="linkUrl != null">
+        #{linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null">
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCate != null">
+        #{shopCate,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsSkuId != null">
+        #{goodsSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="actId != null">
+        #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="isJump != null">
+        #{isJump,jdbcType=BIT},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.ActivityRecommend">
+    update activity_recommend
+    <set>
+      <if test="activityLayoutId != null">
+        activity_layout_id = #{activityLayoutId,jdbcType=INTEGER},
+      </if>
+      <if test="linkUrl != null">
+        link_url = #{linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null">
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCate != null">
+        shop_cate = #{shopCate,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsSkuId != null">
+        goods_sku_id = #{goodsSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="actId != null">
+        act_id = #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=BIT},
+      </if>
+      <if test="isJump != null">
+        is_jump = #{isJump,jdbcType=BIT},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.ActivityRecommend">
+    update activity_recommend
+    set activity_layout_id = #{activityLayoutId,jdbcType=INTEGER},
+      link_url = #{linkUrl,jdbcType=VARCHAR},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
+      shop_cate = #{shopCate,jdbcType=VARCHAR},
+      goods_sku_id = #{goodsSkuId,jdbcType=BIGINT},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      act_id = #{actId,jdbcType=BIGINT},
+      city = #{city,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=TINYINT},
+      status = #{status,jdbcType=BIT},
+      is_jump = #{isJump,jdbcType=BIT},
+      is_deleted = #{isDeleted,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.MessageMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.Message">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sender_id" jdbcType="BIGINT" property="senderId" />
+    <result column="receiver_id" jdbcType="BIGINT" property="receiverId" />
+    <result column="message_text_id" jdbcType="BIGINT" property="messageTextId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <resultMap id="MessageOutResultMap" type="com.xq.live.vo.out.MessageOut" extends="BaseResultMap">
+    <association property="messageText" javaType="com.xq.live.model.MessageText">
+      <id column="message_text_id" jdbcType="BIGINT" property="id" />
+      <result column="title" jdbcType="VARCHAR" property="title" />
+      <result column="content" jdbcType="VARCHAR" property="content" />
+      <result column="type" jdbcType="INTEGER" property="type" />
+      <result column="msg_is_deleted" jdbcType="INTEGER" property="isDeleted" />
+      <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+      <result column="act_id" jdbcType="BIGINT" property="actId" />
+      <result column="url" jdbcType="BIGINT" property="url" />
+    </association>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, sender_id, receiver_id, message_text_id, status, is_deleted, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from message
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from message
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.Message">
+    insert into message (id, sender_id, receiver_id,
+    message_text_id, status, is_deleted,
+      create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{senderId,jdbcType=BIGINT}, #{receiverId,jdbcType=BIGINT},
+      #{messageTextId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{isDeleted,jdbcType=INTEGER},
+      now(), now())
+      <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+        select last_insert_id() as id
+      </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.Message">
+    insert into message
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="senderId != null">
+        sender_id,
+      </if>
+      <if test="receiverId != null">
+        receiver_id,
+      </if>
+      <if test="messageTextId != null">
+        message_text_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="senderId != null">
+        #{senderId,jdbcType=BIGINT},
+      </if>
+      <if test="receiverId != null">
+        #{receiverId,jdbcType=BIGINT},
+      </if>
+      <if test="messageTextId != null">
+        #{messageTextId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.Message">
+    update message
+    <set>
+      <if test="senderId != null">
+        sender_id = #{senderId,jdbcType=BIGINT},
+      </if>
+      <if test="receiverId != null">
+        receiver_id = #{receiverId,jdbcType=BIGINT},
+      </if>
+      <if test="messageTextId != null">
+        message_text_id = #{messageTextId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.Message">
+    update message
+    set sender_id = #{senderId,jdbcType=BIGINT},
+      receiver_id = #{receiverId,jdbcType=BIGINT},
+      message_text_id = #{messageTextId,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      update_time = now()
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="listTotal" resultType="java.lang.Integer">
+    select count(1)
+    from message_text mt
+    left join message m on mt.id = m.message_text_id and m.is_deleted = #{isDeleted,jdbcType=INTEGER} and m.receiver_id = #{receiverId,jdbcType=BIGINT}
+    <where>
+      <if test="messageTextId != null">
+        and mt.id = #{messageTextId,jdbcType=BIGINT}
+      </if>
+      <if test="type != null">
+        and mt.type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="isDeleted != null">
+        and mt.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+
+  <select id="list" resultMap="MessageOutResultMap">
+    SELECT
+      mt.id message_text_id,
+      mt.content,
+      mt.type,
+      mt.send_time,
+      mt.is_deleted msg_is_deleted,
+      mt.title,
+      m.id,
+      m.sender_id,
+      m.receiver_id,
+      ifnull(m.status, 0),
+      m.create_time,
+      m.is_deleted,
+      m.create_time,
+      m.update_time
+    FROM
+    message_text mt
+    left join message m on mt.id = m.message_text_id and m.is_deleted = #{isDeleted,jdbcType=INTEGER} and m.receiver_id = #{receiverId,jdbcType=BIGINT}
+    <where>
+      <if test="messageTextId != null">
+        and mt.id = #{messageTextId,jdbcType=BIGINT}
+      </if>
+      <if test="type != null">
+        and mt.type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="isDeleted != null">
+        and mt.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+    </where>
+    order by mt.id desc
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="detail" resultMap="MessageOutResultMap">
+    SELECT
+      mt.id message_text_id,
+      mt.content,
+      mt.type,
+      mt.send_time,
+      mt.is_deleted msg_is_deleted,
+      mt.title,
+      m.id,
+      m.sender_id,
+      m.receiver_id,
+      ifnull(m.status, 0),
+      m.create_time,
+      m.is_deleted,
+      m.create_time,
+      m.update_time
+    FROM
+    message_text mt
+    left join message m on mt.id = m.message_text_id and m.receiver_id = #{receiverId,jdbcType=BIGINT}
+    <where>
+      <if test="messageTextId != null">
+        and mt.id = #{messageTextId,jdbcType=BIGINT}
+      </if>
+      <if test="type != null">
+        and mt.type = #{type,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectByRecId" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select
+      <include refid="Base_Column_List" />
+    from message
+    where receiver_id = #{receiverId,jdbcType=BIGINT}
+      and message_text_id = #{messageTextId,jdbcType=BIGINT}
+  </select>
+
+  <!--获取通知列表-->
+  <select id="listAct" resultMap="MessageOutResultMap">
+    SELECT
+    mt.id message_text_id,
+    mt.content,
+    mt.type,
+    mt.send_time,
+    mt.is_deleted msg_is_deleted,
+    mt.title,
+    mt.act_id,
+    mt.url,
+    m.id,
+    m.sender_id,
+    m.receiver_id,
+    ifnull(m.status, 0),
+    m.create_time,
+    m.is_deleted,
+    m.create_time,
+    m.update_time,
+    m.status
+    FROM
+    message_text mt
+    left join message m on mt.id = m.message_text_id  and m.receiver_id = #{receiverId,jdbcType=BIGINT}
+    <where>
+      mt.is_deleted=0
+      and ((m.is_deleted=0 and m.receiver_id = #{receiverId,jdbcType=BIGINT}) or (m.is_deleted is null and mt.type in (1,2)))
+      <if test="messageTextId != null">
+        and mt.id = #{messageTextId,jdbcType=BIGINT}
+      </if>
+      <if test="type != null">
+        and mt.type = #{type,jdbcType=INTEGER}
+      </if>
+    </where>
+    order by m.status asc, mt.send_time desc
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="listActTotal" resultType="java.lang.Integer">
+    SELECT count(1)
+    FROM
+    message_text mt
+    left join message m on mt.id = m.message_text_id  and m.receiver_id = #{receiverId,jdbcType=BIGINT}
+    <where>
+      mt.is_deleted=0
+      and (m.is_deleted=0 or m.is_deleted is null)
+      <if test="messageTextId != null">
+        and mt.id = #{messageTextId,jdbcType=BIGINT}
+      </if>
+      <if test="type != null">
+        and mt.type = #{type,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+
+  <!--通知一键已读将该用户下的所有通知消息标记为已读状态-->
+  <update id="readAllNotic" >
+    update message
+    set status=1,
+    update_time = now()
+    where status=0
+    and receiver_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+  <!--活动已读,实际message中无相关未读记录，直接生成一条和message_text相关联的记录，并标记为已读状态-->
+  <insert id="readAct">
+    insert into message ( sender_id, receiver_id,
+    message_text_id, status, is_deleted,
+    create_time, update_time)
+    values ( 0, #{receiverId,jdbcType=BIGINT},
+    #{messageTextId,jdbcType=BIGINT}, 1, 0,
+    now(), now())
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
+
+  <!--获取未读消息总数 ，关联message表时未读活动消息的message信息为空-->
+  <select id="unreadMessageTotal" resultType="java.lang.Integer">
+     select count(1) from (
+    <if test="type != null and (type==1 or type ==2) ">
+        select mt.id from message_text mt
+        left join message m on m.message_text_id=mt.id and (m.receiver_id=#{receiverId,jdbcType=BIGINT} or m.receiver_id is null)
+        where (m.status=0 or m.status is null)
+        and (m.is_deleted=0 or m.is_deleted is null)
+        and mt.is_deleted=0
+        and mt.type=#{type,jdbcType=INTEGER}
+    </if>
+
+    <if test="type != null and type==3">
+        select mt.id from message_text mt
+        left join message m on m.message_text_id=mt.id
+        where m.status=0
+        and m.is_deleted=0
+        and mt.is_deleted=0
+        and m.receiver_id=#{receiverId,jdbcType=BIGINT}
+        and mt.type=#{type,jdbcType=INTEGER}
+    </if>
+    ) s
+  </select>
+
+</mapper>

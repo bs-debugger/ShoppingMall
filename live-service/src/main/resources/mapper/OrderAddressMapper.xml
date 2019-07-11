@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.OrderAddressMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.OrderAddress">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="dict_province_id" jdbcType="BIGINT" property="dictProvinceId" />
+    <result column="dict_city_id" jdbcType="BIGINT" property="dictCityId" />
+    <result column="dict_county_id" jdbcType="BIGINT" property="dictCountyId" />
+    <result column="dict_area_id" jdbcType="BIGINT" property="dictAreaId" />
+    <result column="detail_address" jdbcType="VARCHAR" property="detailAddress" />
+    <result column="chat_name" jdbcType="VARCHAR" property="chatName" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="is_default" jdbcType="INTEGER" property="isDefault" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, dict_province_id, dict_city_id, dict_county_id, dict_area_id, detail_address, 
+    chat_name, mobile, is_default, create_time, update_time,is_deleted
+  </sql>
+
+  <resultMap id="OrderAddressOutMap" type="com.xq.live.vo.out.OrderAddressOut" extends="BaseResultMap">
+    <result column="dict_province" jdbcType="VARCHAR" property="dictProvince" />
+    <result column="dict_city" jdbcType="VARCHAR" property="dictCity" />
+    <result column="dict_county" jdbcType="VARCHAR" property="dictCounty" />
+    <result column="dict_area" jdbcType="VARCHAR" property="dictArea" />
+  </resultMap>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_address
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from order_address
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.OrderAddress">
+    insert into order_address (id, user_id, dict_province_id, 
+      dict_city_id, dict_county_id, dict_area_id, 
+      detail_address, chat_name, mobile, 
+      is_default, create_time, update_time,is_deleted
+      )
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{dictProvinceId,jdbcType=BIGINT}, 
+      #{dictCityId,jdbcType=BIGINT}, #{dictCountyId,jdbcType=BIGINT}, #{dictAreaId,jdbcType=BIGINT}, 
+      #{detailAddress,jdbcType=VARCHAR}, #{chatName,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{isDefault,jdbcType=INTEGER}, now(), now(),0
+      )
+    <selectKey resultType="java.lang.Long" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.OrderAddress">
+    insert into order_address
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="dictProvinceId != null">
+        dict_province_id,
+      </if>
+      <if test="dictCityId != null">
+        dict_city_id,
+      </if>
+      <if test="dictCountyId != null">
+        dict_county_id,
+      </if>
+      <if test="dictAreaId != null">
+        dict_area_id,
+      </if>
+      <if test="detailAddress != null">
+        detail_address,
+      </if>
+      <if test="chatName != null">
+        chat_name,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="isDefault != null">
+        is_default,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="dictProvinceId != null">
+        #{dictProvinceId,jdbcType=BIGINT},
+      </if>
+      <if test="dictCityId != null">
+        #{dictCityId,jdbcType=BIGINT},
+      </if>
+      <if test="dictCountyId != null">
+        #{dictCountyId,jdbcType=BIGINT},
+      </if>
+      <if test="dictAreaId != null">
+        #{dictAreaId,jdbcType=BIGINT},
+      </if>
+      <if test="detailAddress != null">
+        #{detailAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="chatName != null">
+        #{chatName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="isDefault != null">
+        #{isDefault,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.OrderAddress">
+    update order_address
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="dictProvinceId != null">
+        dict_province_id = #{dictProvinceId,jdbcType=BIGINT},
+      </if>
+      <if test="dictCityId != null">
+        dict_city_id = #{dictCityId,jdbcType=BIGINT},
+      </if>
+      <if test="dictCountyId != null">
+        dict_county_id = #{dictCountyId,jdbcType=BIGINT},
+      </if>
+      <if test="dictAreaId != null">
+        dict_area_id = #{dictAreaId,jdbcType=BIGINT},
+      </if>
+      <if test="detailAddress != null">
+        detail_address = #{detailAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="chatName != null">
+        chat_name = #{chatName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="isDefault != null">
+        is_default = #{isDefault,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted=#{isDeleted,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.OrderAddress">
+    update order_address
+    set user_id = #{userId,jdbcType=BIGINT},
+      dict_province_id = #{dictProvinceId,jdbcType=BIGINT},
+      dict_city_id = #{dictCityId,jdbcType=BIGINT},
+      dict_county_id = #{dictCountyId,jdbcType=BIGINT},
+      dict_area_id = #{dictAreaId,jdbcType=BIGINT},
+      detail_address = #{detailAddress,jdbcType=VARCHAR},
+      chat_name = #{chatName,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      is_default = #{isDefault,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--查询记录总数-->
+  <select id="listTotal" parameterType="com.xq.live.vo.in.OrderAddressInVo" resultType="java.lang.Integer">
+   SELECT COUNT(1) FROM order_address
+   <where>
+     1=1
+     <if test="userId != null">
+       and user_id = #{userId,jdbcType=BIGINT}
+     </if>
+     <if test="mobile != null">
+       and mobile = #{mobile,jdbcType=VARCHAR}
+     </if>
+     AND is_deleted=0
+     limit #{start}, #{rows}
+   </where>
+  </select>
+  <!--根据userid分页查询所有收获地址-->
+  <select id="getAddressList" parameterType="com.xq.live.vo.in.OrderAddressInVo" resultMap="OrderAddressOutMap">
+    select
+     res.id,
+     res.user_id,
+     res.dict_province_id,
+     res.dict_city_id,
+     res.dict_county_id,
+     res.dict_area_id,
+     res.detail_address,
+     res.chat_name,
+     res.mobile,
+     res.is_default,
+     res.create_time,
+     res.update_time,
+     ci.city_cname  as dict_city,
+     co.county_cname  as dict_county,
+     pr.province_cname as dict_province
+    from order_address res
+    LEFT JOIN dict_city ci ON ci.id=res.dict_city_id
+    LEFT JOIN dict_county co ON co.id=res.dict_county_id
+    LEFT JOIN dict_province pr ON pr.id=res.dict_province_id
+    where res.user_id = #{userId,jdbcType=BIGINT}
+    AND res.is_deleted=0
+    order by res.create_time
+    limit #{start}, #{rows}
+  </select>
+  <!--根据id查询单个收获地址-->
+  <select id="getAddress" parameterType="java.lang.Long" resultMap="OrderAddressOutMap">
+     select
+     res.id,
+     res.user_id,
+     res.dict_province_id,
+     res.dict_city_id,
+     res.dict_county_id,
+     res.dict_area_id,
+     res.detail_address,
+     res.chat_name,
+     res.mobile,
+     res.is_default,
+     res.create_time,
+     res.update_time,
+     res.is_deleted,
+     ci.city_cname  as dict_city,
+     co.county_cname  as dict_county,
+     pr.province_cname as dict_province
+    from order_address res
+    LEFT JOIN dict_city ci ON ci.id=res.dict_city_id
+    LEFT JOIN dict_county co ON co.id=res.dict_county_id
+    LEFT JOIN dict_province pr ON pr.id=res.dict_province_id
+    where res.id = #{id,jdbcType=BIGINT}
+  </select>
+
+
+</mapper>

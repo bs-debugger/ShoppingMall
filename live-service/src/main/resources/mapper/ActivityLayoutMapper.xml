@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ActivityLayoutMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ActivityLayout">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="sort" jdbcType="TINYINT" property="sort" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, type, position, city, sort, status, is_deleted, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from activity_layout
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByTypeAndCity" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from activity_layout
+    where type = #{type,jdbcType=INTEGER} and city = #{city,jdbcType=VARCHAR}
+  </select>
+  <select id="findActivityLayout" parameterType="com.xq.live.vo.in.ActivityLayoutInVo" resultType="com.xq.live.model.ActivityLayout">
+    select
+    <include refid="Base_Column_List" />
+    from activity_layout
+    where status = true and is_deleted = false
+      <if test="position != null and position != ''">
+        and position = #{position, jdbcType=VARCHAR}
+      </if>
+      and city = #{city, jdbcType=VARCHAR}
+      <if test="type != null and type != ''">
+        and type = #{type, jdbcType=VARCHAR}
+      </if>
+    order by sort asc
+  </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from activity_layout
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.ActivityLayout">
+    insert into activity_layout (id, type, position, 
+      city, sort, status, is_deleted, 
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, #{position,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{sort,jdbcType=TINYINT}, #{status,jdbcType=BIT}, #{isDeleted,jdbcType=BIT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.ActivityLayout">
+    insert into activity_layout
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="position != null">
+        position,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.ActivityLayout">
+    update activity_layout
+    <set>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="position != null">
+        position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=BIT},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.ActivityLayout">
+    update activity_layout
+    set type = #{type,jdbcType=TINYINT},
+      position = #{position,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=TINYINT},
+      status = #{status,jdbcType=BIT},
+      is_deleted = #{isDeleted,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

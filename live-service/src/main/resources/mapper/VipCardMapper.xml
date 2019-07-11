@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.VipCardMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.VipCard">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="vip_type_id" jdbcType="BIGINT" property="vipTypeId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="card_no" jdbcType="VARCHAR" property="cardNo" />
+    <result column="show_no" jdbcType="VARCHAR" property="showNo" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="grade" jdbcType="INTEGER" property="grade" />
+    <result column="grade_name" jdbcType="VARCHAR" property="gradeName" />
+    <result column="discount" jdbcType="DECIMAL" property="discount" />
+    <result column="account_amount" jdbcType="DECIMAL" property="accountAmount" />
+    <result column="available_points" jdbcType="INTEGER" property="availablePoints" />
+    <result column="total_points" jdbcType="INTEGER" property="totalPoints" />
+    <result column="time_limit_type" jdbcType="INTEGER" property="timeLimitType" />
+    <result column="expiry_date" jdbcType="TIMESTAMP" property="expiryDate" />
+  </resultMap>
+
+  <resultMap id="VipCardOutResultMap" type="com.xq.live.vo.out.VipCardOut" extends="BaseResultMap">
+    <association property="vipGradeConfig" javaType="com.xq.live.model.VipGradeConfig">
+      <result column="grade_grade" jdbcType="INTEGER" property="grade" />
+      <result column="grade_grade_name" jdbcType="VARCHAR" property="gradeName" />
+      <result column="grade_points" jdbcType="INTEGER" property="points" />
+      <result column="grade_discount" jdbcType="DECIMAL" property="discount" />
+    </association>
+    <association property="vipType" javaType="com.xq.live.model.VipType">
+      <result column="type_vip_name" jdbcType="VARCHAR" property="vipName" />
+      <result column="type_remark" jdbcType="VARCHAR" property="remark" />
+    </association>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, vip_type_id, user_id, create_time, update_time, is_deleted, user_name, remark, 
+    card_no, show_no, status, grade, grade_name, discount, account_amount, available_points, 
+    total_points, time_limit_type, expiry_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from vip_card
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from vip_card
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.VipCard">
+    insert into vip_card (id, vip_type_id, user_id, 
+      create_time, update_time,
+      user_name, remark, card_no, 
+      show_no, status, grade, 
+      grade_name, discount, account_amount, 
+      available_points, total_points, time_limit_type, 
+      expiry_date)
+    values (#{id,jdbcType=BIGINT}, #{vipTypeId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
+      now(), now(),
+      #{userName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{cardNo,jdbcType=VARCHAR}, 
+      #{showNo,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{grade,jdbcType=INTEGER}, 
+      #{gradeName,jdbcType=VARCHAR}, #{discount,jdbcType=DECIMAL}, #{accountAmount,jdbcType=DECIMAL}, 
+      #{availablePoints,jdbcType=INTEGER}, #{totalPoints,jdbcType=INTEGER}, #{timeLimitType,jdbcType=INTEGER}, 
+      #{expiryDate,jdbcType=TIMESTAMP})
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.VipCard">
+    insert into vip_card
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="vipTypeId != null">
+        vip_type_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="cardNo != null">
+        card_no,
+      </if>
+      <if test="showNo != null">
+        show_no,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="grade != null">
+        grade,
+      </if>
+      <if test="gradeName != null">
+        grade_name,
+      </if>
+      <if test="discount != null">
+        discount,
+      </if>
+      <if test="accountAmount != null">
+        account_amount,
+      </if>
+      <if test="availablePoints != null">
+        available_points,
+      </if>
+      <if test="totalPoints != null">
+        total_points,
+      </if>
+      <if test="timeLimitType != null">
+        time_limit_type,
+      </if>
+      <if test="expiryDate != null">
+        expiry_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="vipTypeId != null">
+        #{vipTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNo != null">
+        #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="showNo != null">
+        #{showNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="grade != null">
+        #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="gradeName != null">
+        #{gradeName,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null">
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountAmount != null">
+        #{accountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="availablePoints != null">
+        #{availablePoints,jdbcType=INTEGER},
+      </if>
+      <if test="totalPoints != null">
+        #{totalPoints,jdbcType=INTEGER},
+      </if>
+      <if test="timeLimitType != null">
+        #{timeLimitType,jdbcType=INTEGER},
+      </if>
+      <if test="expiryDate != null">
+        #{expiryDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.VipCard">
+    update vip_card
+    <set>
+      <if test="vipTypeId != null">
+        vip_type_id = #{vipTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNo != null">
+        card_no = #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="showNo != null">
+        show_no = #{showNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="grade != null">
+        grade = #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="gradeName != null">
+        grade_name = #{gradeName,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null">
+        discount = #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountAmount != null">
+        account_amount = #{accountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="availablePoints != null">
+        available_points = #{availablePoints,jdbcType=INTEGER},
+      </if>
+      <if test="totalPoints != null">
+        total_points = #{totalPoints,jdbcType=INTEGER},
+      </if>
+      <if test="timeLimitType != null">
+        time_limit_type = #{timeLimitType,jdbcType=INTEGER},
+      </if>
+      <if test="expiryDate != null">
+        expiry_date = #{expiryDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.VipCard">
+    update vip_card
+    set vip_type_id = #{vipTypeId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      card_no = #{cardNo,jdbcType=VARCHAR},
+      show_no = #{showNo,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      grade = #{grade,jdbcType=INTEGER},
+      grade_name = #{gradeName,jdbcType=VARCHAR},
+      discount = #{discount,jdbcType=DECIMAL},
+      account_amount = #{accountAmount,jdbcType=DECIMAL},
+      available_points = #{availablePoints,jdbcType=INTEGER},
+      total_points = #{totalPoints,jdbcType=INTEGER},
+      time_limit_type = #{timeLimitType,jdbcType=INTEGER},
+      expiry_date = #{expiryDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="getDetail" parameterType="java.lang.Long" resultMap="VipCardOutResultMap">
+    select vc.*,vt.vip_name type_vip_name,vt.remark type_remark,
+    vgc.grade grade_grade,vgc.grade_name grade_grade_name,vgc.points grade_points,vgc.discount grade_discount
+    from vip_card vc
+    left join vip_type vt on vc.vip_type_id=vt.id
+    left join vip_grade_config vgc on vc.vip_type_id=vgc.vip_type_id and vc.grade=vgc.grade
+    where vc.id = #{id,jdbcType=BIGINT}
+    and vc.is_deleted=0
+  </select>
+
+  <select id="getByUserAndCardType"  resultMap="VipCardOutResultMap">
+    select vc.*,vt.vip_name type_vip_name,vt.remark type_remark,
+    vgc.grade grade_grade,vgc.grade_name grade_grade_name,vgc.points grade_points,vgc.discount grade_discount
+    from vip_card vc
+    left join vip_type vt on vc.vip_type_id=vt.id
+    left join vip_grade_config vgc on vc.vip_type_id=vgc.vip_type_id and vc.grade=vgc.grade
+    where vc.user_id = #{userId,jdbcType=BIGINT}
+    and vc.vip_type_id= #{vipTypeId,jdbcType=BIGINT}
+    and vc.is_deleted=0
+  </select>
+
+</mapper>

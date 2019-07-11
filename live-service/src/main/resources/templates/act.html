@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>index</title>
+    <style>
+        html,body{width: 100%;margin: 0px; padding: 0px;}
+        .Wrap{width:100%; overflow:hidden; text-align:center;}
+        .indexImg{width: 100%;height: 100%;}
+        .button{width: 90%;
+            height: 60px;display:
+        flex;align-items: center;
+            justify-content: space-around;
+            position: relative;
+            left: 20px;
+            top: -121px;
+        }
+        .writing{height: 257px;}
+        .button a{
+            width: 72px;
+            height: 34px;
+            font-size: 16px;
+            color: #ffffff;
+            border: 0px;
+            text-decoration:none;
+            line-height: 34px;
+            border-bottom-left-radius: 26px;
+            border-bottom-right-radius: 26px;
+            border-top-left-radius: 26px;
+            border-top-right-radius: 26px;
+            box-shadow:2px 0px 6px rgba(250,46,46,0.47);
+            background: -webkit-linear-gradient(left top, #FA2E2E , #FA7B2E);
+        }
+        .button button{
+            width: 72px;
+            height: 34px;
+            font-size: 16px;
+            color: #ffffff;
+            border: 0px;
+            outline:none;
+            border-bottom-left-radius: 26px;
+            border-bottom-right-radius: 26px;
+            border-top-left-radius: 26px;
+            border-top-right-radius: 26px;
+            box-shadow:2px 0px 6px rgba(32,133,177,0.47);
+            text-decoration:none;
+            line-height: 34px;
+            background: -webkit-linear-gradient(left top, #0094FF , #54B8DD);
+        }
+    </style>
+</head>
+<body>
+<div class="Wrap">
+    <div class="firstOne">
+        <img class="indexImg" src="https://xq-1256079679.file.myqcloud.com/test_1kkkkkkkkk_0.8.jpg" alt="主图"/>
+    </div>
+    <div class="firstOne">
+        <img class="indexImg" src="https://xq-1256079679.file.myqcloud.com/test_2kkkkkkkkk_0.8.jpg" alt="主图"/>
+    </div>
+    <div class="firstOne">
+        <img class="indexImg" src="https://xq-1256079679.file.myqcloud.com/test_3kkkkkkkk_0.8.jpg" alt="主图"/>
+    </div>
+    <div class="firstOne">
+        <img class="indexImg" src="https://xq-1256079679.file.myqcloud.com/test_4kkkkkkk_0.8.jpg" alt="主图"/>
+    </div>
+    <div class="firstOne writing">
+        <img class="indexImg" src="https://xq-1256079679.file.myqcloud.com/test_5kkkkkkk_0.8.jpg" alt="主图"/>
+        <div class="button">
+            <!-- <button>下载</button> -->
+            <a href="https://xqmp4-1256079679.file.myqcloud.com/test_H567B9652_0621172354.apk">下载</a>
+            <!--http://ucdl.25pp.com/fs08/2018/06/04/10/110_c5e94c2ddc41e3047c24d90a0ca680a2.apk?sf=4738273&vh=8a9f6984b0985e46af443e2ff2f09de6&sh=10&cc=2259644024&appid=7758013&packageid=600679566&md5=aae155392d2cf98ad5a9dc2cf1040fb7&apprd=7758013&pkg=io.dcloud.H53DA2BA2&vcode=58&fname=%E4%BA%AB7%E5%95%86%E5%AE%B6&iconUrl=http%3A%2F%2Fandroid%2Dartworks%2E25pp%2Ecom%2Ffs08%2F2018%2F06%2F04%2F11%2F110%5F203138ae30f0da36c1895195a435120b%5Fcon%2Epng-->
+            <button id="run">进入</button>
+            <!-- <a href="">进入</a> -->
+        </div>
+    </div>
+    <div class="firstOne">
+        <img class="indexImg" src="https://xq-1256079679.file.myqcloud.com/test_6kkkkkkkk_0.8.jpg" alt="主图"/>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
+<script>
+    window.onload = function(){
+        var ball = document.querySelector("#run");
+        ball.onclick = function(){
+            wx.miniProgram.navigateTo({url: 'pages/index/index'})
+        };
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.SoMapper">
+    <resultMap id="BaseResultMap" type="com.xq.live.model.So">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="so_amount" jdbcType="DECIMAL" property="soAmount"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="shop_id" jdbcType="BIGINT" property="shopId"/>
+        <result column="pay_type" jdbcType="TINYINT" property="payType"/>
+        <result column="so_status" jdbcType="TINYINT" property="soStatus"/>
+        <result column="so_type" jdbcType="TINYINT" property="soType"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="is_dui" jdbcType="TINYINT" property="isDui"/>
+        <result column="hx_time" jdbcType="TIMESTAMP" property="hxTime"/>
+    </resultMap>
+
+    <resultMap id="SoOutResultMap" type="com.xq.live.vo.out.SoOut" extends="BaseResultMap">
+        <result column="so_id" jdbcType="BIGINT" property="soId"/>
+        <result column="sku_id" jdbcType="BIGINT" property="skuId"/>
+        <result column="sku_code" jdbcType="VARCHAR" property="skuCode"/>
+        <result column="sku_name" jdbcType="VARCHAR" property="skuName"/>
+        <result column="sku_num" jdbcType="INTEGER" property="skuNum"/>
+        <result column="unit_price" jdbcType="DECIMAL" property="unitPrice"/>
+        <result column="paid_time" jdbcType="TIMESTAMP" property="paidTime"/>
+        <result column="service_price" jdbcType="DECIMAL" property="servicePrice"/>
+        <result column="dish_sku_id" jdbcType="BIGINT" property="dishSkuId"/>
+        <result column="dish_sku_name" jdbcType="VARCHAR" property="dishSkuName"/>
+    </resultMap>
+
+    <resultMap id="SoOutForOrderResultMap" type="com.xq.live.vo.out.SoForOrderOut" extends="BaseResultMap">
+        <result column="so_id" jdbcType="BIGINT" property="soId"/>
+        <result column="sku_id" jdbcType="BIGINT" property="skuId"/>
+        <result column="sku_code" jdbcType="VARCHAR" property="skuCode"/>
+        <result column="sku_name" jdbcType="VARCHAR" property="skuName"/>
+        <result column="sku_num" jdbcType="INTEGER" property="skuNum"/>
+        <result column="unit_price" jdbcType="DECIMAL" property="unitPrice"/>
+        <result column="paid_time" jdbcType="TIMESTAMP" property="paidTime"/>
+        <result column="dish_sku_id" jdbcType="BIGINT" property="dishSkuId"/>
+        <result column="dish_sku_name" jdbcType="VARCHAR" property="dishSkuName"/>
+        <collection property="coupons" ofType="com.xq.live.vo.out.CouponForOrderOut">
+            <result column="coupon_id" jdbcType="BIGINT" property="couponId"/>
+            <result column="coupon_code" jdbcType="VARCHAR" property="couponCode" />
+            <result column="coupon_amount" jdbcType="INTEGER" property="couponAmount" />
+            <result column="type" jdbcType="INTEGER" property="type" />
+            <result column="qrcode_url" jdbcType="VARCHAR" property="qrcodeUrl" />
+            <result column="is_used" jdbcType="INTEGER" property="isUsed" />
+            <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+            <result column="expiry_date" jdbcType="DATE" property="expiryDate" />
+            <result column="used_time" jdbcType="TIMESTAMP" property="usedTime" />
+            <collection property="promotionRules" ofType="com.xq.live.model.PromotionRules">
+                <result column="rule_id" jdbcType="BIGINT" property="id" />
+                <result column="rule_type" jdbcType="INTEGER" property="ruleType" />
+                <result column="rule_desc" jdbcType="VARCHAR" property="ruleDesc" />
+                <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+                <result column="coupon_shop_id" jdbcType="BIGINT" property="shopId" />
+                <result column="coupon_sku_id" jdbcType="BIGINT" property="skuId" />
+            </collection>
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, so_amount, user_id, user_name, shop_id,pay_type, so_status, so_type, create_time, update_time, is_dui
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from so
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByUserIdTotal" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select
+        count(1)
+        from so
+        where user_id = #{userId,jdbcType=BIGINT}
+        and (so_status = 2 OR so_status = 3)
+    </select>
+
+    <select id="selectByPk" parameterType="java.lang.Long" resultMap="SoOutResultMap">
+        select s.id, s.so_amount, s.user_id, s.user_name, s.shop_id,s.pay_type, s.so_status, s.so_type, s.create_time,
+        s.update_time,s.paid_time,s.is_dui ,sd.so_id, sd.sku_id, sd.sku_code, sd.sku_name, sd.sku_num, sd.unit_price,sd.dish_sku_id,sd.dish_sku_name
+        from so s
+        inner join so_detail sd on s.id = sd.so_id
+        where s.id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByPkForShop" parameterType="java.lang.Long" resultMap="SoOutResultMap">
+        select s.id, s.so_amount, s.user_id, s.user_name,s.pay_type, s.so_status, s.so_type, s.create_time,
+        s.update_time,s.paid_time,s.is_dui,sd.so_id, sd.sku_id, sk.sku_code, sk.sku_name,sd.shop_id
+        from so s
+        left join so_shop_log sd on s.id = sd.so_id
+        left join sku sk on sd.sku_id = sk.id
+        where s.id = #{id,jdbcType=BIGINT}
+        and sd.operate_type = 1
+    </select>
+
+    <select id="selectByPkForOrder" parameterType="java.lang.Long" resultMap="SoOutForOrderResultMap">
+        select s.id, s.so_amount, s.user_id, s.user_name, s.shop_id,s.pay_type, s.so_status, s.so_type, s.create_time,
+        s.update_time,s.paid_time,s.is_dui,sd.so_id, sd.sku_id, sd.sku_code, sd.sku_name, sd.sku_num, sd.unit_price,sd.dish_sku_id,sd.dish_sku_name,
+        c.id as coupon_id,c.coupon_code,c.coupon_amount,c.type,c.qrcode_url,c.is_used,c.is_deleted,c.expiry_date,
+        c.used_time,' ' as rule_desc
+        from so s
+        inner join so_detail sd on s.id = sd.so_id
+        INNER JOIN coupon c on s.id = c.so_id
+        where s.id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectSkuAllocation" resultType="java.lang.Integer">
+        select count(1)
+        from so s
+        inner join so_detail sd on s.id = sd.so_id
+        inner join sku sk on sd.dish_sku_id = sk.id
+        where sk.type = 1 and sk.sku_type = 9
+        and s.user_id = #{userId,jdbcType=BIGINT}
+        and (TO_DAYS(s.paid_time) = TO_DAYS(now()))
+    </select>
+
+    <select id="totalAmount" resultMap="SoOutResultMap">
+        select
+        convert(IFNULL(sum(s.so_amount),0),decimal(11,2)) as so_amount,
+        ((select convert(IFNULL(COUNT(1),0),decimal(11,2)) from so s
+        inner join so_detail sd on s.id = sd.so_id
+        inner join sku sk on sd.sku_id = sk.id
+        where s.shop_id = #{shopId,jdbcType=BIGINT}
+        and s.so_type = 1
+        and s.so_status = 3
+        and sk.is_deleted = 0
+        and sk.sku_type = 3
+        <if test="beginTime !=null and endTime != null">
+            and (s.hx_time BETWEEN #{beginTime} and #{endTime})
+        </if>
+        <if test="isDui !=null">
+            and s.is_dui = #{isDui,jdbcType=INTEGER}
+        </if>)+
+        (select convert(IFNULL(COUNT(1),0)*1.5,decimal(11,2)) from so s
+        inner join so_detail sd on s.id = sd.so_id
+        inner join sku sk on sd.sku_id = sk.id
+        where s.shop_id = #{shopId,jdbcType=BIGINT}
+        and s.so_type = 1
+        and s.so_status = 3
+        and sk.is_deleted = 0
+        and sk.sku_type = 4
+        <if test="beginTime !=null and endTime != null">
+            and (s.hx_time BETWEEN #{beginTime} and #{endTime})
+        </if>
+        <if test="isDui !=null">
+            and s.is_dui = #{isDui,jdbcType=INTEGER}
+        </if>)) as service_price
+        from so s
+        inner join so_detail sd on s.id = sd.so_id
+        inner join sku sk on sd.sku_id = sk.id
+        where s.shop_id = #{shopId,jdbcType=BIGINT}
+        and s.so_type = 1
+        and s.so_status = 3
+        and sk.is_deleted = 0
+        AND sk.sku_type != 8
+        AND sk.sku_type != 10
+        <if test="beginTime !=null and endTime != null">
+            and (s.hx_time BETWEEN #{beginTime} and #{endTime})
+        </if>
+        <if test="isDui !=null">
+            and s.is_dui = #{isDui,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="list" resultMap="SoOutResultMap">
+        select s.id, s.so_amount, s.user_id, s.user_name, s.shop_id,s.pay_type, s.so_status, s.so_type, s.create_time,
+        s.update_time,s.paid_time,s.hx_time,s.is_dui,sd.so_id, sd.sku_id, sd.sku_code, sd.sku_name, sd.sku_num, sd.unit_price,sd.dish_sku_id,sd.dish_sku_name
+        from so s
+        inner join so_detail sd on s.id = sd.so_id
+        inner join sku su on sd.sku_id=su.id
+        <where>
+            <if test="id != null">
+                s.id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null">
+                and s.user_id = #{userId}
+            </if>
+            <if test="soStatus != null">
+                and s.so_status = #{soStatus}
+            </if>
+            <if test="soType != null">
+                and s.so_type = #{soType}
+            </if>
+            <if test="shopId != null">
+                and s.shop_id = #{shopId}
+            </if>
+            <if test="isDui != null">
+                and s.is_dui =  #{isDui,jdbcType=TINYINT}
+            </if>
+            <if test="beginTime !=null and endTime != null">
+                and (s.hx_time BETWEEN #{beginTime} and #{endTime})
+            </if>
+            <if test="otherStatus != null">
+                and s.so_status in (4,5)
+            </if>
+            AND su.is_deleted=0
+
+        </where>
+        order by id desc
+        limit #{start}, #{rows}
+    </select>
+
+
+    <select id="listForShop" resultMap="SoOutResultMap">
+        select s.id, s.so_amount, s.user_id, s.user_name, s.shop_id,s.pay_type, s.so_status, s.so_type, s.create_time,
+        s.update_time,s.paid_time,s.hx_time,ss.shop_id,ss.sku_id
+        from so s
+        inner join so_shop_log ss on s.id = ss.so_id
+        <where>
+            <if test="id != null">
+                s.id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null">
+                and s.user_id = #{userId}
+            </if>
+            <if test="soStatus != null">
+                and s.so_status = #{soStatus}
+                and ss.operate_type = #{soStatus}
+            </if>
+            <if test="soType != null">
+                and s.so_type = #{soType}
+            </if>
+            <if test="beginTime !=null and endTime != null">
+                and (s.paid_time BETWEEN #{beginTime} and #{endTime})
+            </if>
+            <if test="shopId != null">
+                and ss.shop_id = #{shopId,jdbcType=BIGINT}
+            </if>
+            <if test="isDui != null">
+                and s.is_dui =  #{isDui,jdbcType=TINYINT}
+            </if>
+        </where>
+        order by id desc
+        limit #{start}, #{rows}
+    </select>
+
+    <select id="listNoPage" resultMap="SoOutResultMap">
+        select s.id, s.so_amount, s.user_id, s.user_name, s.shop_id,s.pay_type, s.so_status, s.so_type, s.create_time,
+        s.update_time,s.paid_time,s.hx_time,s.is_dui,sd.so_id, sd.sku_id, sd.sku_code, sd.sku_name, sd.sku_num, sd.unit_price,sd.dish_sku_id,sd.dish_sku_name
+        from so s
+        inner join so_detail sd on s.id = sd.so_id
+        inner join sku su on sd.sku_id=su.id
+        <where>
+            <if test="id != null">
+                s.id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null">
+                and s.user_id = #{userId}
+            </if>
+            <if test="soStatus != null">
+                and s.so_status = 3
+            </if>
+            <if test="soType != null">
+                and s.so_type = #{soType}
+            </if>
+            <if test="shopId != null">
+                and s.shop_id = #{shopId}
+            </if>
+            <if test="isDui != null">
+                and s.is_dui =  #{isDui,jdbcType=TINYINT}
+            </if>
+            <if test="beginTime !=null and endTime != null">
+                and (s.hx_time BETWEEN #{beginTime} and #{endTime})
+            </if>
+            AND su.is_deleted=0
+            AND su.sku_type not in(8,10)
+        </where>
+        order by id desc
+    </select>
+
+    <select id="listForShopNoPage" resultMap="SoOutResultMap">
+        select s.id, s.so_amount, s.user_id, s.user_name, s.shop_id,s.pay_type, s.so_status, s.so_type, s.create_time,
+        s.update_time,s.paid_time,s.hx_time,ss.shop_id,ss.sku_id
+        from so s
+        inner join so_shop_log ss on s.id = ss.so_id
+        <where>
+            <if test="id != null">
+                s.id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null">
+                and s.user_id = #{userId}
+            </if>
+            <if test="soStatus != null">
+                and s.so_status = #{soStatus}
+                and ss.operate_type = #{soStatus}
+            </if>
+            <if test="soType != null">
+                and s.so_type = #{soType}
+            </if>
+            <if test="beginTime !=null and endTime != null">
+                and (s.paid_time BETWEEN #{beginTime} and #{endTime})
+            </if>
+            <if test="shopId != null">
+                and ss.shop_id = #{shopId,jdbcType=BIGINT}
+            </if>
+            <if test="isDui != null">
+                and s.is_dui =  #{isDui,jdbcType=TINYINT}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+
+    <select id="listTotal" resultType="java.lang.Integer">
+        select count(s.id)
+        from so s
+        inner join so_detail sd on s.id = sd.so_id
+        <where>
+            <if test="id != null">
+                s.id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null">
+                and s.user_id = #{userId}
+            </if>
+            <if test="soStatus != null">
+                and s.so_status = 3
+            </if>
+            <if test="soType != null">
+                and s.so_type = #{soType}
+            </if>
+            <if test="isDui != null">
+                and s.is_dui =  #{isDui,jdbcType=TINYINT}
+            </if>
+        </where>
+    </select>
+
+    <!--根据shopid获取一段时间内的所有食典券和砍菜券订单数量-->
+    <select id="skulistTotal" resultType="java.lang.Integer">
+        select count(s.id)
+        from so s
+        INNER JOIN so_detail sd ON s.id = sd.so_id
+        INNER JOIN sku sk ON sd.sku_id = sk.id
+        <where>
+            1=1
+            <if test="id != null">
+                and s.id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null">
+                and s.user_id = #{userId}
+            </if>
+            <if test="soType != null">
+                and s.so_type = #{soType}
+            </if>
+            <if test="isDui != null">
+                and s.is_dui =  #{isDui,jdbcType=TINYINT}
+            </if>
+            <if test="beginTime !=null and endTime != null">
+                and (s.hx_time BETWEEN #{beginTime} and #{endTime})
+            </if>
+            and s.so_status = 3
+            AND sk.is_deleted=0
+            AND sk.sku_type != 8
+            AND sk.sku_type != 10
+            AND s.shop_id =#{shopId,jdbcType=BIGINT}
+        </where>
+    </select>
+
+    <!--根据shopid获取一段时间内的所有商家订单数量-->
+    <select id="solistTotal" resultType="java.lang.Integer">
+        select count(s.id)
+        from so s
+        INNER JOIN so_shop_log sd ON s.id = sd.so_id
+        LEFT JOIN sku sk ON sd.sku_id = sk.id
+        <where>
+            1=1
+            <if test="id != null">
+                and s.id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null">
+                and s.user_id = #{userId}
+            </if>
+            <if test="soType != null">
+                and s.so_type = #{soType}
+            </if>
+            <if test="isDui != null">
+                and s.is_dui =  #{isDui,jdbcType=TINYINT}
+            </if>
+            <if test="beginTime !=null and endTime != null">
+                and (s.paid_time BETWEEN #{beginTime} and #{endTime})
+            </if>
+            AND s.shop_id =#{shopId,jdbcType=BIGINT}
+            AND sd.operate_type=2
+            and s.so_status = 2
+        </where>
+    </select>
+
+    <select id="listForShopTotal" resultType="java.lang.Integer">
+        select count(s.id)
+        from so s
+        inner join so_shop_log ss on s.id = ss.so_id
+        <where>
+            <if test="id != null">
+                s.id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null">
+                and s.user_id = #{userId}
+            </if>
+            <if test="soStatus != null">
+                and s.so_status = #{soStatus}
+                and ss.operate_type = #{soStatus}
+            </if>
+            <if test="soType != null">
+                and s.so_type = #{soType}
+            </if>
+            <if test="beginTime !=null and endTime != null">
+                and (s.paid_time BETWEEN #{beginTime} and #{endTime})
+            </if>
+            <if test="shopId != null">
+                and ss.shop_id = #{shopId,jdbcType=BIGINT}
+            </if>
+            <if test="isDui != null">
+                and s.is_dui =  #{isDui,jdbcType=TINYINT}
+            </if>
+        </where>
+    </select>
+
+    <!--根据订单ID获取用户当天是否领取过活动票-->
+    <select id="hadBeenGiven" parameterType="com.xq.live.vo.in.SoInVo" resultType="java.lang.Integer">
+        SELECT
+    	count(1)
+        FROM so_detail sd
+        INNER JOIN so s ON sd.so_id = s.id
+        INNER JOIN vote v on s.user_id = v.user_id
+        WHERE s.user_id = #{userId,jdbcType=BIGINT}
+        AND sd.sku_id = #{skuId,jdbcType=BIGINT}
+        and v.act_id = #{actId,jdbcType=BIGINT}
+        AND (TO_DAYS(sd.create_time) = TO_DAYS(now()))
+    </select>
+
+    <!--根据订单ID获取用户ID-->
+    <select id="getUserIDBySoId" parameterType="com.xq.live.model.So"  resultType="java.lang.Long">
+      SELECT s.user_id FROM so s
+      WHERE s.id=#{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+      delete from so   where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.xq.live.model.So">
+        insert into so (so_amount, user_id,
+        user_name, shop_id,pay_type, so_status,
+        so_type, create_time, update_time ,is_dui
+        )
+        values (#{soAmount,jdbcType=DECIMAL}, #{userId,jdbcType=BIGINT},
+        #{userName,jdbcType=VARCHAR}, #{shopId,jdbcType=BIGINT},#{payType,jdbcType=TINYINT}, #{soStatus,jdbcType=TINYINT},
+        #{soType,jdbcType=TINYINT}, now(), now(),0
+        )
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            select last_insert_id() as id
+        </selectKey>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.So">
+        update so
+        <set>
+            <if test="soAmount != null">
+                so_amount = #{soAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="shopId != null">
+                shop_id = #{shopId,jdbcType=BIGINT},
+            </if>
+            <if test="payType != null">
+                pay_type = #{payType,jdbcType=TINYINT},
+            </if>
+            <if test="soStatus != null">
+                so_status = #{soStatus,jdbcType=TINYINT},
+            </if>
+            <if test="soType != null">
+                so_type = #{soType,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDui != null">
+                is_dui =  #{isDui,jdbcType=TINYINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.xq.live.model.So">
+        update so
+        set so_amount = #{soAmount,jdbcType=DECIMAL},
+          user_id = #{userId,jdbcType=BIGINT},
+          user_name = #{userName,jdbcType=VARCHAR},
+          pay_type = #{payType,jdbcType=TINYINT},
+          so_status = #{soStatus,jdbcType=TINYINT},
+          so_type = #{soType,jdbcType=TINYINT},
+          create_time = #{createTime,jdbcType=TIMESTAMP},
+          update_time = #{updateTime,jdbcType=TIMESTAMP},
+          is_dui =  #{isDui,jdbcType=TINYINT}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="paid" parameterType="com.xq.live.vo.in.SoInVo">
+        update so set so_status = #{soStatus,jdbcType=TINYINT},
+            paid_time = now(),
+            update_time = now()
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="hexiao" parameterType="com.xq.live.vo.in.SoInVo">
+        update so set so_status = #{soStatus,jdbcType=TINYINT},
+        hx_time = now(),
+        update_time = now()
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="cancel" parameterType="com.xq.live.vo.in.SoInVo">
+        update so set so_status = #{soStatus,jdbcType=TINYINT},
+        update_time = now()
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="refundApplication" parameterType="com.xq.live.vo.in.SoInVo">
+        update so set so_status = #{soStatus,jdbcType=TINYINT},
+        update_time = now()
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <!--退款之后订单状态修改为已退款-->
+    <update id="UpdateById" parameterType="com.xq.live.vo.in.SoConditionInVO">
+        UPDATE so s
+        SET s.update_time = now(),s.so_status=#{soStatus,jdbcType=TINYINT}
+        where s.id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <!--退款之后票卷状态修改-->
+    <update id="UpdateCouponBySoId" parameterType="com.xq.live.vo.in.CouponConditionInVo">
+    UPDATE  coupon s
+    SET s.status=#{soStatus,jdbcType=INTEGER},s.update_time = now()
+    WHERE s.so_id=#{soId,jdbcType=BIGINT}
+    </update>
+
+</mapper>

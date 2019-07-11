@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.GoodsPromotionRulesMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.GoodsPromotionRules">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="goods_sku_id" jdbcType="BIGINT" property="goodsSkuId" />
+    <result column="goods_sku_code" jdbcType="VARCHAR" property="goodsSkuCode" />
+    <result column="goods_sku_name" jdbcType="VARCHAR" property="goodsSkuName" />
+    <result column="rule_type" jdbcType="INTEGER" property="ruleType" />
+    <result column="rule_desc" jdbcType="VARCHAR" property="ruleDesc" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="man_num" jdbcType="INTEGER" property="manNum" />
+    <result column="gift_num" jdbcType="INTEGER" property="giftNum" />
+    <result column="act_amount" jdbcType="DECIMAL" property="actAmount" />
+    <result column="man_amount" jdbcType="DECIMAL" property="manAmount" />
+    <result column="jian_amount" jdbcType="DECIMAL" property="jianAmount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, goods_sku_id, goods_sku_code, goods_sku_name, rule_type, rule_desc, end_time, 
+    shop_id, create_time, update_time, man_num, gift_num,act_amount,man_amount,jian_amount
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from goods_promotion_rules
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from goods_promotion_rules
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.GoodsPromotionRules">
+    insert into goods_promotion_rules (id, goods_sku_id, goods_sku_code, 
+      goods_sku_name, rule_type, rule_desc, 
+      end_time, shop_id, create_time, 
+      update_time, man_num, gift_num,act_amount,man_amount,jian_amount
+      )
+    values (#{id,jdbcType=BIGINT}, #{goodsSkuId,jdbcType=BIGINT}, #{goodsSkuCode,jdbcType=VARCHAR}, 
+      #{goodsSkuName,jdbcType=VARCHAR}, #{ruleType,jdbcType=INTEGER}, #{ruleDesc,jdbcType=VARCHAR}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{shopId,jdbcType=BIGINT}, now(),
+      now(), #{manNum,jdbcType=INTEGER}, #{giftNum,jdbcType=INTEGER}
+      ,#{actAmount,jdbcType=DECIMAL},#{manAmount,jdbcType=DECIMAL},#{jianAmount,jdbcType=DECIMAL}
+      )
+    <selectKey resultType="java.lang.Long" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.GoodsPromotionRules">
+    insert into goods_promotion_rules
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="goodsSkuId != null">
+        goods_sku_id,
+      </if>
+      <if test="goodsSkuCode != null">
+        goods_sku_code,
+      </if>
+      <if test="goodsSkuName != null">
+        goods_sku_name,
+      </if>
+      <if test="ruleType != null">
+        rule_type,
+      </if>
+      <if test="ruleDesc != null">
+        rule_desc,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="manNum != null">
+        man_num,
+      </if>
+      <if test="giftNum != null">
+        gift_num,
+      </if>
+      <if test="actAmount != null">
+        act_amount,
+      </if>
+      <if test="manAmount != null">
+        man_amount,
+      </if>
+      <if test="jianAmount != null">
+        jian_amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuId != null">
+        #{goodsSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuCode != null">
+        #{goodsSkuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsSkuName != null">
+        #{goodsSkuName,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleType != null">
+        #{ruleType,jdbcType=INTEGER},
+      </if>
+      <if test="ruleDesc != null">
+        #{ruleDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="manNum != null">
+        #{manNum,jdbcType=INTEGER},
+      </if>
+      <if test="giftNum != null">
+        #{giftNum,jdbcType=INTEGER},
+      </if>
+      <if test="actAmount != null">
+        #{actAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="manAmount != null">
+        #{manAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="jianAmount != null">
+        #{jianAmount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.GoodsPromotionRules">
+    update goods_promotion_rules
+    <set>
+      <if test="goodsSkuId != null">
+        goods_sku_id = #{goodsSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuCode != null">
+        goods_sku_code = #{goodsSkuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsSkuName != null">
+        goods_sku_name = #{goodsSkuName,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleType != null">
+        rule_type = #{ruleType,jdbcType=INTEGER},
+      </if>
+      <if test="ruleDesc != null">
+        rule_desc = #{ruleDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="manNum != null">
+        man_num = #{manNum,jdbcType=INTEGER},
+      </if>
+      <if test="giftNum != null">
+        gift_num = #{giftNum,jdbcType=INTEGER},
+      </if>
+      <if test="actAmount != null">
+        act_amount = #{actAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="manAmount != null">
+        man_amount = #{manAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="jianAmount != null">
+        jian_amount = #{jianAmount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.GoodsPromotionRules">
+    update goods_promotion_rules
+    set goods_sku_id = #{goodsSkuId,jdbcType=BIGINT},
+      goods_sku_code = #{goodsSkuCode,jdbcType=VARCHAR},
+      goods_sku_name = #{goodsSkuName,jdbcType=VARCHAR},
+      rule_type = #{ruleType,jdbcType=INTEGER},
+      rule_desc = #{ruleDesc,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      man_num = #{manNum,jdbcType=INTEGER},
+      gift_num = #{giftNum,jdbcType=INTEGER},
+      act_amount = #{actAmount,jdbcType=DECIMAL},
+      man_amount = #{manAmount,jdbcType=DECIMAL},
+      jian_amount = #{jianAmount,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByIds" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/> FROM goods_promotion_rules
+    WHERE id IN
+    <foreach collection="list" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </select>
+
+  <select id="selectBySkuIds" resultMap="BaseResultMap">
+    SELECT r.*
+    FROM goods_promotion_rules r LEFT JOIN act_goods_sku s ON r.id=s.goods_pr_id
+    WHERE s.is_deleted=0 AND  s.sku_id IN
+    <foreach collection="list" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </select>
+</mapper>

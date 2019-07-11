@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.OrderWriteOffMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.OrderWriteOff">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="order_coupon_id" jdbcType="BIGINT" property="orderCouponId" />
+    <result column="order_coupon_code" jdbcType="VARCHAR" property="orderCouponCode" />
+    <result column="order_address_id" jdbcType="BIGINT" property="orderAddressId" />
+    <result column="goods_sku_id" jdbcType="BIGINT" property="goodsSkuId" />
+    <result column="coupon_amount" jdbcType="DECIMAL" property="couponAmount" />
+    <result column="send_amount" jdbcType="DECIMAL" property="sendAmount" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="changer_id" jdbcType="BIGINT" property="changerId" />
+    <result column="changer_name" jdbcType="VARCHAR" property="changerName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="send_time" jdbcType="VARCHAR" property="sendTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="salepoint_id" jdbcType="BIGINT" property="salepointId" />
+    <result column="service_amount" jdbcType="DECIMAL" property="serviceAmount" />
+    <result column="shop_service_amount" jdbcType="DECIMAL" property="shopServiceAmount" />
+    <result column="user_service_amount" jdbcType="DECIMAL" property="userServiceAmount" />
+    <result column="real_unit_price" jdbcType="DECIMAL" property="realUnitPrice" />
+    <result column="is_bill" jdbcType="INTEGER" property="isBill" />
+    <result column="is_dui" jdbcType="INTEGER" property="isDui" />
+    <result column="real_shop_unit_price" jdbcType="DECIMAL" property="realShopUnitPrice" />
+  </resultMap>
+  <resultMap id="OrderWriteOffOutResultMap" type="com.xq.live.vo.out.OrderWriteOffOut" extends="BaseResultMap">
+    <result column="total_service" jdbcType="DECIMAL" property="totalService" />
+    <result column="total_price" jdbcType="DECIMAL" property="totalPrice" />
+    <result column="total_shop_price" jdbcType="DECIMAL" property="totalShopPrice" />
+    <result column="total_item" jdbcType="INTEGER" property="totalItem" />
+    <result column="show_code" jdbcType="VARCHAR" property="showCode" />
+    <association property="goodsSku" javaType="com.xq.live.model.GoodsSku">
+      <id column="gs_id" jdbcType="BIGINT" property="id" />
+      <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+      <result column="sku_name" jdbcType="VARCHAR" property="skuName" />
+      <result column="sku_pic" jdbcType="VARCHAR" property="skuPic" />
+      <result column="small_sku_pic" jdbcType="VARCHAR" property="smallSkuPic" />
+    </association>
+  </resultMap>
+
+
+  <resultMap id="OrderWriteOffWanDaResultMap" type="com.xq.live.vo.out.OrderWriteOffResultOut" extends="BaseResultMap">
+    <result column="name" jdbcType="VARCHAR" property="shopZoneName" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="sku_name" jdbcType="VARCHAR" property="skuNmae" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="nick_name" jdbcType="VARCHAR" property="userNickName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="real_unit_price" jdbcType="DECIMAL" property="realUnitPrice" />
+
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, order_id, shop_id, shop_name, order_coupon_id, order_coupon_code, order_address_id, 
+    goods_sku_id, coupon_amount, send_amount,user_id, user_name, changer_id, changer_name, create_time,
+    update_time,send_time,remark,salepoint_id,service_amount,shop_service_amount,user_service_amount,real_unit_price,is_bill,is_dui,real_shop_unit_price
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_write_off
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectDetailByPrimaryKey" parameterType="java.lang.Long" resultMap="OrderWriteOffOutResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from order_write_off
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectDetailByOrderCouponId" parameterType="java.lang.Long" resultMap="OrderWriteOffOutResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from order_write_off
+    where order_coupon_id = #{orderCouponId,jdbcType=BIGINT}
+  </select>
+  <select id="selectDetailByOrderCouponCode" parameterType="java.lang.String" resultMap="OrderWriteOffOutResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from order_write_off
+    where order_coupon_code = #{orderCouponCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from order_write_off
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.OrderWriteOff">
+    insert into order_write_off (id, order_id, shop_id, 
+      shop_name, order_coupon_id, order_coupon_code, 
+      order_address_id, goods_sku_id, coupon_amount, send_amount,
+      user_id, user_name, changer_id, 
+      changer_name, create_time, update_time,send_time,remark,
+      salepoint_id,service_amount,shop_service_amount,user_service_amount,
+      <if test="isBill!=null">
+        is_bill,
+      </if>
+      <if test="isDui!=null">
+        is_dui,
+      </if>
+      real_unit_price,real_shop_unit_price
+      )
+    values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, 
+      #{shopName,jdbcType=VARCHAR}, #{orderCouponId,jdbcType=BIGINT}, #{orderCouponCode,jdbcType=VARCHAR}, 
+      #{orderAddressId,jdbcType=BIGINT}, #{goodsSkuId,jdbcType=BIGINT}, #{couponAmount,jdbcType=DECIMAL}, #{sendAmount,jdbcType=DECIMAL},
+      #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{changerId,jdbcType=BIGINT}, 
+      #{changerName,jdbcType=VARCHAR}, now(), now(),#{sendTime,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},
+      #{salepointId,jdbcType=BIGINT}, #{serviceAmount,jdbcType=DECIMAL},#{shopServiceAmount,jdbcType=DECIMAL},#{userServiceAmount,jdbcType=DECIMAL},
+      <if test="isBill!=null">
+        #{isBill,jdbcType=INTEGER},
+      </if>
+      <if test="isDui!=null">
+        #{isDui,jdbcType=INTEGER},
+      </if>
+      #{realUnitPrice,jdbcType=DECIMAL},#{realShopUnitPrice,jdbcType=DECIMAL}
+      )
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
+  <insert id="batchInsert" parameterType="com.xq.live.model.OrderWriteOff">
+    insert into order_write_off (id, order_id, shop_id,
+    shop_name, order_coupon_id, order_coupon_code,
+    order_address_id, goods_sku_id, coupon_amount, send_amount,
+    user_id, user_name, changer_id,
+    changer_name, create_time, update_time,send_time,remark,
+    salepoint_id,service_amount,shop_service_amount,user_service_amount,
+    <if test="isBill!=null">
+      is_bill,
+    </if>
+    <if test="isDui!=null">
+      is_dui,
+    </if>
+    real_unit_price,real_shop_unit_price
+    )
+    values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT},
+    #{shopName,jdbcType=VARCHAR}, #{orderCouponId,jdbcType=BIGINT}, #{orderCouponCode,jdbcType=VARCHAR},
+    #{orderAddressId,jdbcType=BIGINT}, #{goodsSkuId,jdbcType=BIGINT}, #{couponAmount,jdbcType=DECIMAL}, #{sendAmount,jdbcType=DECIMAL},
+    #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{changerId,jdbcType=BIGINT},
+    #{changerName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP},#{sendTime,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},
+    #{salepointId,jdbcType=BIGINT}, #{serviceAmount,jdbcType=DECIMAL},#{shopServiceAmount,jdbcType=DECIMAL},#{userServiceAmount,jdbcType=DECIMAL},
+    <if test="isBill!=null">
+      #{isBill,jdbcType=INTEGER},
+    </if>
+    <if test="isDui!=null">
+      #{isDui,jdbcType=INTEGER},
+    </if>
+    #{realUnitPrice,jdbcType=DECIMAL},#{realShopUnitPrice,jdbcType=DECIMAL}
+    )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.OrderWriteOff">
+    insert into order_write_off
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="shopName != null">
+        shop_name,
+      </if>
+      <if test="orderCouponId != null">
+        order_coupon_id,
+      </if>
+      <if test="orderCouponCode != null">
+        order_coupon_code,
+      </if>
+      <if test="orderAddressId != null">
+        order_address_id,
+      </if>
+      <if test="goodsSkuId != null">
+        goods_sku_id,
+      </if>
+      <if test="couponAmount != null">
+        coupon_amount,
+      </if>
+      <if test="sendAmount != null">
+        send_amount,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="changerId != null">
+        changer_id,
+      </if>
+      <if test="changerName != null">
+        changer_name,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="sendTime != null">
+        send_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="serviceAmount != null">
+        service_amount,
+      </if>
+      <if test="shopServiceAmount != null">
+        shop_service_amount,
+      </if>
+      <if test="userServiceAmount != null">
+        user_service_amount,
+      </if>
+      <if test="isBill != null">
+        is_bill,
+      </if>
+      <if test="isDui != null">
+        is_dui,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="shopName != null">
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderCouponId != null">
+        #{orderCouponId,jdbcType=BIGINT},
+      </if>
+      <if test="orderCouponCode != null">
+        #{orderCouponCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAddressId != null">
+        #{orderAddressId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuId != null">
+        #{goodsSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="couponAmount != null">
+        #{couponAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sendAmount != null">
+        #{sendAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="changerId != null">
+        #{changerId,jdbcType=BIGINT},
+      </if>
+      <if test="changerName != null">
+        #{changerName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceAmount != null">
+        #{serviceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="shopServiceAmount != null">
+        #{shopServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="userServiceAmount != null">
+        #{userServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="isBill != null">
+        #{isBill,jdbcType=INTEGER},
+      </if>
+      <if test="isDui != null">
+        #{isDui,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.OrderWriteOff">
+    update order_write_off
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="shopName != null">
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderCouponId != null">
+        order_coupon_id = #{orderCouponId,jdbcType=BIGINT},
+      </if>
+      <if test="orderCouponCode != null">
+        order_coupon_code = #{orderCouponCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAddressId != null">
+        order_address_id = #{orderAddressId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuId != null">
+        goods_sku_id = #{goodsSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="couponAmount != null">
+        coupon_amount = #{couponAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sendAmount != null">
+        send_amount = #{sendAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="changerId != null">
+        changer_id = #{changerId,jdbcType=BIGINT},
+      </if>
+      <if test="changerName != null">
+        changer_name = #{changerName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendTime != null">
+        send_time = #{sendTime,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceAmount != null">
+        service_amount = #{serviceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="shopServiceAmount != null">
+        shop_service_amount = #{shopServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="userServiceAmount != null">
+        user_service_amount = #{userServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="isBill != null">
+        is_bill = #{isBill,jdbcType=INTEGER},
+      </if>
+      <if test="isDui != null">
+        is_dui = #{isDui,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.OrderWriteOff">
+    update order_write_off
+    set order_id = #{orderId,jdbcType=BIGINT},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      order_coupon_id = #{orderCouponId,jdbcType=BIGINT},
+      order_coupon_code = #{orderCouponCode,jdbcType=VARCHAR},
+      order_address_id = #{orderAddressId,jdbcType=BIGINT},
+      goods_sku_id = #{goodsSkuId,jdbcType=BIGINT},
+      coupon_amount = #{couponAmount,jdbcType=DECIMAL},
+      send_amount = #{sendAmount,jdbcType=DECIMAL},
+      user_id = #{userId,jdbcType=BIGINT},
+      user_name = #{userName,jdbcType=VARCHAR},
+      changer_id = #{changerId,jdbcType=BIGINT},
+      changer_name = #{changerName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      send_time = #{sendTime,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      service_amount = #{serviceAmount,jdbcType=DECIMAL},
+      shop_service_amount = #{shopServiceAmount,jdbcType=DECIMAL},
+      user_service_amount = #{userServiceAmount,jdbcType=DECIMAL},
+      is_bill = #{isBill,jdbcType=INTEGER},
+      is_dui = #{isDui,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="list" resultMap="OrderWriteOffOutResultMap">
+    select
+    owo.*,ocp.show_code,
+    gs.id as gs_id,gs.sku_code,gs.sku_name,gs.sku_pic,gs.small_sku_pic
+    from order_write_off owo
+    inner join goods_sku gs on owo.goods_sku_id = gs.id
+    inner JOIN order_coupon ocp on owo.order_coupon_code=ocp.coupon_code
+    <where>
+      1=1
+      <if test="id != null">
+        and owo.id = #{id}
+      </if>
+      <if test="shopId != null">
+        and owo.shop_id = #{shopId}
+      </if>
+      <if test="goodsSkuId != null">
+        and owo.goods_sku_id = #{goodsSkuId}
+      </if>
+      <if test="beginTime !=null and endTime != null">
+        and (owo.create_time BETWEEN #{beginTime} and #{endTime})
+      </if>
+      <if test="isBill !=null">
+        and owo.is_bill = #{isBill,jdbcType=INTEGER}
+      </if>
+      and gs.is_deleted = 0
+    </where>
+    order by create_time DESC
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="listTotal" resultType="java.lang.Integer">
+    select
+    count(1)
+    from order_write_off owo
+    inner join goods_sku gs on owo.goods_sku_id = gs.id
+    <where>
+      1=1
+      <if test="id != null">
+        and owo.id = #{id}
+      </if>
+      <if test="shopId != null">
+        and owo.shop_id = #{shopId}
+      </if>
+      <if test="goodsSkuId != null">
+        and owo.goods_sku_id = #{goodsSkuId}
+      </if>
+      <if test="beginTime !=null and endTime != null">
+        and (owo.create_time BETWEEN #{beginTime} and #{endTime})
+      </if>
+      <if test="isBill !=null">
+        and owo.is_bill = #{isBill,jdbcType=INTEGER}
+      </if>
+      and gs.is_deleted = 0
+    </where>
+  </select>
+
+  <select id="selectTotalAmount" resultMap="OrderWriteOffOutResultMap">
+    SELECT
+    convert(IFNULL(sum(owo.shop_service_amount),0),decimal(11,2)) total_service,
+    convert(IFNULL(sum(real_unit_price),0),decimal(11,2)) total_price,
+    convert(IFNULL(sum(owo.real_shop_unit_price),0),decimal(11,2)) total_shop_price,
+    count(owo.id) total_item
+    from order_write_off owo
+    inner join goods_sku gs on owo.goods_sku_id = gs.id
+    <where>
+      1=1
+      <if test="shopId != null">
+        and owo.shop_id = #{shopId}
+      </if>
+      <if test="beginTime !=null and endTime != null">
+        and (owo.create_time BETWEEN #{beginTime} and #{endTime})
+      </if>
+      <if test="isBill !=null">
+        and owo.is_bill = #{isBill,jdbcType=INTEGER}
+      </if>
+      <if test="isDui !=null">
+        and owo.is_dui = #{isDui,jdbcType=INTEGER}
+      </if>
+      and gs.is_deleted = 0
+    </where>
+  </select>
+
+  <!--批量修改符合条件订单的结算状态(适用版，通过shopid和时间段批量修改)-->
+  <update id="updateByShopId" parameterType="com.xq.live.vo.in.OrderWriteOffInVo">
+    update order_write_off owo
+    left join order_coupon ocu on owo.order_coupon_id=ocu.id
+    set owo.is_bill=1
+    where
+    owo.shop_id=#{shopId,jdbcType=BIGINT}
+    and owo.is_bill=0
+    and ocu.is_used=1
+    <if test="beginTime !=null and endTime != null">
+      and (owo.create_time BETWEEN #{beginTime} and #{endTime})
+    </if>
+  </update>
+
+  <!--查询可提现余额-->
+  <select id="selectTotalPrice" resultMap="OrderWriteOffOutResultMap">
+    select sum(ocu.real_unit_price) total_price from order_write_off owo
+    left join order_coupon ocu on owo.order_coupon_id=ocu.id
+    <where>
+      ocu.shop_id = #{shopId}
+      <if test="beginTime !=null and endTime != null">
+        and (owo.create_time BETWEEN #{beginTime} and #{endTime})
+      </if>
+
+      and owo.is_dui=0
+    </where>
+
+  </select>
+
+  <!--查询万达活动订单信息-->
+  <select id="selectWanDaWriteOff" resultMap="OrderWriteOffWanDaResultMap">
+    select szi.name,sp.shop_name,gs.sku_name,owo.user_name,usr.nick_name,owo.create_time,gc.category_name,owo.real_unit_price
+    from order_write_off owo
+    left join shop sp
+    on owo.shop_id=sp.id
+    left join shop_zone_item szi
+    on sp.shop_zone_item_id = szi.id
+    left join goods_sku gs
+    on gs.id=owo.goods_sku_id
+    left join user usr
+    on usr.id=owo.user_id
+    left join goods_spu gsp
+    on gs.spu_id=gsp.id
+    left join goods_category gc
+    on gsp.category_id=gc.id
+    where sp.shop_zone_item_id  >0
+    and sp.is_deleted=0
+    and (owo.create_time BETWEEN #{startTime} and #{endTime})
+    <if test="shopZoneItemId !=null ">
+      and sp.shop_zone_item_id  = #{shopZoneItemId}
+    </if>
+    order by szi.name,sp.shop_name,owo.user_name,owo.create_time
+
+  </select>
+
+  <!--查询万达所有订单信息-->
+  <!--<select id="selectWanDaWriteOff" resultMap="OrderWriteOffWanDaResultMap">
+     select szi.name,sp.shop_name,gs.sku_name,owo.user_name,usr.nick_name,owo.create_time,gc.category_name,owo.real_unit_price
+     from order_write_off owo
+     left join shop sp
+     on owo.shop_id=sp.id
+     left join shop_zone_item szi
+     on sp.shop_zone_item_id = szi.id
+     left join act_goods_sku ags
+     on ags.sku_id=owo.goods_sku_id
+     left join goods_sku gs
+     on gs.id=owo.goods_sku_id
+     left join user usr
+     on usr.id=owo.user_id
+     left join goods_spu gsp
+     on gs.spu_id=gsp.id
+     left join goods_category gc
+     on gsp.category_id=gc.id
+     where sp.shop_zone_item_id  >0
+     and sp.is_deleted=0
+     and ags.act_id=45
+     and ags.is_deleted=0
+     and (owo.create_time BETWEEN #{startTime} and #{endTime})
+     <if test="shopZoneItemId !=null ">
+       and sp.shop_zone_item_id  = #{shopZoneItemId}
+     </if>
+     order by szi.name,sp.shop_name,owo.user_name,owo.create_time
+
+   </select>-->
+
+  <!--3.7，3.8查询万达活动订单信息，只查原价和砍价-->
+  <select id="selectDailyByUserId" resultMap="BaseResultMap">
+    select owo.* from order_write_off owo
+    left join goods_sku gs on gs.id=owo.goods_sku_id
+    left join shop s on gs.shop_id=s.id
+    left join order_coupon oc on owo.order_coupon_id=oc.id
+    where s.shop_zone_item_id>0
+    and oc.flag_type=4
+    and owo.user_id=#{userId,jdbcType=BIGINT}
+    and TO_DAYS(owo.create_time)=TO_DAYS(#{createTime,jdbcType=TIMESTAMP})
+
+  </select>
+
+
+
+</mapper>

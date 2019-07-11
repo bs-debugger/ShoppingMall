@@ -1,0 +1,835 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ActGoodsSkuMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ActGoodsSku">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="act_id" jdbcType="BIGINT" property="actId" />
+    <result column="sku_id" jdbcType="BIGINT" property="skuId" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="category_id" jdbcType="BIGINT" property="categoryId" />
+    <result column="goods_pr_id" jdbcType="BIGINT" property="goodsPrId" />
+    <result column="apply_status" jdbcType="TINYINT" property="applyStatus" />
+    <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="weight" jdbcType="INTEGER" property="weight" />
+    <result column="ratio" jdbcType="DECIMAL" property="ratio" />
+    <result column="stock_num" jdbcType="INTEGER" property="stockNum" />
+    <result column="people_num" jdbcType="INTEGER" property="peopleNum" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="rule_desc" jdbcType="VARCHAR" property="ruleDesc" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="due_time" jdbcType="TIMESTAMP" property="dueTime" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="current_num" jdbcType="INTEGER" property="currentNum" />
+
+    <result column="goods_sku_number" jdbcType="VARCHAR" property="goodsSkuNumber" />
+    <result column="vote_num" jdbcType="INTEGER" property="voteNum" />
+    <result column="waring_stock" jdbcType="INTEGER" property="waringStock" />
+    <result column="auto_add_stock" jdbcType="INTEGER" property="autoAddStock" />
+
+    <result column="expiry_date" jdbcType="TIMESTAMP" property="expiryDate" />
+    <result column="discount" jdbcType="DECIMAL" property="discount" />
+    <result column="weekend_usable" jdbcType="INTEGER" property="weekendUsable" />
+    <result column="time_usable" jdbcType="INTEGER" property="timeUsable" />
+
+  </resultMap>
+
+  <resultMap id="ActGoodsSkuOutResultMap" extends="BaseResultMap" type="com.xq.live.vo.out.ActGoodsSkuOut">
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <association property="goodsCategory" javaType="com.xq.live.model.GoodsCategory">
+      <result column="code" jdbcType="VARCHAR" property="code" />
+      <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+      <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+      <result column="level" jdbcType="INTEGER" property="level" />
+      <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
+      <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
+      <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+      <result column="status" jdbcType="INTEGER" property="status" />
+    </association>
+    <association property="actInfo" javaType="com.xq.live.model.ActInfo">
+      <result column="act_name" jdbcType="VARCHAR" property="actName" />
+      <result column="act_desc" jdbcType="VARCHAR" property="actDesc" />
+      <result column="type" jdbcType="INTEGER" property="type" />
+    </association>
+    <association property="goodsPromotionRules" javaType="com.xq.live.model.GoodsPromotionRules">
+      <id column="gpr_id" jdbcType="BIGINT" property="id" />
+      <result column="rule_type" jdbcType="INTEGER" property="ruleType" />
+      <result column="gpr_rule_desc" jdbcType="VARCHAR" property="ruleDesc" />
+      <result column="act_amount" jdbcType="DECIMAL" property="actAmount" />
+      <result column="man_amount" jdbcType="DECIMAL" property="manAmount" />
+      <result column="jian_amount" jdbcType="DECIMAL" property="jianAmount" />
+    </association>
+    <association property="goodsSku" javaType="com.xq.live.model.GoodsSku">
+      <id column="gs_id" jdbcType="BIGINT" property="id" />
+      <result column="gs_sku_name" jdbcType="VARCHAR" property="skuName" />
+      <result column="gs_sku_pic" jdbcType="VARCHAR" property="skuPic" />
+      <result column="gs_small_sku_pic" jdbcType="VARCHAR" property="smallSkuPic" />
+      <result column="gs_goods_sku_pics" jdbcType="VARCHAR" property="goodsSkuPics" />
+      <result column="gs_stock_num" jdbcType="INTEGER" property="stockNum" />
+      <result column="gs_singly_price" jdbcType="DECIMAL" property="singlyPrice" />
+      <result column="gs_sell_price" jdbcType="DECIMAL" property="sellPrice" />
+      <result column="gs_sku_status" jdbcType="INTEGER" property="status" />
+    </association>
+    <collection property="goodsSkuOut" ofType="com.xq.live.vo.out.GoodsSkuOut">
+      <result column="sku_name" jdbcType="VARCHAR" property="skuName" />
+      <result column="spu_id" jdbcType="VARCHAR" property="spuId" />
+      <result column="sku_id" jdbcType="VARCHAR" property="id" />
+      <result column="sku_pic" jdbcType="VARCHAR" property="skuPic" />
+      <result column="sku_shop_id" jdbcType="VARCHAR" property="shopId" />
+      <result column="market_price" jdbcType="DECIMAL" property="marketPrice" />
+      <result column="sell_price" jdbcType="DECIMAL" property="sellPrice" />
+      <result column="single_type" jdbcType="INTEGER" property="singleType" />
+      <result column="gs_sku_status" jdbcType="INTEGER" property="status" />
+    </collection>
+    <collection property="actTimeRules" ofType="com.xq.live.model.ActTimeRules">
+      <result column="atr_id" jdbcType="BIGINT" property="id" />
+      <result column="atr_week_days" jdbcType="VARCHAR" property="weekDays" />
+      <result column="atr_start_hour" jdbcType="INTEGER" property="startHour" />
+      <result column="atr_start_minuts" jdbcType="INTEGER" property="startMinuts" />
+      <result column="atr_end_hour" jdbcType="INTEGER" property="endHour" />
+      <result column="atr_end_minuts" jdbcType="INTEGER" property="endMinuts" />
+    </collection>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, act_id, sku_id, sku_code, shop_id, category_id,goods_pr_id, apply_status, sort_num, create_time,
+    update_time, is_deleted,weight,ratio,stock_num,people_num,
+    end_time,rule_desc,start_time,due_time,create_user_id,state,current_num,goods_sku_number,vote_num,
+    waring_stock,auto_add_stock,expiry_date,discount,weekend_usable,time_usable
+
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from act_goods_sku
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from act_goods_sku
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.xq.live.model.ActGoodsSku">
+
+    insert into act_goods_sku (id, act_id, sku_id, 
+      sku_code, shop_id,category_id, goods_pr_id,
+      apply_status, sort_num, create_time, 
+      update_time, is_deleted,weight,ratio,stock_num,people_num,
+      end_time,rule_desc,start_time,due_time,create_user_id,state,current_num,goods_sku_number,
+      vote_num,waring_stock,auto_add_stock,expiry_date,discount,weekend_usable,time_usable)
+    values (#{id,jdbcType=BIGINT}, #{actId,jdbcType=BIGINT}, #{skuId,jdbcType=BIGINT}, 
+      #{skuCode,jdbcType=VARCHAR}, #{shopId,jdbcType=BIGINT},#{categoryId,jdbcType=BIGINT}, #{goodsPrId,jdbcType=BIGINT},
+      #{applyStatus,jdbcType=INTEGER}, #{sortNum,jdbcType=INTEGER}, now(),
+      now(), 0, #{weight,jdbcType=INTEGER},
+      #{ratio,jdbcType=DECIMAL}, #{stockNum,jdbcType=INTEGER}, #{peopleNum,jdbcType=DECIMAL},
+      #{endTime,jdbcType=TIMESTAMP}, #{ruleDesc,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP},
+      #{dueTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=BIGINT}, #{state,jdbcType=INTEGER},0,
+    #{goodsSkuNumber,jdbcType=VARCHAR} ,0,#{waringStock,jdbcType=INTEGER},#{autoAddStock,jdbcType=INTEGER},
+    #{expiryDate,jdbcType=TIMESTAMP}, #{discount,jdbcType=DECIMAL}, #{weekendUsable,jdbcType=INTEGER}, #{timeUsable,jdbcType=INTEGER})
+    <selectKey resultType="java.lang.Long" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.ActGoodsSku">
+    insert into act_goods_sku
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="actId != null">
+        act_id,
+      </if>
+      <if test="skuId != null">
+        sku_id,
+      </if>
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="categoryId != null">
+        category_id,
+      </if>
+      <if test="goodsPrId != null">
+        goods_pr_id,
+      </if>
+      <if test="applyStatus != null">
+        apply_status,
+      </if>
+      <if test="sortNum != null">
+        sort_num,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="ratio != null">
+        ratio,
+      </if>
+      <if test="stockNum != null">
+        stock_num,
+      </if>
+      <if test="peopleNum != null">
+        people_num,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="ruleDesc != null">
+        rule_desc,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="dueTime != null">
+        due_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="currentNum != null">
+        current_num,
+      </if>
+      <if test="goodsSkuNumber != null">
+        goods_sku_number,
+      </if>
+      <if test="voteNum != null">
+        vote_num,
+      </if>
+      <if test="autoAddStock != null">
+        auto_add_stock,
+      </if>
+      <if test="expiryDate != null">
+        expiry_date,
+      </if>
+      <if test="discount != null">
+        discount,
+      </if>
+      <if test="weekendUsable != null">
+        weekend_usable,
+      </if>
+      <if test="timeUsable != null">
+        time_usable,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="actId != null">
+        #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="skuId != null">
+        #{skuId,jdbcType=BIGINT},
+      </if>
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsPrId != null">
+        #{goodsPrId,jdbcType=BIGINT},
+      </if>
+      <if test="applyStatus != null">
+        #{applyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="sortNum != null">
+        #{sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="ratio != null">
+        #{ratio,jdbcType=DECIMAL},
+      </if>
+      <if test="stockNum != null">
+        #{stockNum,jdbcType=INTEGER},
+      </if>
+      <if test="peopleNum != null">
+        #{peopleNum,jdbcType=INTEGER},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ruleDesc != null">
+        #{ruleDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dueTime != null">
+        #{dueTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="currentNum != null">
+        #{currentNum,jdbcType=INTEGER},
+      </if>
+      <if test="goodsSkuNumber != null">
+        #{goodsSkuNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="voteNum != null">
+        #{voteNum,jdbcType=INTEGER},
+      </if>
+      <if test="autoAddStock != null">
+        #{autoAddStock,jdbcType=INTEGER},
+      </if>
+      <if test="expiryDate != null">
+        #{expiryDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="discount != null">
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="weekendUsable != null">
+        #{weekendUsable,jdbcType=INTEGER},
+      </if>
+      <if test="timeUsable != null">
+        #{timeUsable,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.ActGoodsSku">
+    update act_goods_sku
+    <set>
+      <if test="actId != null">
+        act_id = #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="skuId != null">
+        sku_id = #{skuId,jdbcType=BIGINT},
+      </if>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="categoryId != null">
+        category_id = #{categoryId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsPrId != null">
+        goods_pr_id = #{goodsPrId,jdbcType=BIGINT},
+      </if>
+      <if test="applyStatus != null">
+        apply_status = #{applyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="sortNum != null">
+        sort_num = #{sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="ratio != null">
+        ratio = #{ratio,jdbcType=DECIMAL},
+      </if>
+      <if test="stockNum != null">
+        stock_num = #{stockNum,jdbcType=INTEGER},
+      </if>
+      <if test="peopleNum != null">
+        people_num = #{peopleNum,jdbcType=INTEGER},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ruleDesc != null">
+        rule_desc = #{ruleDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dueTime != null">
+        due_time = #{dueTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="currentNum != null">
+        current_num= #{currentNum,jdbcType=INTEGER},
+      </if>
+      <if test="goodsSkuNumber != null">
+        goods_sku_number= #{goodsSkuNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="voteNum != null">
+        vote_num= #{voteNum,jdbcType=INTEGER},
+      </if>
+      <if test="waringStock != null">
+        waring_stock= #{waringStock,jdbcType=INTEGER},
+      </if>
+      <if test="autoAddStock != null">
+        auto_add_stock= #{autoAddStock,jdbcType=INTEGER},
+      </if>
+      <if test="expiryDate != null">
+        expiry_date= #{expiryDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="discount != null">
+        discount= #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="weekendUsable != null">
+        weekend_usable= #{weekendUsable,jdbcType=INTEGER},
+      </if>
+      <if test="timeUsable != null">
+        time_usable= #{timeUsable,jdbcType=INTEGER},
+      </if>
+
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.ActGoodsSku">
+    update act_goods_sku
+    set act_id = #{actId,jdbcType=BIGINT},
+      sku_id = #{skuId,jdbcType=BIGINT},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      category_id = #{categoryId,jdbcType=BIGINT},
+      goods_pr_id = #{goodsPrId,jdbcType=BIGINT},
+      apply_status = #{applyStatus,jdbcType=TINYINT},
+      sort_num = #{sortNum,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=INTEGER},
+      ratio = #{ratio,jdbcType=DECIMAL},
+      stock_num = #{stockNum,jdbcType=INTEGER},
+      people_num = #{peopleNum,jdbcType=INTEGER},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      rule_desc = #{ruleDesc,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      due_time = #{dueTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      state = #{state,jdbcType=INTEGER},
+      current_num= #{currentNum,jdbcType=INTEGER},
+      goods_sku_number= #{goodsSkuNumber,jdbcType=VARCHAR},
+      vote_num= #{voteNum,jdbcType=INTEGER},
+      auto_add_stock= #{autoAddStock,jdbcType=INTEGER},
+      expiry_date= #{expiryDate,jdbcType=TIMESTAMP},
+      discount= #{discount,jdbcType=DECIMAL},
+      weekend_usable= #{weekendUsable,jdbcType=INTEGER},
+      time_usable= #{timeUsable,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--通过活动id查询报名参加该活动的商品类目列表(根据类目来分组)-->
+  <select id="selectCategoryByActId" parameterType="com.xq.live.vo.in.ActGoodsSkuInVo" resultMap="ActGoodsSkuOutResultMap">
+    SELECT
+    ags.category_id,
+    gc.code, gc.category_name, gc.parent_id, gc.level, gc.image_url, gc.sort_num, gc.is_deleted, gc.status,
+    ai.act_name,ai.act_desc,ai.type
+    FROM
+    act_goods_sku ags
+    INNER JOIN goods_category gc on gc.id=ags.category_id
+    inner join act_info ai on ags.act_id = ai.id
+    WHERE
+    ags.is_deleted = 0
+    AND ags.apply_status = 1
+    AND ags.act_id = #{actId,jdbcType=BIGINT}
+    AND ags.state=1
+    and ai.is_deleted = 0
+    and ai.act_status = 1
+    GROUP BY ags.category_id
+  </select>
+
+  <!--通过活动id和商品id查询商品所对应的活动详情-->
+  <select id="selectByActId" parameterType="com.xq.live.vo.in.ActGoodsSkuInVo" resultMap="ActGoodsSkuOutResultMap">
+    SELECT
+    ags.*,
+    gc.code, gc.category_name, gc.parent_id, gc.level, gc.image_url, gc.sort_num, gc.is_deleted, gc.status,
+    ai.act_name,ai.act_desc,ai.type,
+    gpr.id as gpr_id, gpr.rule_type,gpr.rule_desc as gpr_rule_desc,gpr.act_amount,
+    atr.id atr_id,atr.week_days atr_week_days,atr.start_hour atr_start_hour,atr.start_minuts atr_start_minuts,atr.end_hour atr_end_hour,atr.end_minuts atr_end_minuts
+    FROM
+    act_goods_sku ags
+    INNER JOIN goods_category gc on gc.id=ags.category_id
+    inner join act_info ai on ags.act_id = ai.id
+    left join goods_promotion_rules gpr on ags.goods_pr_id = gpr.id
+    left join act_time_rules atr on atr.rule_type=0 and atr.ref_id=ags.id
+    WHERE
+    ags.is_deleted = 0
+    AND ags.apply_status = 1
+    and ai.act_status = 1
+    and ags.state=1
+    AND ags.act_id = #{actId,jdbcType=BIGINT}
+    AND ags.sku_id=#{skuId,jdbcType=BIGINT}
+    and ai.is_deleted = 0
+  </select>
+
+  <!--通过活动id和商品id查询商品所对应的活动详情-->
+  <select id="selectInfoByActId" parameterType="com.xq.live.vo.in.ActGoodsSkuInVo" resultMap="ActGoodsSkuOutResultMap">
+    SELECT
+    ags.*,
+    gs.sku_name, gs.sku_pic, gs.market_price, gs.sell_price, gs.single_type, gs.status as gs_sku_status,
+    gc.code, gc.category_name, gc.parent_id, gc.level, gc.image_url, gc.sort_num, gc.is_deleted, gc.status,
+    ai.act_name,ai.act_desc,ai.type,
+    gpr.id as gpr_id, gpr.rule_type,gpr.rule_desc as gpr_rule_desc,gpr.act_amount
+    FROM
+    act_goods_sku ags
+    left join goods_sku gs on gs.id = ags.sku_id
+    left join goods_category gc on gc.id=ags.category_id
+    inner join act_info ai on ags.act_id = ai.id
+    left join goods_promotion_rules gpr on ags.goods_pr_id = gpr.id
+    WHERE
+    ags.is_deleted = 0
+    AND ags.apply_status = 1
+    and ai.act_status = 1
+    and ags.state=1
+    AND ags.act_id = #{actId,jdbcType=BIGINT}
+    AND ags.sku_id=#{skuId,jdbcType=BIGINT}
+    and ai.is_deleted = 0
+  </select>
+
+  <!--通过活动id商品所对应的活动详情-->
+  <select id="selectHistoryList" parameterType="com.xq.live.vo.in.ActGoodsSkuInVo" resultMap="ActGoodsSkuOutResultMap">
+    SELECT
+    ags.*,
+    gc.code, gc.category_name, gc.parent_id, gc.level, gc.image_url, gc.sort_num, gc.is_deleted, gc.status,
+    ai.act_name,ai.act_desc,ai.type,
+    sk.sku_pic,sk.sku_name,sk.market_price,sk.sell_price,
+    gpr.id as gpr_id, gpr.rule_type,gpr.rule_desc as gpr_rule_desc,gpr.act_amount
+    FROM
+    act_goods_sku ags
+    INNER JOIN goods_category gc on gc.id=ags.category_id
+    inner join act_info ai on ags.act_id = ai.id
+    INNER JOIN goods_sku sk on sk.id=ags.sku_id
+    left join goods_promotion_rules gpr on ags.goods_pr_id = gpr.id
+    WHERE
+    ags.is_deleted = 0
+    AND sk.is_deleted=0
+    AND ags.act_id = #{actId,jdbcType=BIGINT}
+    AND (ags.state= 2 or ags.state=3)
+    and ai.is_deleted = 0
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="selectHistoryTotal" resultType="java.lang.Integer">
+     SELECT
+    count(1)
+    FROM
+    act_goods_sku ags
+    INNER JOIN goods_category gc on gc.id=ags.category_id
+    inner join act_info ai on ags.act_id = ai.id
+    INNER JOIN goods_sku sk on sk.id=ags.sku_id
+    left join goods_promotion_rules gpr on ags.goods_pr_id = gpr.id
+    WHERE
+    ags.is_deleted = 0
+    AND sk.is_deleted=0
+    AND ags.act_id = #{actId,jdbcType=BIGINT}
+    AND (ags.state= 2 or ags.state=3)
+    and ai.is_deleted = 0
+  </select>
+
+  <!--通过商品id查询该商品参与的活动列表-->
+  <select id="selectActInfoListByGoodsSkuId" parameterType="com.xq.live.vo.in.ActGoodsSkuInVo" resultMap="ActGoodsSkuOutResultMap">
+    SELECT
+    ags.*,
+    gc.code, gc.category_name, gc.parent_id, gc.level, gc.image_url, gc.sort_num, gc.is_deleted, gc.status,
+    ai.act_name,ai.act_desc,ai.type,
+    gpr.id as gpr_id, gpr.rule_type,gpr.rule_desc as gpr_rule_desc,gpr.act_amount,gpr.man_amount,gpr.jian_amount,
+    atr.id atr_id,atr.week_days atr_week_days,atr.start_hour atr_start_hour,atr.start_minuts atr_start_minuts,atr.end_hour atr_end_hour,atr.end_minuts atr_end_minuts
+    FROM
+    act_goods_sku ags
+    INNER JOIN goods_category gc on gc.id=ags.category_id
+    inner join act_info ai on ags.act_id = ai.id
+    left join goods_promotion_rules gpr on ags.goods_pr_id = gpr.id
+    left join act_time_rules atr on atr.rule_type=0 and atr.ref_id=ags.id
+    WHERE
+    ags.is_deleted = 0
+    AND ags.apply_status = 1
+    <if test="actId != null">
+      AND ags.act_id = #{actId,jdbcType=BIGINT}
+    </if>
+    <if test="skuId != null">
+    AND ags.sku_id=#{skuId,jdbcType=BIGINT}
+    </if>
+    AND ags.state=1
+    and ai.is_deleted = 0
+    and ai.act_status = 1
+    order by  ai.id asc
+  </select>
+
+  <!--查询可抽奖的参与活动商品以及类目-->
+  <select id="selectLotteryList" parameterType="com.xq.live.vo.in.ActGoodsSkuInVo" resultMap="ActGoodsSkuOutResultMap">
+    (SELECT
+    ags.*,
+    gc.code, gc.category_name, gc.parent_id, gc.level, gc.image_url, gc.status,
+    gs.sku_name,gs.spu_id,gs.id as sku_id,gs.shop_id as sku_shop_id,gs.single_type,gs.sku_pic
+    FROM
+    act_goods_sku ags
+    INNER JOIN goods_category gc on gc.id=ags.category_id
+	LEFT JOIN goods_sku gs on gs.id=ags.sku_id
+    left JOIN shop shp on shp.id=gs.shop_id
+	where
+    ags.is_deleted = 0
+    AND ags.apply_status = 1
+    AND ags.state = 1
+    AND ags.act_id =  #{actId,jdbcType=BIGINT}
+    AND gs.status != 2
+    and  gs.stock_num > 0
+    and ags.stock_num > 0
+    AND ags.shop_id>0
+    AND shp.city= #{city,jdbcType=VARCHAR})
+    UNION
+  (SELECT
+    ags.*,
+    gc.code, gc.category_name, gc.parent_id, gc.level, gc.image_url, gc.status,
+    gs.sku_name,gs.spu_id,gs.id as sku_id,gs.shop_id as sku_shop_id,gs.single_type,gs.sku_pic
+    FROM
+    act_goods_sku ags
+    INNER JOIN goods_category gc on gc.id=ags.category_id
+	LEFT JOIN goods_sku gs on gs.id=ags.sku_id
+	where
+    ags.is_deleted = 0
+    AND ags.apply_status = 1
+    AND ags.state = 1
+    AND ags.act_id =  #{actId,jdbcType=BIGINT}
+    AND gs.status != 2
+    and gs.stock_num > 0
+    and ags.stock_num > 0
+    AND ags.shop_id=0)
+  </select>
+
+
+
+  <!--抽奖后库存减少1-->
+  <update id="updateStockNum" parameterType="com.xq.live.vo.out.ActGoodsSkuOut">
+    update act_goods_sku
+    set
+    stock_num = stock_num-1,
+    update_time = now()
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--用户参团成功后人数加一-->
+  <update id="updateCurrentNum" parameterType="com.xq.live.model.ActGoodsSku">
+    update act_goods_sku
+    <set>
+      <if test="state != null">
+        state = #{state,jdbcType=BIGINT},
+        end_time = now(),
+      </if>
+      current_num = current_num+1,
+      update_time = now()
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--修改超时活动状态-->
+  <update id="updateOverTimeActStatus" parameterType="com.xq.live.model.ActGoodsSku">
+    update act_goods_sku
+    <set>
+      <if test="state != null">
+        state = #{state,jdbcType=BIGINT},
+      </if>
+      update_time = now(),
+      end_time = now()
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--购买订单后库存减少和取消订单后增加-->
+  <update id="updateCutDownStockNum" parameterType="com.xq.live.vo.in.ActGoodsSkuInVo">
+    update act_goods_sku
+    set
+    <if test="stockNumType != null and stockNumType==1">
+      stock_num = stock_num-#{stockNum},
+    </if>
+    <if test="stockNumType != null and stockNumType==2">
+      stock_num = stock_num+#{stockNum},
+    </if>
+    update_time = now()
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--订单取消后库存释放-->
+  <update id="updateByRollback" parameterType="java.util.List">
+    update act_goods_sku
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="stock_num =case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          <if test="item.stockNum !=null">
+            when id=#{item.id,jdbcType=BIGINT} then stock_num + #{item.stockNum,jdbcType=INTEGER}
+          </if>
+          <if test="item.stockNum == null">
+            when id=#{item.id} then stock_num
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <!--查询拼团活动中已到期的团-->
+  <select id="selectDistributionList"  resultMap="BaseResultMap">
+    SELECT
+    gs.*
+    FROM
+    act_goods_sku gs
+    LEFT JOIN act_info ai ON ai.id = gs.act_id
+    WHERE
+    ai.type = 7
+    and
+    gs.state = 1
+    AND	gs.due_time &lt; now()
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from act_goods_sku
+  </select>
+
+  <select id="countByActId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    select count(1) from act_goods_sku where act_id = #{actId,jdbcType=BIGINT}
+  </select>
+
+  <update id="updateVoteNumUp" parameterType="com.xq.live.vo.in.ActGoodsSkuInVo">
+    update act_goods_sku
+    <set>
+      vote_num = vote_num+#{voteNum,jdbcType=INTEGER},
+      update_time = now()
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--查询某一商对应参加的活动信息-->
+  <select id="selectListBySkuId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from act_goods_sku
+    where
+    is_deleted=0 and
+    sku_id = #{skuId,jdbcType=BIGINT}
+  </select>
+
+  <!--查询库存不足的商品-->
+  <select id="selectStocklist" resultMap="BaseResultMap">
+    select
+    ags.*
+    from act_goods_sku ags
+    INNER  JOIN goods_sku gs on gs.id=ags.sku_id
+    where
+    ags.is_deleted=0 and
+    ags.waring_stock &gt;= ags.stock_num
+    AND ags.apply_status=1
+    AND gs.is_deleted=0
+    AND gs.status=1
+    AND ags.shop_id &gt; 0
+  </select>
+
+  <select id="selectActInfo" resultType="com.xq.live.vo.out.ActGoodsSkuRecommendOut">
+    select
+      ags.act_id, ags.sku_id, gs.sku_name, gs.sku_pic, gs.small_sku_pic, gs.sell_price, gs.stock_num
+    from act_goods_sku ags
+    left join goods_sku gs on ags.sku_id = gs.id
+    left join goods_promotion_rules gpr on ags.goods_pr_id = gpr.id
+    where ags.act_id = #{actId, jdbcType=BIGINT} and ags.sku_id = #{goodsSkuId, jdbcType=BIGINT}
+      and ags.is_deleted = 0
+      and ags.apply_status = 1
+      and gs.is_deleted = 0
+      and gs.status = 1
+      and gs.stock_num > 0
+  </select>
+
+  <!--通过活动id和城市商品详情-->
+  <select id="selectGoodsList" parameterType="com.xq.live.vo.in.ActGoodsSkuInVo" resultMap="ActGoodsSkuOutResultMap">
+    SELECT
+    ags.*,
+    gc.code, gc.category_name, gc.parent_id, gc.level, gc.image_url, gc.sort_num, gc.is_deleted, gc.status,
+    ai.act_name,ai.act_desc,ai.type,
+    gs.sku_pic gs_sku_pic,gs.sku_name gs_sku_name,gs.singly_price gs_singly_price,gs.sell_price gs_sell_price,gs.id gs_id,gs.small_sku_pic gs_small_sku_pic, gs.goods_sku_pics gs_goods_sku_pics,
+    gpr.id as gpr_id, gpr.rule_type,gpr.rule_desc as gpr_rule_desc,gpr.act_amount,s.shop_name
+    FROM
+    act_goods_sku ags
+    INNER JOIN goods_category gc on gc.id=ags.category_id
+    inner join act_info ai on ags.act_id = ai.id
+    INNER JOIN goods_sku gs on gs.id=ags.sku_id
+    left join goods_promotion_rules gpr on ags.goods_pr_id = gpr.id
+    left join shop s on gs.shop_id=s.id
+    <where>
+      ags.is_deleted = 0
+      AND gs.is_deleted=0
+      AND ags.act_id = #{actId,jdbcType=BIGINT}
+      and s.city=#{city,jdbcType=VARCHAR}
+      AND ags.state= 1
+      and ai.is_deleted = 0
+      and gs.is_deleted=0
+      and gs.status=1
+      <if test="searcheKey != null">
+        and (s.shop_name like concat('%', #{searcheKey}, '%') or gs.sku_name like concat('%', #{searcheKey}, '%'))
+      </if>
+    </where>
+
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="selectGoodsTotal" resultType="java.lang.Integer">
+    SELECT
+    count(1)
+    FROM
+    act_goods_sku ags
+    INNER JOIN goods_category gc on gc.id=ags.category_id
+    inner join act_info ai on ags.act_id = ai.id
+    INNER JOIN goods_sku gs on gs.id=ags.sku_id
+    left join goods_promotion_rules gpr on ags.goods_pr_id = gpr.id
+    left join shop s on gs.shop_id=s.id
+    <where>
+      ags.is_deleted = 0
+      AND gs.is_deleted=0
+      AND ags.act_id = #{actId,jdbcType=BIGINT}
+      and s.city=#{city,jdbcType=VARCHAR}
+      AND ags.state= 1
+      and ai.is_deleted = 0
+      and gs.is_deleted=0
+      and gs.status=1
+      <if test="searcheKey != null">
+        and (s.shop_name like concat('%', #{searcheKey}, '%') or gs.sku_name like concat('%', #{searcheKey}, '%'))
+      </if>
+    </where>
+  </select>
+
+</mapper>

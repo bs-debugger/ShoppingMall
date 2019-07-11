@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ActTopicMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ActTopic">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="act_id" jdbcType="BIGINT" property="actId" />
+    <result column="topic_id" jdbcType="BIGINT" property="topicId" />
+    <result column="act_topic_code" jdbcType="VARCHAR" property="actTopicCode" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="apply_status" jdbcType="INTEGER" property="applyStatus" />
+    <result column="vote_num" jdbcType="INTEGER" property="voteNum" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <resultMap id="ActTopicOutMap" type="com.xq.live.vo.out.ActTopicOut" extends="BaseResultMap">
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="home_pic" jdbcType="VARCHAR" property="homePic" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="hit_num" jdbcType="INTEGER" property="hitNum" />
+    <result column="topic_type" jdbcType="INTEGER" property="topicType" />
+    <result column="trans_num" jdbcType="INTEGER" property="transNum" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
+    <result column="zan" jdbcType="INTEGER" property="zan" />
+    <result column="is_zan" jdbcType="INTEGER" property="isZan" />
+    <result column="user_type" jdbcType="INTEGER" property="userType" />
+    <result column="zan_total" jdbcType="INTEGER" property="zanTotal" />
+    <result column="act_hit_num" jdbcType="INTEGER" property="actHitNum" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, act_id, topic_id, act_topic_code, user_id, apply_status, vote_num, create_time, 
+    update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from act_topic
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from act_topic
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.vo.in.ActTopicInVo">
+    insert into act_topic (id, act_id, topic_id, 
+      act_topic_code, user_id, apply_status, 
+      vote_num, create_time, update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{actId,jdbcType=BIGINT}, #{topicId,jdbcType=BIGINT}, 
+      #{actTopicCode,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT},1,
+      0, now(), now()
+      )
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.vo.in.ActTopicInVo">
+    insert into act_topic
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="actId != null">
+        act_id,
+      </if>
+      <if test="topicId != null">
+        topic_id,
+      </if>
+      <if test="actTopicCode != null">
+        act_topic_code,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="applyStatus != null">
+        apply_status,
+      </if>
+      <if test="voteNum != null">
+        vote_num,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="actId != null">
+        #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="topicId != null">
+        #{topicId,jdbcType=BIGINT},
+      </if>
+      <if test="actTopicCode != null">
+        #{actTopicCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="applyStatus != null">
+        #{applyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="voteNum != null">
+        #{voteNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.vo.in.ActTopicInVo">
+    update act_topic
+    <set>
+      <if test="actId != null">
+        act_id = #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="topicId != null">
+        topic_id = #{topicId,jdbcType=BIGINT},
+      </if>
+      <if test="actTopicCode != null">
+        act_topic_code = #{actTopicCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="applyStatus != null">
+        apply_status = #{applyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="voteNum != null">
+        vote_num = #{voteNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.vo.in.ActTopicInVo">
+    update act_topic
+    set act_id = #{actId,jdbcType=BIGINT},
+      topic_id = #{topicId,jdbcType=BIGINT},
+      act_topic_code = #{actTopicCode,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=BIGINT},
+      apply_status = #{applyStatus,jdbcType=INTEGER},
+      vote_num = #{voteNum,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateForVoteNums" parameterType="com.xq.live.vo.in.ActTopicInVo">
+    update act_topic
+    <set>
+      <if test="actId != null">
+        act_id = #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="topicId != null">
+        topic_id = #{topicId,jdbcType=BIGINT},
+      </if>
+      <if test="actTopicCode != null">
+        act_topic_code = #{actTopicCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="applyStatus != null">
+        apply_status = #{applyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="voteNum != null">
+        vote_num = #{voteNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where topic_id = #{topicId,jdbcType=BIGINT}
+    and apply_status = 1
+    <if test="actId != null">
+      and act_id = #{actId,jdbcType=BIGINT}
+    </if>
+  </update>
+
+  <select id="countByActId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    select count(1) from act_topic where act_id = #{actId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByTopicId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from act_topic
+    where topic_id = #{topicId,jdbcType=BIGINT}
+    <if test="actId != null">
+      and act_id = #{actId,jdbcType=BIGINT}
+    </if>
+    and apply_status = 1
+  </select>
+
+  <select id="listForNewAct" resultMap="ActTopicOutMap">
+    select
+    a.*,
+    t.title,
+    t.summary,
+    t.home_pic,
+    t.content,
+    t.hit_num,
+    t.topic_type,
+    t.trans_num,
+    u.user_name,
+    u.nick_name,
+    u.icon_url,
+    (select count(1) from zan where ref_id = a.topic_id and type = 2) as zan,
+    (select count(1) from zan where ref_id = a.topic_id and type = 2
+    <if test="zanUserId != null">
+      AND  user_id = #{zanUserId}
+    </if>
+    ) as is_zan,
+    u.user_type
+    FROM
+    act_topic a
+    inner join topic t on a.topic_id = t.id
+    inner join user u on a.user_id = u.id
+    <where>
+      1=1
+      <if test="id != null">
+        and  a.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="actId != null">
+        AND  a.act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      <if test="topicId != null">
+        AND  a.topic_id = #{topicId,jdbcType=BIGINT}
+      </if>
+      <if test="userId != null">
+        AND  a.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="searchKey != null">
+        and a.act_topic_code = #{searchKey,jdbcType=VARCHAR}
+      </if>
+      and  a.apply_status = 1
+      and t.is_deleted = 0
+    </where>
+    ORDER by
+    <if test="sortType == 1">
+      a.create_time DESC
+    </if>
+    <if test="sortType ==null || sortType !=1">
+      a.vote_num DESC
+    </if>
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="listTotal" resultType="java.lang.Integer">
+    select
+    count(1)
+    FROM
+    act_topic a
+    inner join topic t on a.topic_id = t.id
+    inner join user u on a.user_id = u.id
+    <where>
+      1=1
+      <if test="id != null">
+        and  a.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="actId != null">
+        AND  a.act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      <if test="topicId != null">
+        AND  a.topic_id = #{topicId,jdbcType=BIGINT}
+      </if>
+      <if test="userId != null">
+        AND  a.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="searchKey != null">
+        and a.act_topic_code = #{searchKey,jdbcType=VARCHAR}
+      </if>
+      and  a.apply_status = 1
+      and t.is_deleted = 0
+    </where>
+    ORDER by
+    <if test="sortType == 1">
+      a.create_time DESC,
+    </if>
+    a.vote_num DESC
+  </select>
+
+  <select id="zanAndHitTotal" resultMap="ActTopicOutMap">
+    select
+    sum(a.vote_num) as zan_total,
+    sum(t.hit_num) as act_hit_num
+    FROM
+    act_topic a
+    inner join topic t on a.topic_id = t.id
+    inner join user u on a.user_id = u.id
+    <where>
+      1=1
+      <if test="id != null">
+        and  a.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="actId != null">
+        AND  a.act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      <if test="topicId != null">
+        AND  a.topic_id = #{topicId,jdbcType=BIGINT}
+      </if>
+      <if test="userId != null">
+        AND  a.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      and  a.apply_status = 1
+      and t.is_deleted = 0
+    </where>
+    ORDER by
+    <if test="sortType == 1">
+      a.create_time DESC,
+    </if>
+    a.vote_num DESC
+  </select>
+</mapper>

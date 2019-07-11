@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ActLotteryCategoryMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ActLotteryCategory">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="main_pic" jdbcType="VARCHAR" property="mainPic" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
+    <result column="ref_id" jdbcType="BIGINT" property="refId" />
+    <result column="act_id" jdbcType="BIGINT" property="actId" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, main_pic, name, sort_num, ref_id, act_id, is_deleted, type, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from act_lottery_category
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from act_lottery_category
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.ActLotteryCategory">
+    insert into act_lottery_category (id, main_pic, name, 
+      sort_num, ref_id, act_id, 
+      is_deleted, type, create_time, 
+      update_time)
+    values (#{id,jdbcType=BIGINT}, #{mainPic,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{sortNum,jdbcType=INTEGER}, #{refId,jdbcType=BIGINT}, #{actId,jdbcType=BIGINT}, 
+      #{isDeleted,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.ActLotteryCategory">
+    insert into act_lottery_category
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="mainPic != null">
+        main_pic,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sortNum != null">
+        sort_num,
+      </if>
+      <if test="refId != null">
+        ref_id,
+      </if>
+      <if test="actId != null">
+        act_id,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="mainPic != null">
+        #{mainPic,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNum != null">
+        #{sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="refId != null">
+        #{refId,jdbcType=BIGINT},
+      </if>
+      <if test="actId != null">
+        #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.ActLotteryCategory">
+    update act_lottery_category
+    <set>
+      <if test="mainPic != null">
+        main_pic = #{mainPic,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNum != null">
+        sort_num = #{sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="refId != null">
+        ref_id = #{refId,jdbcType=BIGINT},
+      </if>
+      <if test="actId != null">
+        act_id = #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.ActLotteryCategory">
+    update act_lottery_category
+    set main_pic = #{mainPic,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      sort_num = #{sortNum,jdbcType=INTEGER},
+      ref_id = #{refId,jdbcType=BIGINT},
+      act_id = #{actId,jdbcType=BIGINT},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="list" parameterType="com.xq.live.vo.in.ActLotteryCategoryInVo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from act_lottery_category
+    where act_id = #{actId,jdbcType=BIGINT}
+    AND is_deleted=0
+    order BY
+    sort_num
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="listTotal" parameterType="com.xq.live.vo.in.ActLotteryCategoryInVo" resultType="java.lang.Integer">
+    select
+    count(1)
+    from act_lottery_category
+    where act_id = #{actId,jdbcType=BIGINT}
+    AND is_deleted=0
+  </select>
+
+
+</mapper>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xq.live.dao.GoodsSkuAuditLogMapper" >
+  <resultMap id="BaseResultMap" type="com.xq.live.model.GoodsSkuAuditLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="sku_id" property="skuId" jdbcType="BIGINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sku_id, content, is_deleted, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from goods_sku_audit_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from goods_sku_audit_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.GoodsSkuAuditLog" >
+    insert into goods_sku_audit_log (id, sku_id, content, 
+      is_deleted, create_time, update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{skuId,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.GoodsSkuAuditLog" >
+    insert into goods_sku_audit_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="skuId != null" >
+        sku_id,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="skuId != null" >
+        #{skuId,jdbcType=BIGINT},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.GoodsSkuAuditLog" >
+    update goods_sku_audit_log
+    <set >
+      <if test="skuId != null" >
+        sku_id = #{skuId,jdbcType=BIGINT},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.GoodsSkuAuditLog" >
+    update goods_sku_audit_log
+    set sku_id = #{skuId,jdbcType=BIGINT},
+      content = #{content,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <insert id="batchInsert">
+    <foreach collection="list" item="item" separator=";">
+      insert into goods_sku_audit_log (id, sku_id, content,
+      is_deleted, create_time, update_time
+      )
+      values (#{item.id,jdbcType=BIGINT}, #{item.skuId,jdbcType=BIGINT}, #{item.content,jdbcType=VARCHAR},
+      #{item.isDeleted,jdbcType=TINYINT}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}
+      )
+    </foreach>
+  </insert>
+</mapper>

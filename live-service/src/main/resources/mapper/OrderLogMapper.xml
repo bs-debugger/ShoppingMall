@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.OrderLogMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.OrderLog">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
+    <result column="operate_type" jdbcType="INTEGER" property="operateType" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_ip" jdbcType="VARCHAR" property="userIp" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, order_code, operate_type, user_id, user_name, user_ip, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from order_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.OrderLog">
+    insert into order_log (id, order_code, operate_type, 
+      user_id, user_name, user_ip, 
+      create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{orderCode,jdbcType=VARCHAR}, #{operateType,jdbcType=INTEGER}, 
+      #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{userIp,jdbcType=VARCHAR}, 
+      now(), now())
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
+  <insert id="batchInsert" parameterType="com.xq.live.model.OrderLog">
+    insert into order_log (id, order_code, operate_type,
+    user_id, user_name, user_ip,
+    create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{orderCode,jdbcType=VARCHAR}, #{operateType,jdbcType=INTEGER},
+    #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{userIp,jdbcType=VARCHAR},
+    #{createTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.OrderLog">
+    insert into order_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderCode != null">
+        order_code,
+      </if>
+      <if test="operateType != null">
+        operate_type,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="userIp != null">
+        user_ip,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orderCode != null">
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operateType != null">
+        #{operateType,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userIp != null">
+        #{userIp,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.OrderLog">
+    update order_log
+    <set>
+      <if test="orderCode != null">
+        order_code = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operateType != null">
+        operate_type = #{operateType,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userIp != null">
+        user_ip = #{userIp,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.OrderLog">
+    update order_log
+    set order_code = #{orderCode,jdbcType=VARCHAR},
+      operate_type = #{operateType,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=BIGINT},
+      user_name = #{userName,jdbcType=VARCHAR},
+      user_ip = #{userIp,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

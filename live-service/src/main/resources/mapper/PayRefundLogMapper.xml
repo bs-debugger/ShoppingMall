@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.PayRefundLogMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.PayRefundLog">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="transaction_id" jdbcType="VARCHAR" property="transactionId" />
+    <result column="out_trade_no" jdbcType="VARCHAR" property="outTradeNo" />
+    <result column="refund_id" jdbcType="VARCHAR" property="refundId" />
+    <result column="out_refund_no" jdbcType="VARCHAR" property="outRefundNo" />
+    <result column="total_fee" jdbcType="DECIMAL" property="totalFee" />
+    <result column="refund_fee" jdbcType="DECIMAL" property="refundFee" />
+    <result column="settlement_refund_fee" jdbcType="DECIMAL" property="settlementRefundFee" />
+    <result column="refund_status" jdbcType="VARCHAR" property="refundStatus" />
+    <result column="refund_recv_accout" jdbcType="VARCHAR" property="refundRecvAccout" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, transaction_id, out_trade_no, refund_id, out_refund_no, total_fee, refund_fee, 
+    settlement_refund_fee, refund_status, refund_recv_accout, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pay_refund_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from pay_refund_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.PayRefundLog">
+    insert into pay_refund_log (id, transaction_id, out_trade_no, 
+      refund_id, out_refund_no, total_fee, 
+      refund_fee, settlement_refund_fee, refund_status, 
+      refund_recv_accout, create_time)
+    values (#{id,jdbcType=BIGINT}, #{transactionId,jdbcType=VARCHAR}, #{outTradeNo,jdbcType=VARCHAR}, 
+      #{refundId,jdbcType=VARCHAR}, #{outRefundNo,jdbcType=VARCHAR}, #{totalFee,jdbcType=DECIMAL}, 
+      #{refundFee,jdbcType=DECIMAL}, #{settlementRefundFee,jdbcType=DECIMAL}, #{refundStatus,jdbcType=VARCHAR}, 
+      #{refundRecvAccout,jdbcType=VARCHAR}, now())
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.PayRefundLog">
+    insert into pay_refund_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="transactionId != null">
+        transaction_id,
+      </if>
+      <if test="outTradeNo != null">
+        out_trade_no,
+      </if>
+      <if test="refundId != null">
+        refund_id,
+      </if>
+      <if test="outRefundNo != null">
+        out_refund_no,
+      </if>
+      <if test="totalFee != null">
+        total_fee,
+      </if>
+      <if test="refundFee != null">
+        refund_fee,
+      </if>
+      <if test="settlementRefundFee != null">
+        settlement_refund_fee,
+      </if>
+      <if test="refundStatus != null">
+        refund_status,
+      </if>
+      <if test="refundRecvAccout != null">
+        refund_recv_accout,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="transactionId != null">
+        #{transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="outTradeNo != null">
+        #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="refundId != null">
+        #{refundId,jdbcType=VARCHAR},
+      </if>
+      <if test="outRefundNo != null">
+        #{outRefundNo,jdbcType=VARCHAR},
+      </if>
+      <if test="totalFee != null">
+        #{totalFee,jdbcType=DECIMAL},
+      </if>
+      <if test="refundFee != null">
+        #{refundFee,jdbcType=DECIMAL},
+      </if>
+      <if test="settlementRefundFee != null">
+        #{settlementRefundFee,jdbcType=DECIMAL},
+      </if>
+      <if test="refundStatus != null">
+        #{refundStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="refundRecvAccout != null">
+        #{refundRecvAccout,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.PayRefundLog">
+    update pay_refund_log
+    <set>
+      <if test="transactionId != null">
+        transaction_id = #{transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="outTradeNo != null">
+        out_trade_no = #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="refundId != null">
+        refund_id = #{refundId,jdbcType=VARCHAR},
+      </if>
+      <if test="outRefundNo != null">
+        out_refund_no = #{outRefundNo,jdbcType=VARCHAR},
+      </if>
+      <if test="totalFee != null">
+        total_fee = #{totalFee,jdbcType=DECIMAL},
+      </if>
+      <if test="refundFee != null">
+        refund_fee = #{refundFee,jdbcType=DECIMAL},
+      </if>
+      <if test="settlementRefundFee != null">
+        settlement_refund_fee = #{settlementRefundFee,jdbcType=DECIMAL},
+      </if>
+      <if test="refundStatus != null">
+        refund_status = #{refundStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="refundRecvAccout != null">
+        refund_recv_accout = #{refundRecvAccout,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.PayRefundLog">
+    update pay_refund_log
+    set transaction_id = #{transactionId,jdbcType=VARCHAR},
+      out_trade_no = #{outTradeNo,jdbcType=VARCHAR},
+      refund_id = #{refundId,jdbcType=VARCHAR},
+      out_refund_no = #{outRefundNo,jdbcType=VARCHAR},
+      total_fee = #{totalFee,jdbcType=DECIMAL},
+      refund_fee = #{refundFee,jdbcType=DECIMAL},
+      settlement_refund_fee = #{settlementRefundFee,jdbcType=DECIMAL},
+      refund_status = #{refundStatus,jdbcType=VARCHAR},
+      refund_recv_accout = #{refundRecvAccout,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--根据退款单号查询退款记录-->
+  <select id="listByOutRefundNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM
+    pay_refund_log s
+    WHERE
+    s.out_refund_no=#{outRefundNo,jdbcType=VARCHAR}
+  </select>
+</mapper>

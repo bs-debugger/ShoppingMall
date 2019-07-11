@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.GlobalConfigMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.GlobalConfig">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="config_key" jdbcType="VARCHAR" property="configKey" />
+    <result column="config_value" jdbcType="LONGVARCHAR" property="configValue" />
+    <result column="config_desc" jdbcType="VARCHAR" property="configDesc" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, config_key, config_value, config_desc, type, is_deleted, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from global_config
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from global_config
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.GlobalConfig">
+    insert into global_config (id, config_key, config_value,
+    config_desc, type, is_deleted,
+      create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{configKey,jdbcType=VARCHAR}, #{configValue,jdbcType=LONGVARCHAR},
+      #{configDesc,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 0,
+      now(), now())
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.GlobalConfig">
+    insert into global_config
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="configKey != null">
+        config_key,
+      </if>
+      <if test="configValue != null">
+        config_value,
+      </if>
+      <if test="configDesc != null">
+        config_desc,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="configKey != null">
+        #{configKey,jdbcType=VARCHAR},
+      </if>
+      <if test="configValue != null">
+        #{configValue,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="configDesc != null">
+        #{configDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.GlobalConfig">
+    update global_config
+    <set>
+      <if test="configKey != null">
+        config_key = #{configKey,jdbcType=VARCHAR},
+      </if>
+      <if test="configValue != null">
+        config_value = #{configValue,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="configDesc != null">
+        config_desc = #{configDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.GlobalConfig">
+    update global_config
+    set config_key = #{configKey,jdbcType=VARCHAR},
+      config_value = #{configValue,jdbcType=LONGVARCHAR},
+      config_desc = #{configDesc,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="list" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from global_config
+    where type = #{type,jdbcType=INTEGER} and is_deleted = 0
+    order by id desc
+  </select>
+</mapper>

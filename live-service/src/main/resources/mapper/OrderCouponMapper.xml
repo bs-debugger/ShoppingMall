@@ -1,0 +1,1406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.OrderCouponMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.OrderCoupon">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="coupon_code" jdbcType="VARCHAR" property="couponCode" />
+    <result column="goods_sku_id" jdbcType="BIGINT" property="goodsSkuId" />
+    <result column="goods_sku_code" jdbcType="VARCHAR" property="goodsSkuCode" />
+    <result column="goods_sku_name" jdbcType="VARCHAR" property="goodsSkuName" />
+    <result column="coupon_amount" jdbcType="DECIMAL" property="couponAmount" />
+    <result column="real_unit_price" jdbcType="DECIMAL" property="realUnitPrice" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="qrcode_url" jdbcType="VARCHAR" property="qrcodeUrl" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="is_used" jdbcType="INTEGER" property="isUsed" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="expiry_date" jdbcType="DATE" property="expiryDate" />
+    <result column="coupon_address_id" jdbcType="BIGINT" property="couponAddressId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="used_time" jdbcType="TIMESTAMP" property="usedTime" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="own_id" jdbcType="BIGINT" property="ownId" />
+    <result column="changer_id" jdbcType="BIGINT" property="changerId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="send_time" jdbcType="VARCHAR" property="sendTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="express_code" jdbcType="VARCHAR" property="expressCode" />
+    <result column="version_no" jdbcType="INTEGER" property="versionNo" />
+    <result column="single_type" jdbcType="INTEGER" property="singleType" />
+    <result column="flag_type" jdbcType="INTEGER" property="flagType" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="coupon_salepoint_id" jdbcType="BIGINT" property="couponSalepointId" />
+    <result column="service_amount" jdbcType="DECIMAL" property="serviceAmount" />
+    <result column="shop_service_amount" jdbcType="DECIMAL" property="shopServiceAmount" />
+    <result column="user_service_amount" jdbcType="DECIMAL" property="userServiceAmount" />
+    <result column="is_show" jdbcType="INTEGER" property="isShow" />
+    <result column="get_the_status" jdbcType="INTEGER" property="getTheStatus" />
+    <result column="show_code" jdbcType="VARCHAR" property="showCode" />
+    <result column="express_state" jdbcType="INTEGER" property="expressState" />
+    <result column="real_shop_unit_price" jdbcType="DECIMAL" property="realShopUnitPrice" />
+  </resultMap>
+  <resultMap id="OrderCouponOutResultMap" type="com.xq.live.vo.out.OrderCouponOut" extends="BaseResultMap">
+    <id column="ocs_id" jdbcType="BIGINT" property="ocsId" />
+    <result column="sku_pic" jdbcType="VARCHAR" property="skuPic" />
+    <result column="small_sku_pic" jdbcType="VARCHAR" property="smallSkuPic" />
+    <result column="spu_id" jdbcType="BIGINT" property="spuId" />
+    <result column="other_marker_price" jdbcType="DECIMAL" property="otherMarkerPrice" />
+    <result column="salepoint_id" jdbcType="BIGINT" property="salepointId" />
+    <result column="send_user_id" jdbcType="BIGINT" property="sendUserId" />
+    <result column="receive_user_id" jdbcType="BIGINT" property="receiveUserId" />
+    <result column="send_user_name" jdbcType="VARCHAR" property="sendUserName" />
+    <result column="receive_user_name" jdbcType="VARCHAR" property="receiveUserName" />
+    <result column="ocs_create_time" jdbcType="TIMESTAMP" property="ocsCreateTime" />
+    <result column="realAmount" jdbcType="DECIMAL" property="realAmount" />
+    <result column="flagTypeName" jdbcType="VARCHAR" property="flagTypeName" />
+    <result column="act_id" jdbcType="BIGINT" property="actId" />
+
+    <result column="shop_service_amount" jdbcType="DECIMAL" property="shopServiceAmount" />
+    <result column="user_service_amount" jdbcType="DECIMAL" property="userServiceAmount" />
+    <collection property="orderItemOuts" ofType="com.xq.live.vo.out.OrderItemOut">
+      <result column="order_item_id" jdbcType="BIGINT" property="id" />
+      <result column="goods_spu_id" jdbcType="BIGINT" property="goodsSpuId" />
+      <result column="goods_sku_id" jdbcType="BIGINT" property="goodsSkuId" />
+      <result column="order_item_shop_id" jdbcType="BIGINT" property="shopId" />
+      <result column="goods_sku_name" jdbcType="VARCHAR" property="goodsSkuName" />
+      <result column="goods_sku_pic" jdbcType="VARCHAR" property="goodsSkuPic" />
+      <result column="unit" jdbcType="VARCHAR" property="unit" />
+      <result column="mini_num" jdbcType="INTEGER" property="miniNum" />
+      <result column="goods_is_deleted" jdbcType="INTEGER" property="goodsIsDeleted" />
+      <result column="goods_status" jdbcType="INTEGER" property="goodsStatus" />
+      <result column="goods_num" jdbcType="INTEGER" property="goodsNum" />
+      <result column="gift_num" jdbcType="INTEGER" property="giftNum" />
+      <result column="goods_price" jdbcType="DECIMAL" property="goodsPrice" />
+      <result column="packing_price" jdbcType="DECIMAL" property="packingPrice" />
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, order_id, coupon_code, goods_sku_id, goods_sku_code, goods_sku_name, coupon_amount, 
+    type, qrcode_url, user_id, user_name, is_used, is_deleted, expiry_date, coupon_address_id,create_time,
+    used_time, shop_id, own_id,changer_id, update_time,send_time,remark,express_code,version_no,single_type,flag_type,status,
+    coupon_salepoint_id,service_amount,shop_service_amount,user_service_amount,is_show,real_unit_price,get_the_status,show_code,express_state,real_shop_unit_price
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_coupon
+    where id = #{id,jdbcType=BIGINT} and (is_show =0 or is_show is null)
+  </select>
+  <select id="selectDetailByPrimaryKey" parameterType="java.lang.Long" resultMap="OrderCouponOutResultMap">
+    select
+    a.*,
+    oin.salepoint_id,
+    oit.id as order_item_id,oit.goods_spu_id,oit.goods_sku_id,oit.shop_id as order_item_shop_id,oit.goods_sku_name,
+    oit.goods_num,oit.gift_num,oit.goods_price,oit.packing_price,gsk.sku_pic as goods_sku_pic,gsk.unit,gsk.mini_num
+    from order_coupon a
+    inner join order_info oin on a.order_id = oin.id
+    inner join order_item oit on oin.order_code = oit.order_code
+    inner join goods_sku gsk on oit.goods_sku_id = gsk.id
+    where a.id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="getByCouponCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from order_coupon
+    where coupon_code = #{couponCode,jdbcType=VARCHAR}
+    and (is_show =0 or is_show is null)
+  </select>
+  <select id="getDetailByCouponCode" parameterType="java.lang.String" resultMap="OrderCouponOutResultMap">
+    select
+    a.*,
+    oin.salepoint_id,
+    oit.id as order_item_id,oit.goods_spu_id,oit.goods_sku_id,oit.shop_id as order_item_shop_id,oit.goods_sku_name,
+    oit.goods_num,oit.gift_num,oit.goods_price,oit.packing_price,gsk.sku_pic as goods_sku_pic,gsk.unit,gsk.mini_num
+    from order_coupon a
+    inner join order_info oin on a.order_id = oin.id
+    inner join order_item oit on oin.order_code = oit.order_code
+    inner join goods_sku gsk on oit.goods_sku_id = gsk.id
+    where a.coupon_code = #{couponCode,jdbcType=VARCHAR}
+    and (a.is_show =0 or a.is_show is null)
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from order_coupon
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.OrderCoupon">
+    insert into order_coupon (id, order_id, coupon_code, 
+      goods_sku_id, goods_sku_code, goods_sku_name, 
+      coupon_amount,real_unit_price, type, qrcode_url,
+      user_id, user_name,
+      expiry_date, coupon_address_id,create_time,
+      used_time, shop_id, own_id,changer_id,
+      update_time,send_time,remark,single_type,flag_type,status,
+      coupon_salepoint_id,service_amount,shop_service_amount,user_service_amount,is_show,get_the_status,
+      show_code,express_state,real_shop_unit_price)
+    values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{couponCode,jdbcType=VARCHAR}, 
+      #{goodsSkuId,jdbcType=BIGINT}, #{goodsSkuCode,jdbcType=VARCHAR}, #{goodsSkuName,jdbcType=VARCHAR}, 
+      #{couponAmount,jdbcType=DECIMAL},#{realUnitPrice,jdbcType=DECIMAL}, #{type,jdbcType=INTEGER}, #{qrcodeUrl,jdbcType=VARCHAR},
+      #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR},
+      #{expiryDate,jdbcType=DATE}, #{couponAddressId,jdbcType=BIGINT},now(),
+      #{usedTime,jdbcType=TIMESTAMP}, #{shopId,jdbcType=BIGINT}, #{ownId,jdbcType=BIGINT},#{changerId,jdbcType=BIGINT},
+      now(),#{sendTime,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR}, #{singleType,jdbcType=INTEGER},#{flagType,jdbcType=INTEGER},#{status,jdbcType=INTEGER},
+      #{couponSalepointId,jdbcType=BIGINT}, #{serviceAmount,jdbcType=DECIMAL},#{shopServiceAmount,jdbcType=DECIMAL},#{userServiceAmount,jdbcType=DECIMAL},#{isShow,jdbcType=INTEGER},#{getTheStatus,jdbcType=INTEGER},
+      #{showCode,jdbcType=VARCHAR},#{expressState,jdbcType=INTEGER},#{realShopUnitPrice,jdbcType=DECIMAL})
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
+  <insert id="batchInsert" parameterType="com.xq.live.model.OrderCoupon">
+    insert into order_coupon (id, order_id, coupon_code,
+    goods_sku_id, goods_sku_code, goods_sku_name,
+    coupon_amount,real_unit_price, type, qrcode_url,
+    user_id, user_name,
+    expiry_date, coupon_address_id,create_time,
+    used_time, shop_id, own_id,changer_id,
+    update_time,send_time,remark,single_type,flag_type,status,
+    coupon_salepoint_id,service_amount,shop_service_amount,user_service_amount,is_show,get_the_status,
+    show_code,express_state,real_shop_unit_price)
+    values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{couponCode,jdbcType=VARCHAR},
+    #{goodsSkuId,jdbcType=BIGINT}, #{goodsSkuCode,jdbcType=VARCHAR}, #{goodsSkuName,jdbcType=VARCHAR},
+    #{couponAmount,jdbcType=DECIMAL},#{realUnitPrice,jdbcType=DECIMAL}, #{type,jdbcType=INTEGER}, #{qrcodeUrl,jdbcType=VARCHAR},
+    #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR},
+    #{expiryDate,jdbcType=DATE}, #{couponAddressId,jdbcType=BIGINT},#{createTime,jdbcType=TIMESTAMP},
+    #{usedTime,jdbcType=TIMESTAMP}, #{shopId,jdbcType=BIGINT}, #{ownId,jdbcType=BIGINT},#{changerId,jdbcType=BIGINT},
+    #{createTime,jdbcType=TIMESTAMP},#{sendTime,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR}, #{singleType,jdbcType=INTEGER},#{flagType,jdbcType=INTEGER},#{status,jdbcType=INTEGER},
+    #{couponSalepointId,jdbcType=BIGINT}, #{serviceAmount,jdbcType=DECIMAL},#{shopServiceAmount,jdbcType=DECIMAL},#{userServiceAmount,jdbcType=DECIMAL},#{isShow,jdbcType=INTEGER},#{getTheStatus,jdbcType=INTEGER},
+    #{showCode,jdbcType=VARCHAR},#{expressState,jdbcType=INTEGER},#{realShopUnitPrice,jdbcType=DECIMAL})
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.OrderCoupon">
+    insert into order_coupon
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="couponCode != null">
+        coupon_code,
+      </if>
+      <if test="goodsSkuId != null">
+        goods_sku_id,
+      </if>
+      <if test="goodsSkuCode != null">
+        goods_sku_code,
+      </if>
+      <if test="goodsSkuName != null">
+        goods_sku_name,
+      </if>
+      <if test="couponAmount != null">
+        coupon_amount,
+      </if>
+      <if test="realUnitPrice != null">
+        real_unit_price,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="qrcodeUrl != null">
+        qrcode_url,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="isUsed != null">
+        is_used,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="expiryDate != null">
+        expiry_date,
+      </if>
+      <if test="couponAddressId != null">
+        coupon_address_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="usedTime != null">
+        used_time,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="ownId != null">
+        own_id,
+      </if>
+      <if test="changerId != null">
+        changer_id,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="sendTime != null">
+        send_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="singleType != null">
+        single_type,
+      </if>
+      <if test="flagType != null">
+        flag_type,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="couponSalepointId != null">
+        coupon_salepoint_id,
+      </if>
+      <if test="serviceAmount != null">
+        service_amount,
+      </if>
+      <if test="shopServiceAmount != null">
+        shop_service_amount,
+      </if>
+      <if test="userServiceAmount != null">
+        user_service_amount,
+      </if>
+      <if test="showCode != null">
+        show_code,
+      </if>
+      <if test="realShopUnitPrice != null">
+        real_shop_unit_price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="couponCode != null">
+        #{couponCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsSkuId != null">
+        #{goodsSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuCode != null">
+        #{goodsSkuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsSkuName != null">
+        #{goodsSkuName,jdbcType=VARCHAR},
+      </if>
+      <if test="couponAmount != null">
+        #{couponAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="realUnitPrice != null">
+        #{realUnitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="qrcodeUrl != null">
+        #{qrcodeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="isUsed != null">
+        #{isUsed,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="expiryDate != null">
+        #{expiryDate,jdbcType=DATE},
+      </if>
+      <if test="couponAddressId != null">
+        #{couponAddressId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="usedTime != null">
+        #{usedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="ownId != null">
+        #{ownId,jdbcType=BIGINT},
+      </if>
+      <if test="changerId != null">
+        #{changerId,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="singleType != null">
+        #{singleType,jdbcType=INTEGER},
+      </if>
+      <if test="flag_type != null">
+        #{flag_type,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="couponSalepointId != null">
+        #{couponSalepointId,jdbcType=BIGINT},
+      </if>
+      <if test="serviceAmount != null">
+        #{serviceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="shopServiceAmount != null">
+        #{shopServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="userServiceAmount != null">
+        #{userServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="showCode != null">
+        #{showCode,jdbcType=VARCHAR},
+      </if>
+      <if test="realShopUnitPrice != null">
+        #{realShopUnitPrice,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.OrderCoupon">
+    update order_coupon
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="couponCode != null">
+        coupon_code = #{couponCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsSkuId != null">
+        goods_sku_id = #{goodsSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuCode != null">
+        goods_sku_code = #{goodsSkuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsSkuName != null">
+        goods_sku_name = #{goodsSkuName,jdbcType=VARCHAR},
+      </if>
+      <if test="couponAmount != null">
+        coupon_amount = #{couponAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="realUnitPrice != null">
+        real_unit_price = #{realUnitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="qrcodeUrl != null">
+        qrcode_url = #{qrcodeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="isUsed != null">
+        is_used = #{isUsed,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="expiryDate != null">
+        expiry_date = #{expiryDate,jdbcType=DATE},
+      </if>
+      <if test="couponAddressId != null">
+        coupon_address_id = #{couponAddressId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="usedTime != null">
+        used_time = #{usedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="ownId != null">
+        own_id = #{ownId,jdbcType=BIGINT},
+      </if>
+      <if test="changerId != null">
+        changer_id = #{changerId,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = now(),
+      </if>
+      <if test="sendTime != null">
+        send_time = #{sendTime,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="singleType != null">
+        single_type = #{singleType,jdbcType=INTEGER},
+      </if>
+      <if test="flagType != null">
+        flag_type = #{flagType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="couponSalepointId != null">
+        coupon_salepoint_id = #{couponSalepointId,jdbcType=BIGINT},
+      </if>
+      <if test="serviceAmount != null">
+        service_amount = #{serviceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="shopServiceAmount != null">
+        shop_service_amount = #{shopServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="userServiceAmount != null">
+        user_service_amount = #{userServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="showCode != null">
+        show_code = #{showCode,jdbcType=VARCHAR},
+      </if>
+      <if test="expressState != null">
+        express_state = #{expressState,jdbcType=INTEGER},
+      </if>
+      <if test="realShopUnitPrice != null">
+        real_shop_unit_price = #{realShopUnitPrice,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByCouponCodeSelective" parameterType="com.xq.live.model.OrderCoupon">
+    update order_coupon
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="couponCode != null">
+        coupon_code = #{couponCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsSkuId != null">
+        goods_sku_id = #{goodsSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuCode != null">
+        goods_sku_code = #{goodsSkuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsSkuName != null">
+        goods_sku_name = #{goodsSkuName,jdbcType=VARCHAR},
+      </if>
+      <if test="couponAmount != null">
+        coupon_amount = #{couponAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="realUnitPrice != null">
+        real_unit_price = #{realUnitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="qrcodeUrl != null">
+        qrcode_url = #{qrcodeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="isUsed != null">
+        is_used = #{isUsed,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="expiryDate != null">
+        expiry_date = #{expiryDate,jdbcType=DATE},
+      </if>
+      <if test="couponAddressId != null">
+        coupon_address_id = #{couponAddressId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="usedTime != null">
+        used_time = #{usedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="ownId != null">
+        own_id = #{ownId,jdbcType=BIGINT},
+      </if>
+      <if test="changerId != null">
+        changer_id = #{changerId,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = now(),
+      </if>
+      <if test="sendTime != null">
+        send_time = #{sendTime,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="singleType != null">
+        single_type = #{singleType,jdbcType=INTEGER},
+      </if>
+      <if test="couponSalepointId != null">
+        coupon_salepoint_id = #{couponSalepointId,jdbcType=BIGINT},
+      </if>
+      <if test="serviceAmount != null">
+        service_amount = #{serviceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="shopServiceAmount != null">
+        shop_service_amount = #{shopServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="userServiceAmount != null">
+        user_service_amount = #{userServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="getTheStatus != null">
+        get_the_status = #{getTheStatus,jdbcType=INTEGER},
+      </if>
+      <if test="showCode != null">
+        show_code = #{showCode,jdbcType=VARCHAR},
+      </if>
+      <if test="expressState != null">
+        express_state = #{expressState,jdbcType=INTEGER},
+      </if>
+      <if test="realShopUnitPrice != null">
+        real_shop_unit_price = #{realShopUnitPrice,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where coupon_code = #{couponCode,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByVersionCouponCodeSelective" parameterType="com.xq.live.model.OrderCoupon">
+    update order_coupon
+    set
+    own_id = #{ownId,jdbcType=BIGINT},
+    update_time = now(),
+    get_the_status = #{getTheStatus,jdbcType=INTEGER},
+    version_no = version_no + 1
+    where coupon_code = #{couponCode,jdbcType=VARCHAR} and version_no = #{versionNo,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.OrderCoupon">
+    update order_coupon
+    set order_id = #{orderId,jdbcType=BIGINT},
+      coupon_code = #{couponCode,jdbcType=VARCHAR},
+      goods_sku_id = #{goodsSkuId,jdbcType=BIGINT},
+      goods_sku_code = #{goodsSkuCode,jdbcType=VARCHAR},
+      goods_sku_name = #{goodsSkuName,jdbcType=VARCHAR},
+      coupon_amount = #{couponAmount,jdbcType=DECIMAL},
+      real_unit_price = #{realUnitPrice,jdbcType=DECIMAL},
+      type = #{type,jdbcType=INTEGER},
+      qrcode_url = #{qrcodeUrl,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=BIGINT},
+      user_name = #{userName,jdbcType=VARCHAR},
+      is_used = #{isUsed,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      expiry_date = #{expiryDate,jdbcType=DATE},
+      coupon_address_id = #{couponAddressId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      used_time = #{usedTime,jdbcType=TIMESTAMP},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      own_id = #{ownId,jdbcType=BIGINT},
+      changer_id = #{changerId,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      send_time = #{sendTime,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      single_type = #{singleType,jdbcType=INTEGER},
+      flag_type = #{flagType,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      coupon_salepoint_id = #{couponSalepointId,jdbcType=BIGINT},
+      service_amount = #{serviceAmount,jdbcType=DECIMAL},
+      shop_service_amount = #{shopServiceAmount,jdbcType=DECIMAL},
+      user_service_amount = #{userServiceAmount,jdbcType=DECIMAL},
+      get_the_status = #{getTheStatus,jdbcType=INTEGER},
+      show_code = #{showCode,jdbcType=VARCHAR},
+      express_state = #{expressState,jdbcType=INTEGER},
+      real_shop_unit_price = #{realShopUnitPrice,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateUseCoupon" parameterType="com.xq.live.model.OrderCoupon">
+    update order_coupon
+    set is_used = #{isUsed,jdbcType=INTEGER},
+    used_time = #{usedTime,jdbcType=TIMESTAMP},
+    changer_id = #{changerId,jdbcType=BIGINT},
+    coupon_address_id = #{couponAddressId,jdbcType=BIGINT},
+    update_time = now(),
+    send_time = #{sendTime,jdbcType=VARCHAR},
+    remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id}
+    and is_used = 0
+  </update>
+
+  <!--修改开团成功后修改票券显示-->
+  <update id="updateModifyingTheDisplay" parameterType="com.xq.live.vo.in.OrderCouponInVo">
+    update order_coupon
+    set is_show=0,
+    create_time = now(),
+    update_time = now()
+     where order_id in(
+      select ao.order_id
+      from act_order ao where
+      ao.act_goods_sku_id = #{actGoodsSkuId,jdbcType=DECIMAL}
+      and ao.state=2
+     )
+  </update>
+
+  <!-- 分页查询 start-->
+  <select id="list" resultMap="OrderCouponOutResultMap">
+    SELECT
+    oc.*,
+    oin.salepoint_id,
+    gs.sku_pic,
+    gs.spu_id,
+    gs.small_sku_pic,
+    gs.other_marker_price,
+    oit.id as order_item_id,oit.goods_spu_id,oit.goods_sku_id,oit.shop_id as order_item_shop_id,oit.goods_sku_name,
+    oit.goods_num,oit.gift_num,oit.goods_price,oit.packing_price,gsk.sku_pic as goods_sku_pic,gsk.unit,gsk.mini_num
+    FROM
+    order_coupon oc
+    INNER join goods_sku gs on oc.goods_sku_id = gs.id
+    inner join order_info oin on oc.order_id = oin.id
+    inner join order_item oit on oin.order_code = oit.order_code
+    inner join goods_sku gsk on oit.goods_sku_id = gsk.id
+    <where>
+      1=1
+      <if test="id != null">
+        and oc.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="orderId != null">
+        and oc.order_id = #{orderId,jdbcType=BIGINT}
+      </if>
+      <if test="couponCode != null">
+        and oc.coupon_code = #{couponCode,jdbcType=VARCHAR}
+      </if>
+      <if test="goodsSkuId != null">
+        and oc.goods_sku_id = #{goodsSkuId,jdbcType=BIGINT}
+      </if>
+      <if test="goodsSkuCode != null">
+        and oc.goods_sku_code = #{goodsSkuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null">
+        and oc.type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="userId != null">
+        and oc.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="userName != null">
+        and oc.user_name = #{userName,jdbcType=VARCHAR}
+      </if>
+      <if test="changerId != null">
+        and oc.changer_id = #{changerId,jdbcType=BIGINT}
+      </if>
+      <if test="changerName != null">
+        and oc.changer_name = #{changerName,jdbcType=VARCHAR}
+      </if>
+      <if test="isUsed != null and isUsed == 0"><!--查询未使用且未过期的-->
+        and oc.is_used = 0
+        <![CDATA[ and oc.expiry_date >= now()]]>
+      </if>
+      <if test="isUsed != null and isUsed == 1"><!--查询已使用和已过期的-->
+        <![CDATA[ and (oc.is_used = 1 or (oc.is_used = 0 and oc.expiry_date < now())) ]]>
+      </if>
+      <if test="singleType != null">
+        and oc.single_type = #{singleType,jdbcType=INTEGER}
+      </if>
+      <if test="serviceAmount != null">
+        and oc.service_amount = #{serviceAmount,jdbcType=DECIMAL}
+      </if>
+      <if test="expressState != null">
+        and oc.express_state = #{expressState,jdbcType=INTEGER}
+      </if>
+
+      and oc.is_deleted = 0
+      and (oc.is_show =0 or oc.is_show is null)
+      AND oin.is_deleted = 0
+    </where>
+    order by
+    <if test="browSort != null and browSort == 1 ">
+      oc.used_time desc,
+    </if>
+    oc.is_used,
+    oc.create_time desc
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="listTotal" resultType="java.lang.Integer">
+    SELECT
+    count(1)
+    FROM
+    order_coupon oc
+    INNER join goods_sku gs on oc.goods_sku_id = gs.id
+    inner join order_info oin on oc.order_id = oin.id
+    inner join order_item oit on oin.order_code = oit.order_code
+    inner join goods_sku gsk on oit.goods_sku_id = gsk.id
+    <where>
+      1=1
+      <if test="id != null">
+        and oc.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="couponCode != null">
+        and oc.coupon_code = #{couponCode,jdbcType=VARCHAR}
+      </if>
+      <if test="goodsSkuId != null">
+        and oc.goods_sku_id = #{goodsSkuId,jdbcType=BIGINT}
+      </if>
+      <if test="goodsSkuCode != null">
+        and oc.goods_sku_code = #{goodsSkuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null">
+        and oc.type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="userId != null">
+        and oc.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="userName != null">
+        and oc.user_name = #{userName,jdbcType=VARCHAR}
+      </if>
+      <if test="changerId != null">
+        and oc.changer_id = #{changerId,jdbcType=BIGINT}
+      </if>
+      <if test="changerName != null">
+        and oc.changer_name = #{changerName,jdbcType=VARCHAR}
+      </if>
+      <if test="isUsed != null and isUsed == 0">
+        and oc.is_used = 0
+        <![CDATA[ and oc.expiry_date >= now()]]>
+      </if>
+      <if test="isUsed != null and isUsed == 1"><!--查询已使用和已过期的-->
+        <![CDATA[ and (oc.is_used = 1 or (oc.is_used = 0 and oc.expiry_date < now())) ]]>
+      </if>
+      <if test="singleType != null">
+        and oc.single_type = #{singleType,jdbcType=INTEGER}
+      </if>
+      <if test="serviceAmount != null">
+        and oc.service_amount = #{serviceAmount,jdbcType=DECIMAL}
+      </if>
+      <if test="expressState != null">
+        and oc.express_state = #{expressState,jdbcType=INTEGER}
+      </if>
+      and oc.is_deleted = 0
+      and (oc.is_show =0 or oc.is_show is null)
+      AND oin.is_deleted = 0
+    </where>
+  </select>
+  <!-- 分页查询 end-->
+
+  <!-- 分页查询 start-->
+  <select id="listForSend" resultMap="OrderCouponOutResultMap">
+    select a.*,
+    oin.salepoint_id,
+    oit.id as order_item_id,oit.goods_spu_id,oit.goods_sku_id,oit.shop_id as order_item_shop_id,oit.goods_sku_name,
+    oit.goods_num,oit.gift_num,oit.goods_price,oit.packing_price,gsk.sku_pic as goods_sku_pic,gsk.small_sku_pic,gsk.unit,gsk.mini_num,
+    (case when a.is_used=1 then 2
+    when a.own_id != #{userId,jdbcType=BIGINT} then 1
+    else 0
+    end) sort
+    from ((SELECT
+    oc.*,
+    gs.sku_pic,
+    gs.small_sku_pic,
+    gs.spu_id,
+    gs.other_marker_price
+    FROM
+    order_coupon oc
+    INNER join goods_sku gs on oc.goods_sku_id = gs.id
+    inner join goods_spu gsp on gs.spu_id = gsp.id
+    inner join order_info oin on oc.order_id = oin.id
+    <where>
+      1=1
+      <if test="userId != null">
+        and (oc.user_id = #{userId,jdbcType=BIGINT} or oc.own_id = #{userId,jdbcType=BIGINT})
+      </if>
+      <if test="type != null">
+        and oc.type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="isUsed != null and isUsed == 0"><!--查询未使用且未过期的-->
+        and oc.is_used = 0
+        and ((oc.status !=4 and oc.status !=5) or oc.status is null)
+        and oc.own_id = #{userId,jdbcType=BIGINT}
+        <![CDATA[ and oc.expiry_date >= now()]]>
+      </if>
+      <if test="isUsed != null and isUsed == 1"><!--查询已使用和已过期的-->
+        <![CDATA[ and (oc.is_used = 1 or oc.own_id != #{userId,jdbcType=BIGINT} or (oc.status in (4,5)) or oc.expiry_date < now()) ]]>
+      </if>
+      <if test="singleType != null">
+        and oc.single_type = #{singleType,jdbcType=INTEGER}
+      </if>
+      <if test="serviceAmount != null">
+        and oc.service_amount = #{serviceAmount,jdbcType=DECIMAL}
+      </if>
+      <if test="categoryId != null and categoryId == 48">
+        and gsp.category_id = 48
+      </if>
+      and oc.is_deleted = 0
+      AND oin.is_deleted = 0
+      and (oc.is_show =0 or oc.is_show is null)
+    </where>)
+    union
+    (SELECT
+    oc.*,
+    gs.sku_pic,
+    gs.small_sku_pic,
+    gs.spu_id,
+    gs.other_marker_price
+    FROM
+    order_coupon oc
+    INNER join goods_sku gs on oc.goods_sku_id = gs.id
+    inner join goods_spu gsp on gs.spu_id = gsp.id
+    inner join order_info oin on oc.order_id = oin.id
+    left join order_coupon_send ocs on oc.coupon_code = ocs.order_coupon_code
+    <where>
+      1=1
+      <if test="userId != null">
+        and ocs.send_user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="type != null">
+        and oc.type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="isUsed != null and isUsed == 0"><!--查询未使用且未过期的-->
+        and oc.is_used = 0
+        and ((oc.status !=4 and oc.status !=5) or oc.status is null)
+        and oc.own_id = #{userId,jdbcType=BIGINT}
+        <![CDATA[ and oc.expiry_date >= now()]]>
+      </if>
+      <if test="isUsed != null and isUsed == 1"><!--查询已使用和已过期的-->
+        <![CDATA[ and (oc.is_used = 1 or oc.own_id != #{userId,jdbcType=BIGINT} or oc.status in (4,5) or oc.expiry_date < now()) ]]>
+      </if>
+      <if test="singleType != null">
+        and oc.single_type = #{singleType,jdbcType=INTEGER}
+      </if>
+      <if test="serviceAmount != null">
+        and oc.service_amount = #{serviceAmount,jdbcType=DECIMAL}
+      </if>
+      <if test="categoryId != null and categoryId == 48">
+        and gsp.category_id = 48
+      </if>
+      and oc.is_deleted = 0
+      AND oin.is_deleted = 0
+      and (oc.is_show =0 or oc.is_show is null)
+    </where>)) as a
+    inner join order_info oin on a.order_id = oin.id
+    inner join order_item oit on oin.order_code = oit.order_code
+    inner join goods_sku gsk on oit.goods_sku_id = gsk.id
+    order by
+    oin.create_time desc,
+    sort ASC,
+    a.id desc
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="listTotalForSend" resultType="java.lang.Integer">
+    select count(1) from ((SELECT
+    oc.*,
+    gs.sku_pic,
+    gs.small_sku_pic,
+    gs.spu_id,
+    gs.other_marker_price
+    FROM
+    order_coupon oc
+    INNER join goods_sku gs on oc.goods_sku_id = gs.id
+    inner join goods_spu gsp on gs.spu_id = gsp.id
+    inner join order_info oin on oc.order_id = oin.id
+    <where>
+      1=1
+      <if test="userId != null">
+        and (oc.user_id = #{userId,jdbcType=BIGINT} or oc.own_id = #{userId,jdbcType=BIGINT})
+      </if>
+      <if test="type != null">
+        and oc.type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="isUsed != null and isUsed == 0"><!--查询未使用且未过期的-->
+        and oc.is_used = 0
+        and ((oc.status !=4 and oc.status !=5) or oc.status is null)
+        and oc.own_id = #{userId,jdbcType=BIGINT}
+        <![CDATA[ and oc.expiry_date >= now()]]>
+      </if>
+      <if test="isUsed != null and isUsed == 1"><!--查询已使用和已过期的-->
+        <![CDATA[ and (oc.is_used = 1 or oc.own_id != #{userId,jdbcType=BIGINT} or oc.status in (4,5) or oc.expiry_date < now()) ]]>
+      </if>
+      <if test="singleType != null">
+        and oc.single_type = #{singleType,jdbcType=INTEGER}
+      </if>
+      <if test="serviceAmount != null">
+        and oc.service_amount = #{serviceAmount,jdbcType=DECIMAL}
+      </if>
+      <if test="categoryId != null and categoryId == 48">
+        and gsp.category_id = 48
+      </if>
+      and oc.is_deleted = 0
+      AND oin.is_deleted = 0
+      and (oc.is_show =0 or oc.is_show is null)
+    </where>)
+    union
+    (SELECT
+    oc.*,
+    gs.sku_pic,
+    gs.small_sku_pic,
+    gs.spu_id,
+    gs.other_marker_price
+    FROM
+    order_coupon oc
+    INNER join goods_sku gs on oc.goods_sku_id = gs.id
+    inner join goods_spu gsp on gs.spu_id = gsp.id
+    inner join order_info oin on oc.order_id = oin.id
+    left join order_coupon_send ocs on oc.coupon_code = ocs.order_coupon_code
+    <where>
+      1=1
+      <if test="userId != null">
+        and ocs.send_user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="type != null">
+        and oc.type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="isUsed != null and isUsed == 0"><!--查询未使用且未过期的-->
+        and oc.is_used = 0
+        and ((oc.status !=4 and oc.status !=5) or oc.status is null)
+        and oc.own_id = #{userId,jdbcType=BIGINT}
+        <![CDATA[ and oc.expiry_date >= now()]]>
+      </if>
+      <if test="isUsed != null and isUsed == 1"><!--查询已使用和已过期的-->
+        <![CDATA[ and (oc.is_used = 1 or oc.own_id != #{userId,jdbcType=BIGINT} or oc.own_id != #{userId,jdbcType=BIGINT} or oc.status in (4,5) or oc.expiry_date < now()) ]]>
+      </if>
+      <if test="singleType != null">
+        and oc.single_type = #{singleType,jdbcType=INTEGER}
+      </if>
+      <if test="serviceAmount != null">
+        and oc.service_amount = #{serviceAmount,jdbcType=DECIMAL}
+      </if>
+      <if test="categoryId != null and categoryId == 48">
+        and gsp.category_id = 48
+      </if>
+      AND oin.is_deleted = 0
+      and oc.is_deleted = 0
+      and (oc.is_show =0 or oc.is_show is null)
+    </where>)) as a
+    inner join order_info oin on a.order_id = oin.id
+    inner join order_item oit on oin.order_code = oit.order_code
+    inner join goods_sku gsk on oit.goods_sku_id = gsk.id
+  </select>
+  <!-- 分页查询 end-->
+
+  <!-- 分页查询 start-->
+  <select id="listCoupon" resultMap="OrderCouponOutResultMap">
+    SELECT
+    oc.*,
+    oin.salepoint_id,
+    gs.sku_pic,
+    gs.spu_id,
+    gs.other_marker_price,
+    ocs.id as ocs_id,
+    ocs.send_user_id,
+    ocs.receive_user_id,
+    (select user_name from user where id = ocs.send_user_id) as send_user_name,
+    (select user_name from user where id = ocs.receive_user_id) as receive_user_name,
+    ocs.create_time as ocs_create_time,
+    oit.id as order_item_id,oit.goods_spu_id,oit.goods_sku_id,oit.shop_id as order_item_shop_id,oit.goods_sku_name,
+    oit.goods_num,oit.gift_num,oit.goods_price,oit.packing_price,gsk.sku_pic as goods_sku_pic,gsk.unit,gsk.mini_num
+    FROM
+    order_coupon oc
+    INNER join goods_sku gs on oc.goods_sku_id = gs.id
+    inner join order_coupon_send ocs on oc.coupon_code = ocs.order_coupon_code
+    inner join order_info oin on oc.order_id = oin.id
+    inner join order_item oit on oin.order_code = oit.order_code
+    inner join goods_sku gsk on oit.goods_sku_id = gsk.id
+    <where>
+      1=1
+      <if test="id != null">
+        and oc.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="orderId != null">
+        and oc.order_id = #{orderId,jdbcType=BIGINT}
+      </if>
+      <if test="couponCode != null">
+        and oc.coupon_code = #{couponCode,jdbcType=VARCHAR}
+      </if>
+      <if test="goodsSkuId != null">
+        and oc.goods_sku_id = #{goodsSkuId,jdbcType=BIGINT}
+      </if>
+      <if test="goodsSkuCode != null">
+        and oc.goods_sku_code = #{goodsSkuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null">
+        and oc.type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="userId != null">
+        and oc.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="userName != null">
+        and oc.user_name = #{userName,jdbcType=VARCHAR}
+      </if>
+      <if test="changerId != null">
+        and oc.changer_id = #{changerId,jdbcType=BIGINT}
+      </if>
+      <if test="changerName != null">
+        and oc.changer_name = #{changerName,jdbcType=VARCHAR}
+      </if>
+      <if test="sendUserId != null">
+        and ocs.send_user_id = #{sendUserId,jdbcType=BIGINT}
+      </if>
+      <if test="receiveUserId != null">
+        and ocs.receive_user_id = #{receiveUserId,jdbcType=BIGINT}
+      </if>
+      <if test="isUsed != null and isUsed == 0"><!--查询未使用且未过期的-->
+        and oc.is_used = 0
+        <![CDATA[ and oc.expiry_date >= now()]]>
+      </if>
+      <if test="isUsed != null and isUsed == 1"><!--查询已使用和已过期的-->
+        <![CDATA[ and (oc.is_used = 1 or (oc.is_used = 0 and oc.expiry_date < now())) ]]>
+      </if>
+      <if test="singleType != null">
+        and oc.single_type = #{singleType,jdbcType=INTEGER}
+      </if>
+      <if test="serviceAmount != null">
+        and oc.service_amount = #{serviceAmount,jdbcType=DECIMAL}
+      </if>
+      and oc.is_deleted = 0
+      AND oin.is_deleted = 0
+      and (oc.is_show =0 or oc.is_show is null)
+    </where>
+    order by
+    ocs.create_time desc
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="listCouponTotal" resultType="java.lang.Integer">
+    SELECT
+    count(1)
+    FROM
+    order_coupon oc
+    INNER join goods_sku gs on oc.goods_sku_id = gs.id
+    inner join order_coupon_send ocs on oc.coupon_code = ocs.order_coupon_code
+    inner join order_info oin on oc.order_id = oin.id
+    inner join order_item oit on oin.order_code = oit.order_code
+    inner join goods_sku gsk on oit.goods_sku_id = gsk.id
+    <where>
+      1=1
+      <if test="id != null">
+        and oc.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="couponCode != null">
+        and oc.coupon_code = #{couponCode,jdbcType=VARCHAR}
+      </if>
+      <if test="goodsSkuId != null">
+        and oc.goods_sku_id = #{goodsSkuId,jdbcType=BIGINT}
+      </if>
+      <if test="goodsSkuCode != null">
+        and oc.goods_sku_code = #{goodsSkuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null">
+        and oc.type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="userId != null">
+        and oc.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="userName != null">
+        and oc.user_name = #{userName,jdbcType=VARCHAR}
+      </if>
+      <if test="changerId != null">
+        and oc.changer_id = #{changerId,jdbcType=BIGINT}
+      </if>
+      <if test="changerName != null">
+        and oc.changer_name = #{changerName,jdbcType=VARCHAR}
+      </if>
+      <if test="sendUserId != null">
+        and ocs.send_user_id = #{sendUserId,jdbcType=BIGINT}
+      </if>
+      <if test="receiveUserId != null">
+        and ocs.receive_user_id = #{receiveUserId,jdbcType=BIGINT}
+      </if>
+      <if test="isUsed != null and isUsed == 0">
+        and oc.is_used = 0
+      </if>
+      <if test="isUsed != null and isUsed == 1"><!--查询已使用和已过期的-->
+        <![CDATA[ and (oc.is_used = 1 or (oc.is_used = 0 and oc.expiry_date < now())) ]]>
+      </if>
+      <if test="singleType != null">
+        and oc.single_type = #{singleType,jdbcType=INTEGER}
+      </if>
+      <if test="serviceAmount != null">
+        and oc.service_amount = #{serviceAmount,jdbcType=DECIMAL}
+      </if>
+      and oc.is_deleted = 0
+      AND oin.is_deleted = 0
+      and (oc.is_show =0 or oc.is_show is null)
+    </where>
+  </select>
+  <!-- 分页查询 end-->
+
+  <!-- 根据orderCode获取相关的OrderCoupon票卷-->
+  <select id="listOrderCouponByOrdercode" resultMap="BaseResultMap">
+    SELECT
+    oc.*
+    FROM
+    order_coupon oc
+    inner join order_info oin on oc.order_id = oin.id
+    where oin.order_code=#{orderCode,jdbcType=VARCHAR}
+  </select>
+
+  <!-- 查询列表数据用于导出 新-->
+  <select id="listCouponForExportV" resultMap="OrderCouponOutResultMap">
+    SELECT
+    oc.id,
+    oc.coupon_code,oc.goods_sku_name,oc.used_time,owo.real_unit_price,owo.service_amount,
+    oc.create_time,
+    (owo.real_shop_unit_price) as realAmount,owo.shop_service_amount,owo.user_service_amount,
+    (case
+    when  oc.flag_type=1
+    then '普通型'
+    when oc.flag_type=4
+    then '砍价型'
+    when oc.flag_type=5
+    then '秒杀型'
+    when oc.flag_type=6
+    then '抽奖活动'
+    end
+    ) as flagTypeName
+    FROM
+    order_write_off owo
+    inner join order_coupon oc on owo.order_coupon_id=oc.id
+    <where>
+      <if test="shopId != null">
+        and owo.shop_id = #{shopId}
+      </if>
+      <if test="beginTime !=null and endTime != null">
+        and (owo.create_time BETWEEN #{beginTime} and #{endTime})
+      </if>
+    </where>
+    order by owo.id desc
+  </select>
+
+  <!-- 查询列表数据用于导出-->
+  <select id="listCouponForExport" resultMap="OrderCouponOutResultMap">
+    SELECT
+    oc.coupon_code,oc.goods_sku_name,oc.used_time,owo.real_unit_price,owo.service_amount,
+    (owo.real_unit_price-owo.service_amount) as realAmount,
+    (case when oc.flag_type=1
+    then '普通型'
+    when oc.flag_type=4
+    then '砍价型'
+    when oc.flag_type=5
+    then '秒杀型'
+    end
+    ) as flagTypeName
+    FROM
+    order_write_off owo
+    inner join order_coupon oc on owo.order_coupon_id=oc.id
+    <where>
+      <if test="shopId != null">
+        and owo.shop_id = #{shopId}
+      </if>
+      <if test="beginTime !=null and endTime != null">
+        and (owo.create_time BETWEEN #{beginTime} and #{endTime})
+      </if>
+    </where>
+    order by owo.id desc
+  </select>
+
+  <!-- 查询总计用于导出 新-->
+  <select id="selectTotalForExportV" resultMap="OrderCouponOutResultMap">
+    SELECT
+    sum(owo.real_unit_price) real_unit_price,sum(owo.service_amount) service_amount,
+    sum(owo.real_shop_unit_price) as realAmount
+    FROM
+    order_write_off owo
+    inner join order_coupon oc on owo.order_coupon_id=oc.id
+    <where>
+      <if test="shopId != null">
+        and owo.shop_id = #{shopId}
+      </if>
+      <if test="beginTime !=null and endTime != null">
+        and (owo.create_time BETWEEN #{beginTime} and #{endTime})
+      </if>
+    </where>
+  </select>
+
+  <!-- 查询总计用于导出-->
+  <select id="selectTotalForExport" resultMap="OrderCouponOutResultMap">
+    SELECT
+    sum(owo.real_unit_price) real_unit_price,sum(owo.service_amount) service_amount,
+    sum(owo.real_unit_price-owo.service_amount) as realAmount
+    FROM
+    order_write_off owo
+    inner join order_coupon oc on owo.order_coupon_id=oc.id
+    <where>
+      <if test="shopId != null">
+        and owo.shop_id = #{shopId}
+      </if>
+      <if test="beginTime !=null and endTime != null">
+        and (owo.create_time BETWEEN #{beginTime} and #{endTime})
+      </if>
+    </where>
+  </select>
+
+  <select id="listByOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from order_coupon
+    where order_id = #{orderId,jdbcType=BIGINT} and (is_show =0 or is_show is null)
+  </select>
+
+  <!--退款之后票卷状态修改：0 默认状态 4 退款申请中 5 已退款-->
+  <update id="updateStatus" parameterType="com.xq.live.vo.in.OrderCouponConditionInVO">
+    UPDATE order_coupon s
+    SET s.update_time = now(),s.status=#{status,jdbcType=INTEGER}
+    WHERE s.order_id in (select oin.id from order_info oin where oin.order_code=#{orderCode,jdbcType=VARCHAR})
+  </update>
+
+  <!-- 分页查询会员票券 start-->
+  <select id="listForVip" resultMap="OrderCouponOutResultMap">
+    SELECT
+    oc.*,
+    oin.salepoint_id,
+    oin.act_id,
+    gs.sku_pic,
+    gs.spu_id,
+    gs.small_sku_pic,
+    gs.other_marker_price,
+    oit.id as order_item_id,oit.goods_spu_id,oit.goods_sku_id,oit.shop_id as order_item_shop_id,oit.goods_sku_name,
+    oit.goods_num,oit.gift_num,oit.goods_price,oit.packing_price,gsk.sku_pic as goods_sku_pic,gsk.unit,gsk.mini_num
+    FROM
+    order_coupon oc
+    INNER join goods_sku gs on oc.goods_sku_id = gs.id
+    inner join order_info oin on oc.order_id = oin.id
+    inner join order_item oit on oin.order_code = oit.order_code
+    inner join goods_sku gsk on oit.goods_sku_id = gsk.id
+    <where>
+      1=1
+      <if test="id != null">
+        and oc.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="orderId != null">
+        and oc.order_id = #{orderId,jdbcType=BIGINT}
+      </if>
+      <if test="couponCode != null">
+        and oc.coupon_code = #{couponCode,jdbcType=VARCHAR}
+      </if>
+      <if test="goodsSkuId != null">
+        and oc.goods_sku_id = #{goodsSkuId,jdbcType=BIGINT}
+      </if>
+      <if test="goodsSkuCode != null">
+        and oc.goods_sku_code = #{goodsSkuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null">
+        and oc.type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="userId != null">
+        and oc.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="userName != null">
+        and oc.user_name = #{userName,jdbcType=VARCHAR}
+      </if>
+      <if test="changerId != null">
+        and oc.changer_id = #{changerId,jdbcType=BIGINT}
+      </if>
+      <if test="changerName != null">
+        and oc.changer_name = #{changerName,jdbcType=VARCHAR}
+      </if>
+      <if test="isUsed != null and isUsed == 0"><!--查询未使用且未过期的-->
+        and oc.is_used = 0
+        <![CDATA[ and oc.expiry_date >= now()]]>
+      </if>
+      <if test="isUsed != null and isUsed == 1"><!--查询已使用和已过期的-->
+        <![CDATA[ and (oc.is_used = 1 or (oc.is_used = 0 and oc.expiry_date < now())) ]]>
+      </if>
+      <if test="singleType != null">
+        and oc.single_type = #{singleType,jdbcType=INTEGER}
+      </if>
+      <if test="serviceAmount != null">
+        and oc.service_amount = #{serviceAmount,jdbcType=DECIMAL}
+      </if>
+      <if test="expressState != null">
+        and oc.express_state = #{expressState,jdbcType=INTEGER}
+      </if>
+
+      and oc.is_deleted = 0
+      and (oc.is_show =0 or oc.is_show is null)
+      AND oin.is_deleted = 0
+      and oc.flag_type in (9,10)
+    </where>
+    order by
+    <if test="browSort != null and browSort == 1 ">
+      oc.used_time desc,
+    </if>
+    oc.is_used,
+    oc.create_time desc
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="listTotalForVip" resultType="java.lang.Integer">
+    SELECT
+    count(1)
+    FROM
+    order_coupon oc
+    INNER join goods_sku gs on oc.goods_sku_id = gs.id
+    inner join order_info oin on oc.order_id = oin.id
+    inner join order_item oit on oin.order_code = oit.order_code
+    inner join goods_sku gsk on oit.goods_sku_id = gsk.id
+    <where>
+      1=1
+      <if test="id != null">
+        and oc.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="couponCode != null">
+        and oc.coupon_code = #{couponCode,jdbcType=VARCHAR}
+      </if>
+      <if test="goodsSkuId != null">
+        and oc.goods_sku_id = #{goodsSkuId,jdbcType=BIGINT}
+      </if>
+      <if test="goodsSkuCode != null">
+        and oc.goods_sku_code = #{goodsSkuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null">
+        and oc.type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="userId != null">
+        and oc.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="userName != null">
+        and oc.user_name = #{userName,jdbcType=VARCHAR}
+      </if>
+      <if test="changerId != null">
+        and oc.changer_id = #{changerId,jdbcType=BIGINT}
+      </if>
+      <if test="changerName != null">
+        and oc.changer_name = #{changerName,jdbcType=VARCHAR}
+      </if>
+      <if test="isUsed != null and isUsed == 0">
+        and oc.is_used = 0
+        <![CDATA[ and oc.expiry_date >= now()]]>
+      </if>
+      <if test="isUsed != null and isUsed == 1"><!--查询已使用和已过期的-->
+        <![CDATA[ and (oc.is_used = 1 or (oc.is_used = 0 and oc.expiry_date < now())) ]]>
+      </if>
+      <if test="singleType != null">
+        and oc.single_type = #{singleType,jdbcType=INTEGER}
+      </if>
+      <if test="serviceAmount != null">
+        and oc.service_amount = #{serviceAmount,jdbcType=DECIMAL}
+      </if>
+      <if test="expressState != null">
+        and oc.express_state = #{expressState,jdbcType=INTEGER}
+      </if>
+      and oc.is_deleted = 0
+      and (oc.is_show =0 or oc.is_show is null)
+      AND oin.is_deleted = 0
+      and oc.flag_type in (9,10)
+    </where>
+  </select>
+
+</mapper>

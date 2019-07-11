@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.DictProvinceMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.DictProvince">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="province_cname" jdbcType="VARCHAR" property="provinceCname" />
+    <result column="province_ename" jdbcType="VARCHAR" property="provinceEname" />
+    <result column="pinyin" jdbcType="VARCHAR" property="pinyin" />
+    <result column="enabled" jdbcType="INTEGER" property="enabled" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="province_cname_efirst" jdbcType="VARCHAR" property="provinceCnameEfirst" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, province_cname, province_ename, pinyin, enabled, is_deleted, province_cname_efirst, 
+    create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dict_province
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from dict_province
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.DictProvince">
+    insert into dict_province (id, province_cname, province_ename, 
+      pinyin, enabled, is_deleted, 
+      province_cname_efirst, create_time, update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{provinceCname,jdbcType=VARCHAR}, #{provinceEname,jdbcType=VARCHAR}, 
+      #{pinyin,jdbcType=VARCHAR}, #{enabled,jdbcType=INTEGER}, #{isDeleted,jdbcType=INTEGER}, 
+      #{provinceCnameEfirst,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.DictProvince">
+    insert into dict_province
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="provinceCname != null">
+        province_cname,
+      </if>
+      <if test="provinceEname != null">
+        province_ename,
+      </if>
+      <if test="pinyin != null">
+        pinyin,
+      </if>
+      <if test="enabled != null">
+        enabled,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="provinceCnameEfirst != null">
+        province_cname_efirst,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="provinceCname != null">
+        #{provinceCname,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceEname != null">
+        #{provinceEname,jdbcType=VARCHAR},
+      </if>
+      <if test="pinyin != null">
+        #{pinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="enabled != null">
+        #{enabled,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="provinceCnameEfirst != null">
+        #{provinceCnameEfirst,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.DictProvince">
+    update dict_province
+    <set>
+      <if test="provinceCname != null">
+        province_cname = #{provinceCname,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceEname != null">
+        province_ename = #{provinceEname,jdbcType=VARCHAR},
+      </if>
+      <if test="pinyin != null">
+        pinyin = #{pinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="enabled != null">
+        enabled = #{enabled,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="provinceCnameEfirst != null">
+        province_cname_efirst = #{provinceCnameEfirst,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.DictProvince">
+    update dict_province
+    set province_cname = #{provinceCname,jdbcType=VARCHAR},
+      province_ename = #{provinceEname,jdbcType=VARCHAR},
+      pinyin = #{pinyin,jdbcType=VARCHAR},
+      enabled = #{enabled,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      province_cname_efirst = #{provinceCnameEfirst,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="list" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dict_province
+    <where>
+      <if test="id != null">
+        id = #{id}
+      </if>
+    </where>
+    order by id ASC
+  </select>
+</mapper>

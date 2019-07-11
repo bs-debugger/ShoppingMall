@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.SoShopLogMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.SoShopLog">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="so_id" jdbcType="BIGINT" property="soId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="sku_id" jdbcType="BIGINT" property="skuId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="operate_type" jdbcType="INTEGER" property="operateType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="user_ip" jdbcType="VARCHAR" property="userIp" />
+    <result column="so_amount" jdbcType="DECIMAL" property="soAmount"/>
+    <result column="service_price" jdbcType="DECIMAL" property="servicePrice"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, so_id, shop_id, sku_id, user_id, user_name, operate_type, create_time, user_ip
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from so_shop_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectBySoId" parameterType="com.xq.live.model.SoShopLog" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from so_shop_log
+    where so_id =  #{soId,jdbcType=BIGINT}
+    and operate_type = #{operateType,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from so_shop_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.SoShopLog">
+    insert into so_shop_log (id, so_id, shop_id, 
+      sku_id, user_id, user_name, 
+      operate_type, create_time, user_ip
+      )
+    values (#{id,jdbcType=BIGINT}, #{soId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, 
+      #{skuId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, 
+      #{operateType,jdbcType=INTEGER}, now(), #{userIp,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.SoShopLog">
+    insert into so_shop_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="soId != null">
+        so_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="skuId != null">
+        sku_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="operateType != null">
+        operate_type,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="userIp != null">
+        user_ip,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="soId != null">
+        #{soId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="skuId != null">
+        #{skuId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateType != null">
+        #{operateType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIp != null">
+        #{userIp,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.SoShopLog">
+    update so_shop_log
+    <set>
+      <if test="soId != null">
+        so_id = #{soId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="skuId != null">
+        sku_id = #{skuId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateType != null">
+        operate_type = #{operateType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIp != null">
+        user_ip = #{userIp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.SoShopLog">
+    update so_shop_log
+    set so_id = #{soId,jdbcType=BIGINT},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      sku_id = #{skuId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      user_name = #{userName,jdbcType=VARCHAR},
+      operate_type = #{operateType,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      user_ip = #{userIp,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="totalAmount" resultMap="BaseResultMap">
+    select
+    convert(IFNULL(sum(ss.so_amount),0),decimal(11,2)) as so_amount,
+    convert(IFNULL(sum(sk.sell_price),0),decimal(11,2)) as service_price
+    from so_shop_log s
+    inner join shop_allocation sa on s.shop_id = sa.shop_id
+    inner join so ss on s.so_id = ss.id
+    left join sku sk on s.sku_id = sk.id and sk.is_deleted = 0
+    where s.shop_id = #{shopId,jdbcType=BIGINT}
+    and s.operate_type = 2
+    and sa.payment_method = 2
+    and sa.is_delete = 0
+    and ss.so_type = 2
+    <if test="beginTime !=null and endTime != null">
+      and (ss.paid_time BETWEEN #{beginTime} and #{endTime})
+    </if>
+    <if test="isDui !=null">
+      and ss.is_dui = #{isDui,jdbcType=INTEGER}
+    </if>
+  </select>
+</mapper>

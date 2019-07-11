@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ShopCashierMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ShopCashier">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="cashier_name" jdbcType="VARCHAR" property="cashierName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="is_admin" jdbcType="TINYINT" property="isAdmin" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator_id" jdbcType="BIGINT" property="creatorId" />
+    <result column="updator_id" jdbcType="BIGINT" property="updatorId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, cashier_name, password, shop_id, parent_id, is_admin, is_deleted, create_time, 
+    creator_id, updator_id, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shop_cashier
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from shop_cashier
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.ShopCashier">
+    insert into shop_cashier (id, cashier_name, password, 
+      shop_id, parent_id, is_admin, 
+      is_deleted, create_time, creator_id, 
+      updator_id, update_time)
+    values (#{id,jdbcType=BIGINT}, #{cashierName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{shopId,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{isAdmin,jdbcType=TINYINT}, 
+      #{isDeleted,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=BIGINT}, 
+      #{updatorId,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.ShopCashier">
+    insert into shop_cashier
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="cashierName != null">
+        cashier_name,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="isAdmin != null">
+        is_admin,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creatorId != null">
+        creator_id,
+      </if>
+      <if test="updatorId != null">
+        updator_id,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="cashierName != null">
+        #{cashierName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="isAdmin != null">
+        #{isAdmin,jdbcType=TINYINT},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="updatorId != null">
+        #{updatorId,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.ShopCashier">
+    update shop_cashier
+    <set>
+      <if test="cashierName != null">
+        cashier_name = #{cashierName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="isAdmin != null">
+        is_admin = #{isAdmin,jdbcType=TINYINT},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null">
+        creator_id = #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="updatorId != null">
+        updator_id = #{updatorId,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.ShopCashier">
+    update shop_cashier
+    set cashier_name = #{cashierName,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      is_admin = #{isAdmin,jdbcType=TINYINT},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator_id = #{creatorId,jdbcType=BIGINT},
+      updator_id = #{updatorId,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

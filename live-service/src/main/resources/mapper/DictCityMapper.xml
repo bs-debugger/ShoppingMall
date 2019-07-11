@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.DictCityMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.DictCity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="province_id" jdbcType="BIGINT" property="provinceId" />
+    <result column="city_cname" jdbcType="VARCHAR" property="cityCname" />
+    <result column="city_ename" jdbcType="VARCHAR" property="cityEname" />
+    <result column="enabled" jdbcType="INTEGER" property="enabled" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="city_pinyin" jdbcType="VARCHAR" property="cityPinyin" />
+    <result column="city_cname_efirst" jdbcType="VARCHAR" property="cityCnameEfirst" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, province_id, city_cname, city_ename, enabled, is_deleted, city_pinyin, city_cname_efirst, 
+    create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dict_city
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from dict_city
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.DictCity">
+    insert into dict_city (id, province_id, city_cname, 
+      city_ename, enabled, is_deleted, 
+      city_pinyin, city_cname_efirst, create_time, 
+      update_time)
+    values (#{id,jdbcType=BIGINT}, #{provinceId,jdbcType=BIGINT}, #{cityCname,jdbcType=VARCHAR}, 
+      #{cityEname,jdbcType=VARCHAR}, #{enabled,jdbcType=INTEGER}, #{isDeleted,jdbcType=INTEGER}, 
+      #{cityPinyin,jdbcType=VARCHAR}, #{cityCnameEfirst,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.DictCity">
+    insert into dict_city
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="provinceId != null">
+        province_id,
+      </if>
+      <if test="cityCname != null">
+        city_cname,
+      </if>
+      <if test="cityEname != null">
+        city_ename,
+      </if>
+      <if test="enabled != null">
+        enabled,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="cityPinyin != null">
+        city_pinyin,
+      </if>
+      <if test="cityCnameEfirst != null">
+        city_cname_efirst,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="provinceId != null">
+        #{provinceId,jdbcType=BIGINT},
+      </if>
+      <if test="cityCname != null">
+        #{cityCname,jdbcType=VARCHAR},
+      </if>
+      <if test="cityEname != null">
+        #{cityEname,jdbcType=VARCHAR},
+      </if>
+      <if test="enabled != null">
+        #{enabled,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="cityPinyin != null">
+        #{cityPinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCnameEfirst != null">
+        #{cityCnameEfirst,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.DictCity">
+    update dict_city
+    <set>
+      <if test="provinceId != null">
+        province_id = #{provinceId,jdbcType=BIGINT},
+      </if>
+      <if test="cityCname != null">
+        city_cname = #{cityCname,jdbcType=VARCHAR},
+      </if>
+      <if test="cityEname != null">
+        city_ename = #{cityEname,jdbcType=VARCHAR},
+      </if>
+      <if test="enabled != null">
+        enabled = #{enabled,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="cityPinyin != null">
+        city_pinyin = #{cityPinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCnameEfirst != null">
+        city_cname_efirst = #{cityCnameEfirst,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.DictCity">
+    update dict_city
+    set province_id = #{provinceId,jdbcType=BIGINT},
+      city_cname = #{cityCname,jdbcType=VARCHAR},
+      city_ename = #{cityEname,jdbcType=VARCHAR},
+      enabled = #{enabled,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      city_pinyin = #{cityPinyin,jdbcType=VARCHAR},
+      city_cname_efirst = #{cityCnameEfirst,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="list" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dict_city
+    <where>
+      <if test="id != null">
+        id = #{id}
+      </if>
+      <if test="provinceId != null">
+        and  province_id = #{provinceId}
+      </if>
+    </where>
+    order by id ASC
+  </select>
+</mapper>

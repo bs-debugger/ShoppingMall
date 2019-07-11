@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ShopAllocationMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ShopAllocation">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="operator_id" jdbcType="BIGINT" property="operatorId" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="payment_method" jdbcType="INTEGER" property="paymentMethod" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, shop_id, operator_id, is_delete, create_time, update_time, payment_method
+  </sql>
+
+  <resultMap id="ShopAllocationMap" extends="BaseResultMap" type="com.xq.live.vo.out.ShopAllocationOut">
+
+  </resultMap>
+  <!--根据id,shopid查看单条数据-->
+  <select id="selectByPrimaryKey" parameterType="com.xq.live.vo.in.ShopAllocationInVo" resultMap="ShopAllocationMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shop_allocation
+    <where>
+      <if test="id != null">AND id = #{id,jdbcType=BIGINT}</if>
+      <if test="shopId != null">AND shop_id=#{shopId,jdbcType=BIGINT}</if>
+      AND is_delete=0
+    </where>
+  </select>
+
+  <!--添加sql-->
+  <!--根据id,shopid或者operatorid查看多条数据-->
+<select id="selectByCan" parameterType="com.xq.live.vo.in.ShopAllocationInVo" resultMap="ShopAllocationMap">
+    select <include refid="Base_Column_List" />
+    from shop_allocation
+    <where>
+      1=1
+      <if test="shopId != null">AND shop_id=#{shopId,jdbcType=BIGINT}</if>
+      <if test="id != null">AND id = #{id,jdbcType=BIGINT}</if>
+      <if test="operatorId != null">AND operator_id = #{operatorId,jdbcType=BIGINT}</if>
+      AND is_delete=0
+    </where>
+</select>
+  <!--根据id或者shopid修改数据-->
+<update id="updateByInfo" parameterType="com.xq.live.vo.in.ShopAllocationInVo">
+    update shop_allocation
+  <set>
+    <if test="operatorId != null">
+      operator_id = #{operatorId,jdbcType=BIGINT},
+    </if>
+    <if test="isDelete != null">
+      is_delete = #{isDelete,jdbcType=INTEGER},
+    </if>
+    <if test="createTime != null">
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="paymentMethod != null">
+      payment_method = #{paymentMethod,jdbcType=INTEGER},
+    </if>
+    update_time = now()
+  </set>
+  <where>
+    <if test="id != null">id = #{id,jdbcType=BIGINT}</if>
+    <if test="shopId != null">shop_id= #{shopId,jdbcType=BIGINT}</if>
+  </where>
+</update>
+  <!--添加数据-->
+<insert id="insertByID" parameterType="com.xq.live.vo.in.ShopAllocationInVo">
+    INSERT INTO shop_allocation(shop_id, operator_id,is_delete,create_time,update_time,payment_method)
+    VALUES (#{shopId,jdbcType=BIGINT}, #{operatorId,jdbcType=BIGINT},
+      #{isDelete,jdbcType=INTEGER}, now(), now(), #{paymentMethod,jdbcType=INTEGER})
+</insert>
+  <!--END-->
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from shop_allocation
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.ShopAllocation">
+    insert into shop_allocation (id, shop_id, operator_id, 
+      is_delete, create_time, update_time,
+      payment_method)
+    values (#{id,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, #{operatorId,jdbcType=BIGINT}, 
+      #{isDelete,jdbcType=INTEGER}, now(), now(),
+      #{paymentMethod,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.ShopAllocation">
+    insert into shop_allocation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="operatorId != null">
+        operator_id,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="paymentMethod != null">
+        payment_method,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="operatorId != null">
+        #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentMethod != null">
+        #{paymentMethod,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.ShopAllocation">
+    update shop_allocation
+    <set>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="operatorId != null">
+        operator_id = #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentMethod != null">
+        payment_method = #{paymentMethod,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.ShopAllocation">
+    update shop_allocation
+    set shop_id = #{shopId,jdbcType=BIGINT},
+      operator_id = #{operatorId,jdbcType=BIGINT},
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      payment_method = #{paymentMethod,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

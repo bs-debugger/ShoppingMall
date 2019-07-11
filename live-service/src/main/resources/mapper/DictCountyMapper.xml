@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.DictCountyMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.DictCounty">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="city_id" jdbcType="BIGINT" property="cityId" />
+    <result column="county_cname" jdbcType="VARCHAR" property="countyCname" />
+    <result column="county_ename" jdbcType="VARCHAR" property="countyEname" />
+    <result column="enabled" jdbcType="INTEGER" property="enabled" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, city_id, county_cname, county_ename, enabled, is_deleted, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dict_county
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from dict_county
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.DictCounty">
+    insert into dict_county (id, city_id, county_cname, 
+      county_ename, enabled, is_deleted, 
+      create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{cityId,jdbcType=BIGINT}, #{countyCname,jdbcType=VARCHAR}, 
+      #{countyEname,jdbcType=VARCHAR}, #{enabled,jdbcType=INTEGER}, #{isDeleted,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.DictCounty">
+    insert into dict_county
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="cityId != null">
+        city_id,
+      </if>
+      <if test="countyCname != null">
+        county_cname,
+      </if>
+      <if test="countyEname != null">
+        county_ename,
+      </if>
+      <if test="enabled != null">
+        enabled,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="cityId != null">
+        #{cityId,jdbcType=BIGINT},
+      </if>
+      <if test="countyCname != null">
+        #{countyCname,jdbcType=VARCHAR},
+      </if>
+      <if test="countyEname != null">
+        #{countyEname,jdbcType=VARCHAR},
+      </if>
+      <if test="enabled != null">
+        #{enabled,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.DictCounty">
+    update dict_county
+    <set>
+      <if test="cityId != null">
+        city_id = #{cityId,jdbcType=BIGINT},
+      </if>
+      <if test="countyCname != null">
+        county_cname = #{countyCname,jdbcType=VARCHAR},
+      </if>
+      <if test="countyEname != null">
+        county_ename = #{countyEname,jdbcType=VARCHAR},
+      </if>
+      <if test="enabled != null">
+        enabled = #{enabled,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.DictCounty">
+    update dict_county
+    set city_id = #{cityId,jdbcType=BIGINT},
+      county_cname = #{countyCname,jdbcType=VARCHAR},
+      county_ename = #{countyEname,jdbcType=VARCHAR},
+      enabled = #{enabled,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="list" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dict_county
+    <where>
+      <if test="id != null">
+        id = #{id}
+      </if>
+      <if test="cityId != null">
+        and  city_id = #{cityId}
+      </if>
+    </where>
+    order by id ASC
+  </select>
+</mapper>

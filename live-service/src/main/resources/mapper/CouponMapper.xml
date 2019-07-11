@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.CouponMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.Coupon">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="so_id" jdbcType="BIGINT" property="soId" />
+    <result column="coupon_code" jdbcType="VARCHAR" property="couponCode" />
+    <result column="sku_id" jdbcType="BIGINT" property="skuId" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="sku_name" jdbcType="VARCHAR" property="skuName" />
+    <result column="coupon_amount" jdbcType="DECIMAL" property="couponAmount" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="qrcode_url" jdbcType="VARCHAR" property="qrcodeUrl" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="is_used" jdbcType="INTEGER" property="isUsed" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="expiry_date" jdbcType="DATE" property="expiryDate" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="used_time" jdbcType="TIMESTAMP" property="usedTime" />
+    <result column="dish_sku_id" jdbcType="BIGINT" property="dishSkuId"/>
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="shop_cashier_id" jdbcType="BIGINT" property="shopCashierId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  
+  <resultMap id="CouponOutResultMap" type="com.xq.live.vo.out.CouponOut" extends="BaseResultMap">
+    <result column="dish_sku_name" jdbcType="VARCHAR" property="dishSkuName" />
+      <!-- 一个商品sku对应多个促销规则 -->
+      <collection property="promotionRules" ofType="com.xq.live.model.PromotionRules">
+        <result column="rule_id" jdbcType="BIGINT" property="id" />
+        <result column="rule_type" jdbcType="INTEGER" property="ruleType" />
+        <result column="rule_desc" jdbcType="VARCHAR" property="ruleDesc" />
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+        <result column="coupon_shop_id" jdbcType="BIGINT" property="shopId" />
+        <result column="coupon_sku_id" jdbcType="BIGINT" property="skuId" />
+      </collection>
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, so_id, coupon_code, sku_id, sku_code, sku_name, coupon_amount, type,qrcode_url, user_id,
+    user_name, is_used, is_deleted, expiry_date, create_time, used_time, shop_id, shop_cashier_id,
+    update_time,dish_sku_id,status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from coupon
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="useLimit" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    select
+    count(1)
+    from coupon
+    where user_id = #{userId,jdbcType=BIGINT}
+    and is_used = 1
+    and is_deleted = 0
+    and (TO_DAYS(used_time) = TO_DAYS(now()))
+  </select>
+
+  <select id="getByCouponCode" parameterType="java.lang.String" resultMap="CouponOutResultMap">
+    SELECT
+      c.id,
+      c.so_id,
+      c.coupon_code,
+      c.sku_id,
+      c.sku_code,
+      c.sku_name,
+      c.coupon_amount,
+      c.type,
+      c.qrcode_url,
+      c.user_id,
+      c.user_name,
+      c.is_used,
+      c.is_deleted,
+      c.expiry_date,
+      c.create_time,
+      c.used_time,
+      c.shop_id,
+      c.shop_cashier_id,
+      c.update_time,
+      c.dish_sku_id,
+      ' ' as rule_desc,
+      c.status
+    FROM
+      coupon c
+    where c.coupon_code = #{couponCode,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectById" parameterType="java.lang.Long" resultMap="CouponOutResultMap">
+    SELECT
+      c.id,
+      c.so_id,
+      c.coupon_code,
+      c.sku_id,
+      c.sku_code,
+      c.sku_name,
+      c.coupon_amount,
+      c.type,
+      c.qrcode_url,
+      c.user_id,
+      c.user_name,
+      c.is_used,
+      c.is_deleted,
+      c.expiry_date,
+      c.create_time,
+      c.used_time,
+      c.shop_id,
+      c.shop_cashier_id,
+      c.update_time,
+      c.dish_sku_id,
+      ' ' as rule_desc,
+      c.status
+    FROM
+    coupon c
+    where c.id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <!-- 分页查询 start-->
+  <select id="list" resultMap="CouponOutResultMap">
+    SELECT
+      c.id,
+      c.so_id,
+      c.coupon_code,
+      c.sku_id,
+      c.sku_code,
+      c.sku_name,
+      c.coupon_amount,
+      c.type,
+      c.qrcode_url,
+      c.user_id,
+      c.user_name,
+      c.is_used,
+      c.is_deleted,
+      c.expiry_date,
+      c.create_time,
+      c.used_time,
+      c.shop_id,
+      c.shop_cashier_id,
+      c.update_time,
+      c.dish_sku_id,
+      ss.sku_name as dish_sku_name,
+      ' ' as rule_desc
+    FROM
+      coupon c
+    INNER join sku s on c.sku_id = s.id
+    left join sku ss on c.dish_sku_id = ss.id
+    <where>
+      1=1
+      <if test="id != null">
+        and c.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="couponCode != null">
+        and c.coupon_code = #{couponCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuId != null">
+        and c.sku_id = #{skuId,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and c.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="userId != null">
+        and c.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="userName != null">
+        and c.user_name = #{userName,jdbcType=VARCHAR}
+      </if>
+      <if test="isUsed != null and isUsed == 0">
+        <![CDATA[ and (c.is_used = 0 and c.expiry_date > now()) ]]>
+      </if>
+      <if test="isUsed != null and isUsed == 1"><!--查询已使用和已过期的-->
+        <![CDATA[ and (c.is_used = 1 or (c.is_used = 0 and c.expiry_date < now())) ]]>
+      </if>
+       and c.is_deleted = 0
+    </where>
+    order by c.id desc
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="listTotal" resultType="java.lang.Integer">
+    select count(1)
+    from coupon c
+    INNER join sku s on c.sku_id = s.id
+    left join sku ss on c.dish_sku_id = ss.id
+    <where>
+      1=1
+      <if test="id != null">
+       and c.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="couponCode != null">
+        and c.coupon_code = #{couponCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuId != null">
+        and c.sku_id = #{skuId,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and c.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="userId != null">
+        and c.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="userName != null">
+        and c.user_name = #{userName,jdbcType=VARCHAR}
+      </if>
+      <if test="isUsed != null and isUsed == 0">
+        <![CDATA[ and (c.is_used = 0 and c.expiry_date > now()) ]]>
+      </if>
+      <if test="isUsed != null and isUsed == 1"><!--查询已使用和已过期的-->
+        <![CDATA[ and (c.is_used = 1 or (c.is_used = 0 and expiry_date < now())) ]]>
+      </if>
+      and c.is_deleted = 0
+      and s.is_deleted = 0
+    </where>
+  </select>
+  <!-- 分页查询 end-->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from coupon
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.xq.live.model.Coupon">
+    insert into coupon (so_id, coupon_code,
+      sku_id, sku_code, sku_name, 
+      coupon_amount, type, qrcode_url, user_id,
+      user_name, expiry_date, create_time, update_time,dish_sku_id,shop_id)
+    values (#{soId,jdbcType=BIGINT}, #{couponCode,jdbcType=VARCHAR},
+      #{skuId,jdbcType=BIGINT}, #{skuCode,jdbcType=VARCHAR}, #{skuName,jdbcType=VARCHAR}, 
+      #{couponAmount,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{qrcodeUrl,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT},
+      #{userName,jdbcType=VARCHAR}, #{expiryDate, jdbcType=DATE}, now(), now(),#{dishSkuId,jdbcType=BIGINT},#{shopId,jdbcType=BIGINT})
+      <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+        select last_insert_id() as id
+      </selectKey>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.Coupon">
+    update coupon
+    <set>
+      <if test="soId != null">
+        so_id = #{soId,jdbcType=BIGINT},
+      </if>
+      <if test="couponCode != null">
+        coupon_code = #{couponCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuId != null">
+        sku_id = #{skuId,jdbcType=BIGINT},
+      </if>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuName != null">
+        sku_name = #{skuName,jdbcType=VARCHAR},
+      </if>
+      <if test="couponAmount != null">
+        coupon_amount = #{couponAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="qrcodeUrl != null">
+        qrcode_url = #{qrcodeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="isUsed != null">
+        is_used = #{isUsed,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="usedTime != null">
+        used_time = #{usedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="shopCashierId != null">
+        shop_cashier_id = #{shopCashierId,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dishSkuId != null">
+        dish_sku_id = #{dishSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.Coupon">
+    update coupon
+    set so_id = #{soId,jdbcType=BIGINT},
+      coupon_code = #{couponCode,jdbcType=VARCHAR},
+      sku_id = #{skuId,jdbcType=BIGINT},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      sku_name = #{skuName,jdbcType=VARCHAR},
+      coupon_amount = #{couponAmount,jdbcType=DECIMAL},
+      type = #{type,jdbcType=INTEGER},
+      qrcode_url = #{qrcodeUrl,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=BIGINT},
+      user_name = #{userName,jdbcType=VARCHAR},
+      is_used = #{isUsed,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      used_time = #{usedTime,jdbcType=TIMESTAMP},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      shop_cashier_id = #{shopCashierId,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      dish_sku_id = #{dishSkuId,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+  <update id="useCoupon" parameterType="com.xq.live.model.Coupon">
+    update coupon
+    set is_used = #{isUsed,jdbcType=INTEGER},
+        used_time = #{usedTime,jdbcType=TIMESTAMP},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      shop_cashier_id = #{shopCashierId,jdbcType=BIGINT},
+      update_time = now()
+    where id = #{id}
+      and user_id = #{userId}
+      and is_used = 0
+  </update>
+
+  <!-- 根据soId获取相关的coupon票卷-->
+  <select id="listCouponBySoId" resultMap="BaseResultMap">
+    SELECT c.*
+    FROM
+    coupon c
+    where c.so_id=#{soId,jdbcType=BIGINT}
+  </select>
+
+</mapper>

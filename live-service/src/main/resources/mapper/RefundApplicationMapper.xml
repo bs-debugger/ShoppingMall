@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.RefundApplicationMapper">
+    <resultMap id="BaseResultMap" type="com.xq.live.vo.out.PayRefundApplicationOut">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="out_trade_no" jdbcType="VARCHAR" property="outTradeNo" />
+        <result column="out_refund_no" jdbcType="VARCHAR" property="outRefundNo" />
+        <result column="order_type" jdbcType="INTEGER" property="orderType" />
+        <result column="total_fee" jdbcType="DECIMAL" property="totalFee" />
+        <result column="refund_fee" jdbcType="DECIMAL" property="refundFee" />
+        <result column="apply_reason" jdbcType="VARCHAR" property="applyReason" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+        <result column="refund_status" jdbcType="INTEGER" property="refundStatus" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="settlement_refund_fee" jdbcType="DECIMAL" property="settlementRefundFee" />
+        <result column="refund_time" jdbcType="TIMESTAMP" property="refundTime" />
+        <result column="type" jdbcType="INTEGER" property="type" />
+        <result column="user_id" jdbcType="BIGINT" property="userId" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+        <result column="other_reason" jdbcType="VARCHAR" property="otherReason" />
+        <result column="pay_type" jdbcType="INTEGER" property="payType" />
+        <result column="shop_name" jdbcType="INTEGER" property="shopNameTo" />
+
+        <association property="shop" javaType="com.xq.live.model.Shop">
+            <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+        </association>
+
+        <collection property="orderItems" ofType="com.xq.live.model.OrderItem">
+            <id column="order_item_id" jdbcType="BIGINT" property="id" />
+            <result column="goods_sku_name" jdbcType="VARCHAR" property="goodsSkuName" />
+            <result column="goods_price" jdbcType="VARCHAR" property="goodsPrice" />
+        </collection>
+
+    </resultMap>
+    <resultMap id="BaseResultMapTo" type="com.xq.live.vo.out.OrderInfoBoOut">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="pay_type" jdbcType="INTEGER" property="payType" />
+        <result column="account_amount" jdbcType="DECIMAL" property="accountAmount" />
+        <result column="account_amount" jdbcType="DECIMAL" property="accountAmount" />
+        <result column="user_id" jdbcType="BIGINT" property="userId" />
+        <result column="order_code" jdbcType="BIGINT" property="orderCode" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    ac.id, ac.out_trade_no, ac.out_refund_no, ac.order_type, ac.total_fee, ac.refund_fee, ac.apply_reason,
+    ac.status, ac.remarks, ac.refund_status, ac.create_time, ac.update_time, ac.settlement_refund_fee,
+    ac.refund_time, ac.type,ac.user_id,i.user_name
+  </sql>
+
+    <!--根据id获取退款信息-->
+    <select id="selectById" parameterType="com.xq.live.vo.in.PayRefundApplicationInVO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from pay_refund_application ac
+        left  join order_info i on ac.out_trade_no = i.order_code
+        where ac.id in
+        <foreach item="item" collection="ids" separator="," open="(" close=")" index="">
+            #{item}
+        </foreach>
+        and ac.status = 0
+    </select>
+
+    <select id="getList" parameterType="com.xq.live.vo.in.PayRefundApplicationInVO" resultMap="BaseResultMap">
+        select
+        pra.id, pra.out_trade_no, pra.out_refund_no, pra.order_type, pra.total_fee, pra.refund_fee, pra.apply_reason,
+        pra.status, pra.remarks, pra.refund_status, pra.create_time, pra.update_time, pra.settlement_refund_fee,
+        pra.refund_time, pra.type,pra.user_id,usr.user_name,other_reason,
+        oit.id order_item_id, oit.goods_sku_name,oit.goods_price,sh.shop_name,oi.pay_type
+        from pay_refund_application pra
+        left join user usr
+        on pra.user_id=usr.id
+        left join order_item oit
+        on oit.order_code=pra.out_trade_no
+        left join order_info oi
+        on oi.order_code=pra.out_trade_no
+        left join shop sh
+        on sh.id=oi.shop_id
+        <where>
+            1=1
+            <if test="outTradeNo!= null">
+                AND  pra.out_trade_no = #{outTradeNo,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                AND  pra.status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="keywords != null and keywords != '' ">
+                AND
+                (
+                usr.user_name LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+                pra.out_trade_no LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+                sh.shop_name LiKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%')
+                )
+            </if>
+            <if test="beginTime !=null and beginTime!='' and endTime !=null and endTime!=''">
+                and pra.create_time BETWEEN DATE_FORMAT(#{beginTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+                and DATE_FORMAT(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+            </if>
+            <if test="type != null">
+                AND  pra.type = #{type,jdbcType=VARCHAR}
+            </if>
+        </where>
+        ORDER BY
+        pra.status asc ,pra.create_time desc
+        <if test="page!=null and rows>0">
+          limit #{start}, #{rows}
+        </if>
+    </select>
+
+    <select id="getListCount" parameterType="com.xq.live.vo.in.PayRefundApplicationInVO" resultType="java.lang.Integer">
+        select
+        count(1)
+        from pay_refund_application pra
+        left join user usr
+        on pra.user_id=usr.id
+        left join order_item oit
+        on oit.order_code=pra.out_trade_no
+        left join order_info oi
+        on oi.order_code=pra.out_trade_no
+        left join shop sh
+        on sh.id=oi.shop_id
+        <where>
+            1=1
+            <if test="outTradeNo!= null">
+                AND  pra.out_trade_no = #{outTradeNo,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                AND  pra.status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="keywords != null and keywords != '' ">
+                AND
+                (
+                usr.user_name LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+                pra.out_trade_no LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+                sh.shop_name LiKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%')
+                )
+            </if>
+            <if test="beginTime !=null and beginTime!='' and endTime !=null and endTime!=''">
+                and pra.create_time BETWEEN DATE_FORMAT(#{beginTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+                and DATE_FORMAT(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+            </if>
+            <if test="type != null">
+                AND  pra.type = #{type,jdbcType=VARCHAR}
+            </if>
+        </where>
+        ORDER BY
+        pra.status asc ,pra.create_time desc
+    </select>
+
+    <update id="updateById" parameterType="com.xq.live.vo.out.PayRefundApplicationOut">
+        update pay_refund_application
+        <set>
+            <if test="remarks != null">
+                remarks = #{remarks,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="refundStatus != null">
+                refund_status = #{refundStatus,jdbcType=INTEGER},
+            </if>
+            <if test="settlementRefundFee != null">
+                settlement_refund_fee = #{settlementRefundFee,jdbcType=DECIMAL},
+            </if>
+            <if test="refundTime != null">
+                refund_time = #{refundTime,jdbcType=TIMESTAMP},
+            </if>
+            update_time = now(),
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getByOutRefundNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from pay_refund_application
+        where out_refund_no = #{outRefundNo,jdbcType=VARCHAR}
+        and status=1
+    </select>
+
+    <!--退款申请头部图表-->
+    <select id="getTableList" resultType="com.xq.live.vo.out.RefundTablesOut">
+    SELECT
+    (SELECT COUNT(1) from pay_refund_application WHERE refund_status=0 and to_days(refund_time) = to_days(now())) as todayFefundTotal,
+    (SELECT SUM(refund_fee) from pay_refund_application WHERE refund_status=0 and to_days(refund_time) = to_days(now())) as todayFefundAmount,
+    (SELECT COUNT(1) from pay_refund_application WHERE refund_status=0) as historicalFefundTotal,
+    (SELECT SUM(refund_fee) from pay_refund_application WHERE refund_status=0) as historicalFefundAmount
+    from pay_refund_application  LIMIT 1
+    </select>
+
+    <sql id="Base_Column_ListTo">
+    id,pay_type,account_amount,user_id,order_code
+  </sql>
+
+    <select id="selectByOrderCode"  resultMap="BaseResultMapTo">
+        select
+        <include refid="Base_Column_ListTo" />
+        from order_info
+        where order_code = #{orderCode,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.SkuDao">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.Sku">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="sku_name" jdbcType="VARCHAR" property="skuName" />
+    <result column="sku_type" jdbcType="TINYINT" property="skuType" />
+    <result column="sell_price" jdbcType="DECIMAL" property="sellPrice" />
+    <result column="in_price" jdbcType="DECIMAL" property="inPrice" />
+    <result column="stock_num" jdbcType="INTEGER" property="stockNum" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opreator_id" jdbcType="BIGINT" property="opreatorId" />
+    <result column="opreator_name" jdbcType="VARCHAR" property="opreatorName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, sku_code, sku_name, sku_type, sell_price, in_price, stock_num, is_deleted, create_time, 
+    update_time, opreator_id, opreator_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sku
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sku
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.Sku">
+    insert into sku (id, sku_code, sku_name, 
+      sku_type, sell_price, in_price, 
+      stock_num, is_deleted, create_time, 
+      update_time, opreator_id, opreator_name
+      )
+    values (#{id,jdbcType=BIGINT}, #{skuCode,jdbcType=VARCHAR}, #{skuName,jdbcType=VARCHAR}, 
+      #{skuType,jdbcType=TINYINT}, #{sellPrice,jdbcType=DECIMAL}, #{inPrice,jdbcType=DECIMAL}, 
+      #{stockNum,jdbcType=INTEGER}, 0, now(),
+      now(), #{opreatorId,jdbcType=BIGINT}, #{opreatorName,jdbcType=VARCHAR}
+      )
+      <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+        select last_insert_id() as id
+      </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.Sku">
+    insert into sku
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="skuName != null">
+        sku_name,
+      </if>
+      <if test="skuType != null">
+        sku_type,
+      </if>
+      <if test="sellPrice != null">
+        sell_price,
+      </if>
+      <if test="inPrice != null">
+        in_price,
+      </if>
+      <if test="stockNum != null">
+        stock_num,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="opreatorId != null">
+        opreator_id,
+      </if>
+      <if test="opreatorName != null">
+        opreator_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuName != null">
+        #{skuName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuType != null">
+        #{skuType,jdbcType=TINYINT},
+      </if>
+      <if test="sellPrice != null">
+        #{sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="inPrice != null">
+        #{inPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stockNum != null">
+        #{stockNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opreatorId != null">
+        #{opreatorId,jdbcType=BIGINT},
+      </if>
+      <if test="opreatorName != null">
+        #{opreatorName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.Sku">
+    update sku
+    <set>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuName != null">
+        sku_name = #{skuName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuType != null">
+        sku_type = #{skuType,jdbcType=TINYINT},
+      </if>
+      <if test="sellPrice != null">
+        sell_price = #{sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="inPrice != null">
+        in_price = #{inPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stockNum != null">
+        stock_num = #{stockNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opreatorId != null">
+        opreator_id = #{opreatorId,jdbcType=BIGINT},
+      </if>
+      <if test="opreatorName != null">
+        opreator_name = #{opreatorName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.Sku">
+    update sku
+    set sku_code = #{skuCode,jdbcType=VARCHAR},
+      sku_name = #{skuName,jdbcType=VARCHAR},
+      sku_type = #{skuType,jdbcType=TINYINT},
+      sell_price = #{sellPrice,jdbcType=DECIMAL},
+      in_price = #{inPrice,jdbcType=DECIMAL},
+      stock_num = #{stockNum,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      update_time = now(),
+      opreator_id = #{opreatorId,jdbcType=BIGINT},
+      opreator_name = #{opreatorName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!-- 查询条件 -->
+  <sql id="Example_Where_Clause">
+    where 1=1
+    <trim  suffixOverrides="," >
+      <if test="id != null and id !=''">
+        and id = #{id}
+      </if>
+      <if test="skuCode != null and skuCode !=''">
+        and sku_code = #{skuCode}
+      </if>
+      <if test="skuName != null and skuName !=''">
+        and sku_name like concat('%', #{skuName}, '%')
+      </if>
+      <if test="skuType != null and skuType !=''">
+        and sku_type = #{skuType}
+      </if>
+      <if test="isDeleted != null and isDeleted !=''">
+        and is_deleted = #{isDeleted}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="queryWithPg" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sku
+    <include refid="Example_Where_Clause"/>
+    <if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      ${pager.orderCondition}
+    </if>
+    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+      ${pager.mysqlQueryCondition}
+    </if>
+  </select>
+
+  <select id="queryWithCount" resultType="java.lang.Integer">
+    select count(1)
+    from sku
+    <include refid="Example_Where_Clause"/>
+  </select>
+
+  <select id="selectByCode" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sku
+    where sku_code = #{skuCode}
+  </select>
+</mapper>

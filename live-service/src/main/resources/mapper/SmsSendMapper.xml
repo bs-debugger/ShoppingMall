@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.SmsSendMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.SmsSend">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sms_type" jdbcType="TINYINT" property="smsType" />
+    <result column="sms_content" jdbcType="VARCHAR" property="smsContent" />
+    <result column="shop_mobile" jdbcType="VARCHAR" property="shopMobile" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="send_status" jdbcType="TINYINT" property="sendStatus" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, sms_type, sms_content, shop_mobile, shop_id, send_status, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sms_send
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByMobile" parameterType="com.xq.live.vo.in.SmsSendInVo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sms_send
+    where shop_mobile = #{shopMobile,jdbcType=VARCHAR}
+    <if test="smsType != null">
+      and sms_type = #{smsType,jdbcType=TINYINT}
+    </if>
+    ORDER BY create_time DESC LIMIT 1
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sms_send
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.SmsSend">
+    insert into sms_send (id, sms_type, sms_content,
+    shop_mobile, shop_id,shop_name,user_name, send_status, remark,
+      create_time)
+    values (#{id,jdbcType=BIGINT}, #{smsType,jdbcType=TINYINT}, #{smsContent,jdbcType=VARCHAR}, 
+      #{shopMobile,jdbcType=VARCHAR}, #{shopId,jdbcType=BIGINT},#{shopName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},#{sendStatus,jdbcType=TINYINT},#{remark,jdbcType=VARCHAR},
+    now())
+      <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+        select last_insert_id() as id
+      </selectKey>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.SmsSend">
+    update sms_send
+    <set>
+      <if test="smsType != null">
+        sms_type = #{smsType,jdbcType=TINYINT},
+      </if>
+      <if test="smsContent != null">
+        sms_content = #{smsContent,jdbcType=VARCHAR},
+      </if>
+      <if test="shopMobile != null">
+        shop_mobile = #{shopMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="sendStatus != null">
+        send_status = #{sendStatus,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.SmsSend">
+    update sms_send
+    set sms_type = #{smsType,jdbcType=TINYINT},
+      sms_content = #{smsContent,jdbcType=VARCHAR},
+      shop_mobile = #{shopMobile,jdbcType=VARCHAR},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      send_status = #{sendStatus,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <insert id="create" parameterType="com.xq.live.vo.in.SmsSendInVo">
+    insert into sms_send (id, sms_type, sms_content,
+    shop_mobile, shop_id,shop_name, user_name, send_status, remark,
+    create_time)
+    values (#{id,jdbcType=BIGINT}, #{smsType,jdbcType=TINYINT}, #{smsContent,jdbcType=VARCHAR},
+    #{shopMobile,jdbcType=VARCHAR}, #{shopId,jdbcType=BIGINT},#{shopName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{sendStatus,jdbcType=TINYINT},#{remark,jdbcType=VARCHAR},
+    #{createTime,jdbcType=TIMESTAMP})
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
+</mapper>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.DeliveryTemplateShopMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.DeliveryTemplateShop">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="delivery_template_id" jdbcType="BIGINT" property="deliveryTemplateId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <resultMap id="DeliveryTemplateShopOutResultMap" type="com.xq.live.vo.out.DeliveryTemplateShopOut" extends="BaseResultMap">
+    <association property="deliveryTemplateOut" javaType="com.xq.live.vo.out.DeliveryTemplateOut">
+      <id column="dt_id" jdbcType="BIGINT" property="id" />
+      <result column="name" jdbcType="VARCHAR" property="name" />
+      <result column="shipping_address" jdbcType="VARCHAR" property="shippingAddress" />
+      <result column="is_free" jdbcType="INTEGER" property="isFree" />
+      <result column="calculate_type" jdbcType="INTEGER" property="calculateType" />
+      <collection property="deliveryMethods" ofType="com.xq.live.model.DeliveryMethod">
+        <id column="dm_id" jdbcType="BIGINT" property="id" />
+        <result column="dm_delivery_template_id" jdbcType="BIGINT" property="deliveryTemplateId" />
+        <result column="region" jdbcType="LONGVARCHAR" property="region" />
+        <result column="region_desc" jdbcType="VARCHAR" property="regionDesc"/>
+        <result column="first_piece" jdbcType="INTEGER" property="firstPiece" />
+        <result column="first_weight" jdbcType="DECIMAL" property="firstWeight" />
+        <result column="first_bulk" jdbcType="DECIMAL" property="firstBulk" />
+        <result column="first_amount" jdbcType="DECIMAL" property="firstAmount" />
+        <result column="second_piece" jdbcType="INTEGER" property="secondPiece" />
+        <result column="second_weight" jdbcType="DECIMAL" property="secondWeight" />
+        <result column="second_bulk" jdbcType="DECIMAL" property="secondBulk" />
+        <result column="second_amount" jdbcType="DECIMAL" property="secondAmount" />
+        <result column="delivery_method_type" jdbcType="INTEGER" property="deliveryMethodType" />
+        <result column="is_default" jdbcType="INTEGER" property="isDefault" />
+      </collection>
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, delivery_template_id, shop_id, is_deleted, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from delivery_template_shop
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from delivery_template_shop
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.DeliveryTemplateShop">
+    insert into delivery_template_shop (id, delivery_template_id, shop_id, 
+      is_deleted, create_time, update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{deliveryTemplateId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, 
+      0, now(), now()
+      )
+    <selectKey resultType="java.lang.Long" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.DeliveryTemplateShop">
+    insert into delivery_template_shop
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="deliveryTemplateId != null">
+        delivery_template_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="deliveryTemplateId != null">
+        #{deliveryTemplateId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.DeliveryTemplateShop">
+    update delivery_template_shop
+    <set>
+      <if test="deliveryTemplateId != null">
+        delivery_template_id = #{deliveryTemplateId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.DeliveryTemplateShop">
+    update delivery_template_shop
+    set delivery_template_id = #{deliveryTemplateId,jdbcType=BIGINT},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="list" resultMap="DeliveryTemplateShopOutResultMap">
+    SELECT a.*,
+    dm.id as dm_id,dm.delivery_template_id as dm_delivery_template_id,
+    dm.region, dm.region_desc,dm.first_piece, dm.first_weight, dm.first_bulk, dm.first_amount,
+    dm.second_piece, dm.second_weight, dm.second_bulk, dm.second_amount, dm.delivery_method_type, dm.is_default
+    from
+    (select dts.*,
+    dt.id as dt_id,dt.name, dt.shipping_address, dt.is_free, dt.calculate_type
+    from
+    delivery_template_shop dts
+    inner join delivery_template dt on dts.delivery_template_id = dt.id
+    <where>
+      1=1
+      <if test="deliveryTemplateId != null">
+        and dts.delivery_template_id = #{deliveryTemplateId,jdbcType=BIGINT}
+      </if>
+      <if test="shopId != null">
+        and dts.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and dts.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null">
+        and dts.create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and dts.update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      and dts.is_deleted = 0
+    </where>
+    order by
+    dts.id
+    limit #{start}, #{rows}) a
+    inner join delivery_method dm on a.dt_id = dm.delivery_template_id
+  </select>
+
+  <select id="listTotal" resultType="java.lang.Integer">
+    select count(dts.id)
+    from
+    delivery_template_shop dts
+    inner join delivery_template dt on dts.delivery_template_id = dt.id
+    <where>
+      1=1
+      <if test="deliveryTemplateId != null">
+        and dts.delivery_template_id = #{deliveryTemplateId,jdbcType=BIGINT}
+      </if>
+      <if test="shopId != null">
+        and dts.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and dts.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null">
+        and dts.create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and dts.update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      and dts.is_deleted = 0
+      and dt.is_free = 0
+    </where>
+  </select>
+</mapper>

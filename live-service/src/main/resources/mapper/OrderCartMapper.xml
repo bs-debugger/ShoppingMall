@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.OrderCartMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.OrderCart">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="goods_sku_id" jdbcType="BIGINT" property="goodsSkuId" />
+    <result column="goods_spu_id" jdbcType="BIGINT" property="goodsSpuId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="goods_sku_name" jdbcType="VARCHAR" property="goodsSkuName" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <resultMap id="OrderCartOutMap" type="com.xq.live.vo.out.OrderCartOut" extends="BaseResultMap">
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, goods_sku_id, goods_spu_id, user_id, shop_id, goods_sku_name, num, price, is_deleted, 
+    create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_cart
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="findByGoodsSkuIdAndUserId"  resultMap="OrderCartOutMap">
+    select
+    <include refid="Base_Column_List" />
+    from order_cart
+    where goods_sku_id = #{goodsSkuId,jdbcType=BIGINT}
+    and user_id = #{userId,jdbcType=BIGINT}
+    and is_deleted = 0
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from order_cart
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.OrderCart">
+    insert into order_cart (id, goods_sku_id, goods_spu_id, 
+      user_id, shop_id, goods_sku_name, 
+      num, price, is_deleted, 
+      create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{goodsSkuId,jdbcType=BIGINT}, #{goodsSpuId,jdbcType=BIGINT}, 
+      #{userId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, #{goodsSkuName,jdbcType=VARCHAR}, 
+      #{num,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, 0,
+      now(), now())
+    <selectKey resultType="java.lang.Long" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.OrderCart">
+    insert into order_cart
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="goodsSkuId != null">
+        goods_sku_id,
+      </if>
+      <if test="goodsSpuId != null">
+        goods_spu_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="goodsSkuName != null">
+        goods_sku_name,
+      </if>
+      <if test="num != null">
+        num,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuId != null">
+        #{goodsSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSpuId != null">
+        #{goodsSpuId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuName != null">
+        #{goodsSkuName,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null">
+        #{num,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.OrderCart">
+    update order_cart
+    <set>
+      <if test="goodsSkuId != null">
+        goods_sku_id = #{goodsSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSpuId != null">
+        goods_spu_id = #{goodsSpuId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuName != null">
+        goods_sku_name = #{goodsSkuName,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null">
+        num = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = now(),
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.OrderCart">
+    update order_cart
+    set goods_sku_id = #{goodsSkuId,jdbcType=BIGINT},
+      goods_spu_id = #{goodsSpuId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      goods_sku_name = #{goodsSkuName,jdbcType=VARCHAR},
+      num = #{num,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByGoodsSkuIdAndUserId" parameterType="com.xq.live.model.OrderCart">
+    update order_cart
+    <set>
+      <if test="goodsSkuId != null">
+        goods_sku_id = #{goodsSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSpuId != null">
+        goods_spu_id = #{goodsSpuId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuName != null">
+        goods_sku_name = #{goodsSkuName,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null">
+        num = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = now(),
+      </if>
+    </set>
+    where goods_sku_id = #{goodsSkuId,jdbcType=BIGINT}
+    and user_id = #{userId,jdbcType=BIGINT}
+    and is_deleted = 0
+  </update>
+
+  <update id="updateBatchByGoodsSkuIdAndUserId">
+    update order_cart
+    set
+    is_deleted = 1,
+    update_time = now()
+    where goods_sku_id id IN
+    <foreach collection="orderCarts" item="item" index="index" separator="," open="(" close=")">
+      #{item.goodsSkuId,jdbcType=BIGINT}
+    </foreach>
+    and user_id = #{userId,jdbcType=BIGINT}
+    and is_deleted = 0
+  </update>
+</mapper>

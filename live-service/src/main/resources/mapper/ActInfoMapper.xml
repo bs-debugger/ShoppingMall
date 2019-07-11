@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ActInfoMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ActInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="act_name" jdbcType="VARCHAR" property="actName" />
+    <result column="act_status" jdbcType="INTEGER" property="actStatus" />
+    <result column="act_desc" jdbcType="VARCHAR" property="actDesc" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="main_pic" jdbcType="VARCHAR" property="mainPic" />
+    <result column="act_url" jdbcType="VARCHAR" property="actUrl" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="sku_type" jdbcType="INTEGER" property="skuType" />
+    <result column="people_num" jdbcType="INTEGER" property="peopleNum"/>
+    <result column="apply_start_time" jdbcType="TIMESTAMP" property="applyStartTime" />
+    <result column="apply_end_time" jdbcType="TIMESTAMP" property="applyEndTime" />
+    <result column="apply_rules" jdbcType="VARCHAR" property="applyRules" />
+    <result column="apply_sign_num" jdbcType="INTEGER" property="applySignNum" />
+    <result column="view_num" jdbcType="INTEGER" property="viewNum" />
+  </resultMap>
+
+  <resultMap id="ActInfoOutResultMap" extends="BaseResultMap" type="com.xq.live.vo.out.ActInfoOut">
+    <result column="vote_num" jdbcType="INTEGER" property="voteNum" />
+    <result column="shop_num" jdbcType="INTEGER" property="shopNum" />
+    <result column="view_num" jdbcType="INTEGER" property="viewNum" />
+    <result column="is_add" jdbcType="INTEGER" property="isAdd" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, act_name, act_status,act_desc, start_time, end_time, main_pic, act_url, is_deleted, create_time,type,
+    apply_start_time,apply_end_time,apply_rules,apply_sign_num,people_num,view_num
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from act_info
+    where id = #{id,jdbcType=BIGINT}
+    and is_deleted = 0
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from act_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.ActInfo">
+    insert into act_info (act_name, start_time, end_time, create_time, main_pic, act_url
+    ,apply_start_time,apply_end_time,apply_rules)
+    values (#{actName,jdbcType=VARCHAR},
+    #{startTime,jdbcType=TIMESTAMP},
+    #{endTime,jdbcType=TIMESTAMP},
+    now(),
+    #{mainPic,jdbcType=VARCHAR},
+    #{actUrl,jdbcType=VARCHAR},#{applyStartTime,jdbcType=TIMESTAMP},
+    #{applyEndTime,jdbcType=TIMESTAMP},
+    #{applyRules,jdbcType=VARCHAR}
+    )
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS ID
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.ActInfo">
+    insert into act_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="actName != null">
+        act_name,
+      </if>
+      <if test="actStatus != null">
+        act_status,
+      </if>
+      <if test="mainPic != null">
+        main_pic,
+      </if>
+      <if test="actUrl != null">
+        act_url,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="applyStartTime != null">
+        apply_start_time,
+      </if>
+      <if test="applyEndTime != null">
+        apply_end_time,
+      </if>
+      <if test="applyRules != null">
+        apply_rules,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="actName != null">
+        #{actName,jdbcType=VARCHAR},
+      </if>
+      <if test="actStatus != null">
+        #{actStatus, jdbcType=INTEGER},
+      </if>
+      <if test="mainPic != null">
+        #{actUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="actUrl != null">
+        #{actUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{applyStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{applyEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{applyRules,jdbcType=VARCHAR},
+      </if>
+
+    </trim>
+    <selectKey resultType="java.lang.Long" keyProperty="id">
+      SELECT last_insert_id() as id
+    </selectKey>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.ActInfo">
+    update act_info
+    <set>
+      <if test="actName != null">
+        act_name = #{actName,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actStatus != null">
+        act_status = #{actStatus,jdbcType=INTEGER},
+      </if>
+      <if test="actUrl != null">
+        act_url = #{actUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="mainPic != null">
+        main_pic = #{mainPic,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="applyStartTime != null">
+        apply_start_time = #{applyStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyEndTime != null">
+        apply_end_time = #{applyEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyRules != null">
+        apply_rules = #{applyRules,jdbcType=VARCHAR},
+      </if>
+      <if test="viewNum != null">
+        view_num = view_num+1,
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.ActInfo">
+    update act_info
+    set act_name = #{actName,jdbcType=VARCHAR},
+    start_time = #{startTime,jdbcType=TIMESTAMP},
+    end_time = #{endTime,jdbcType=TIMESTAMP},
+    create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="listTotal" resultType="java.lang.Integer">
+    select count(1) from act_info
+    <where>
+      1=1
+      <if test="id != null">
+        and id = #{id}
+      </if>
+      <if test="actName != null">
+        and act_name = #{actName}
+      </if>
+      <if test="actRange != null">
+        and act_range = #{actRange}
+      </if>
+      and is_deleted = 0
+    </where>
+  </select>
+
+  <select id="list" resultMap="ActInfoOutResultMap">
+    select
+    ai.id,
+    ai.act_name,
+    ai.act_status,
+    ai.start_time,
+    ai.end_time,
+    ai.main_pic,
+    ai.act_url,
+    ai.is_deleted,
+    ai.create_time,
+    ai.type,
+    ai.act_desc,
+    ai.view_num,
+    ai.apply_start_time,ai.apply_end_time,ai.apply_rules,ai.apply_sign_num,ai.people_num,
+    (select count(1) from vote v where ai.id = v.act_id) as vote_num,
+    (select count(1) from act_shop asp where ai.id = asp.act_id) as shop_num
+    from act_info ai
+    <where>
+      1=1
+      <if test="id != null">
+        and ai.id = #{id}
+      </if>
+      <if test="actName != null">
+        and ai.act_name = #{actName}
+      </if>
+      <if test="actRange != null">
+        and ai.act_range = #{actRange}
+      </if>
+      and is_deleted = 0
+    </where>
+    order by ai.create_time desc
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="findActInfoById" parameterType="java.lang.Long" resultMap="ActInfoOutResultMap">
+    select
+    ai.id,
+    ai.act_name,
+    ai.act_status,
+    ai.act_desc,
+    ai.start_time,
+    ai.end_time,
+    ai.main_pic,
+    ai.act_url,
+    ai.is_deleted,
+    ai.create_time,
+    ai.type,
+    ai.view_num,
+    ai.apply_start_time,ai.apply_end_time,ai.apply_rules,ai.apply_sign_num,ai.people_num,
+
+    (select count(1) from vote v where ai.id = v.act_id) as vote_num,
+    (select count(1) from act_shop asp where ai.id = asp.act_id) as shop_num
+    from act_info ai
+    where ai.id = #{id}
+    and is_deleted = 0
+  </select>
+
+  <select id="listTotalForShop" resultType="java.lang.Integer">
+    select count(1) from act_info ai
+    <where>
+      1=1
+      <if test="id != null">
+        and ai.id = #{id}
+      </if>
+      <if test="actName != null">
+        and ai.act_name = #{actName}
+      </if>
+      <if test="actRange != null and actRange == 1">
+        and ai.act_range in (1,2)
+      </if>
+      <if test="actRange != null and actRange == 2">
+        and ai.act_range in (2,3)
+      </if>
+      <if test="type == 1">
+        and (select count(1) from act_goods_sku ak left join
+        goods_sku k on k.id=ak.sku_id
+        where ai.id = ak.act_id and k.is_deleted=0 and ak.state = 1 and ak.apply_status in (0,1) and ak.shop_id = #{shopId}) >0
+      </if>
+      and ai.is_deleted = 0
+    </where>
+  </select>
+
+  <select id="listForShop" resultMap="ActInfoOutResultMap">
+    select
+    ai.id,
+    ai.act_name,
+    ai.act_status,
+    ai.start_time,
+    ai.end_time,
+    ai.main_pic,
+    ai.act_url,
+    ai.is_deleted,
+    ai.create_time,
+    ai.type,
+    ai.act_desc,
+    ai.sku_type,
+    ai.view_num,
+    ai.apply_start_time,ai.apply_end_time,ai.apply_rules,ai.apply_sign_num,ai.people_num,
+    (select count(1) from vote v where ai.id = v.act_id) as vote_num,
+    (select count(1) from act_shop asp where ai.id = asp.act_id) as shop_num,
+    (select count(1) from act_goods_sku ak left join
+    goods_sku k on k.id=ak.sku_id
+    where ai.id = ak.act_id and k.is_deleted=0 and ak.state = 1 and ak.apply_status in (0,1) and ak.shop_id = #{shopId}) as is_add
+    from act_info ai
+    <where>
+      1=1
+      <if test="id != null">
+        and ai.id = #{id}
+      </if>
+      <if test="actName != null">
+        and ai.act_name = #{actName}
+      </if>
+      <if test="actRange != null and actRange == 1">
+        and ai.act_range in (1,2)
+      </if>
+      <if test="actRange != null and actRange == 2">
+        and ai.act_range in (2,3)
+      </if>
+      <if test="type == 1">
+        and (select count(1) from act_goods_sku ak left join
+        goods_sku k on k.id=ak.sku_id
+        where ai.id = ak.act_id and k.is_deleted=0 and ak.state = 1 and ak.apply_status in (0,1) and ak.shop_id = #{shopId}) >0
+      </if>
+      and is_deleted = 0
+    </where>
+    order by ai.create_time desc
+    limit #{start}, #{rows}
+  </select>
+
+<!--根据活动类型查看活动-->
+  <select id="actTypeList" resultMap="BaseResultMap">
+    SELECT * FROM act_info
+    <where>
+      is_deleted=0
+      AND act_status=1
+      <if test="type != null">
+        and type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+    </where>
+  </select>
+</mapper>

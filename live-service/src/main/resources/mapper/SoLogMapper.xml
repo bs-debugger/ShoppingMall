@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.SoLogMapper">
+    <resultMap id="BaseResultMap" type="com.xq.live.model.SoLog">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="so_id" jdbcType="BIGINT" property="soId"/>
+        <result column="operate_type" jdbcType="TINYINT" property="operateType"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="user_ip" jdbcType="VARCHAR" property="userIp"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, so_id, operate_type, user_id, user_name, create_time, user_ip
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from so_log
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from so_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+    <insert id="insert" parameterType="com.xq.live.model.SoLog">
+        insert into so_log (so_id, operate_type,
+        user_id, user_name, create_time,
+        user_ip)
+        values (#{soId,jdbcType=BIGINT}, #{operateType,jdbcType=TINYINT},
+        #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, now(),
+        #{userIp,jdbcType=VARCHAR})
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            select last_insert_id() as id
+        </selectKey>
+    </insert>
+    
+</mapper>

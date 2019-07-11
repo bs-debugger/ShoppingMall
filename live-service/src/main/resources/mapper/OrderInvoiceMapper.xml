@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.OrderInvoiceMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.OrderInvoice">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="source_type" jdbcType="INTEGER" property="sourceType" />
+    <result column="initial_type" jdbcType="INTEGER" property="initialType" />
+    <result column="apply_status" jdbcType="INTEGER" property="applyStatus" />
+    <result column="invoice_amount" jdbcType="DECIMAL" property="invoiceAmount" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="invoice_open" jdbcType="VARCHAR" property="invoiceOpen" />
+    <result column="duty_paragraph" jdbcType="VARCHAR" property="dutyParagraph" />
+    <result column="order_address_id" jdbcType="BIGINT" property="orderAddressId" />
+    <result column="goods_sku_duty_type" jdbcType="INTEGER" property="goodsSkuDutyType" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <resultMap id="OrderInvoiceOutResultMap" type="com.xq.live.vo.out.OrderInvoiceOut" extends="BaseResultMap">
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, order_code, user_id,mobile, source_type, initial_type, apply_status, invoice_amount,
+    email, invoice_open, duty_paragraph, order_address_id, goods_sku_duty_type, is_deleted, 
+    create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_invoice
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByOrderCode"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from order_invoice
+    where order_code = #{orderCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from order_invoice
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.OrderInvoice">
+    insert into order_invoice (id, order_code, user_id,mobile,
+      source_type, initial_type, apply_status, 
+      invoice_amount, email, invoice_open, 
+      duty_paragraph, order_address_id, goods_sku_duty_type, 
+      is_deleted, create_time, update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{orderCode,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT},#{mobile,jdbcType=VARCHAR},
+      #{sourceType,jdbcType=INTEGER}, #{initialType,jdbcType=INTEGER}, 1,
+      #{invoiceAmount,jdbcType=DECIMAL}, #{email,jdbcType=VARCHAR}, #{invoiceOpen,jdbcType=VARCHAR}, 
+      #{dutyParagraph,jdbcType=VARCHAR}, #{orderAddressId,jdbcType=BIGINT}, #{goodsSkuDutyType,jdbcType=INTEGER}, 
+      0, now(), now()
+      )
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.OrderInvoice">
+    insert into order_invoice
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderCode != null">
+        order_code,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="sourceType != null">
+        source_type,
+      </if>
+      <if test="initialType != null">
+        initial_type,
+      </if>
+      <if test="applyStatus != null">
+        apply_status,
+      </if>
+      <if test="invoiceAmount != null">
+        invoice_amount,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="invoiceOpen != null">
+        invoice_open,
+      </if>
+      <if test="dutyParagraph != null">
+        duty_paragraph,
+      </if>
+      <if test="orderAddressId != null">
+        order_address_id,
+      </if>
+      <if test="goodsSkuDutyType != null">
+        goods_sku_duty_type,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orderCode != null">
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceType != null">
+        #{sourceType,jdbcType=INTEGER},
+      </if>
+      <if test="initialType != null">
+        #{initialType,jdbcType=INTEGER},
+      </if>
+      <if test="applyStatus != null">
+        #{applyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="invoiceAmount != null">
+        #{invoiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceOpen != null">
+        #{invoiceOpen,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyParagraph != null">
+        #{dutyParagraph,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAddressId != null">
+        #{orderAddressId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuDutyType != null">
+        #{goodsSkuDutyType,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.OrderInvoice">
+    update order_invoice
+    <set>
+      <if test="orderCode != null">
+        order_code = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceType != null">
+        source_type = #{sourceType,jdbcType=INTEGER},
+      </if>
+      <if test="initialType != null">
+        initial_type = #{initialType,jdbcType=INTEGER},
+      </if>
+      <if test="applyStatus != null">
+        apply_status = #{applyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="invoiceAmount != null">
+        invoice_amount = #{invoiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceOpen != null">
+        invoice_open = #{invoiceOpen,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyParagraph != null">
+        duty_paragraph = #{dutyParagraph,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAddressId != null">
+        order_address_id = #{orderAddressId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuDutyType != null">
+        goods_sku_duty_type = #{goodsSkuDutyType,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.OrderInvoice">
+    update order_invoice
+    set order_code = #{orderCode,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=BIGINT},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      source_type = #{sourceType,jdbcType=INTEGER},
+      initial_type = #{initialType,jdbcType=INTEGER},
+      apply_status = #{applyStatus,jdbcType=INTEGER},
+      invoice_amount = #{invoiceAmount,jdbcType=DECIMAL},
+      email = #{email,jdbcType=VARCHAR},
+      invoice_open = #{invoiceOpen,jdbcType=VARCHAR},
+      duty_paragraph = #{dutyParagraph,jdbcType=VARCHAR},
+      order_address_id = #{orderAddressId,jdbcType=BIGINT},
+      goods_sku_duty_type = #{goodsSkuDutyType,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="list" resultMap="OrderInvoiceOutResultMap">
+    select *
+    from order_invoice
+    <where>
+      1=1
+      <if test="orderCode != null">
+        and order_code = #{orderCode,jdbcType=VARCHAR}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="mobile != null">
+        and mobile = #{mobile,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceType != null">
+        and source_type = #{sourceType,jdbcType=INTEGER}
+      </if>
+      <if test="initialType != null">
+        and initial_type = #{initialType,jdbcType=INTEGER}
+      </if>
+      <if test="applyStatus != null">
+        and apply_status = #{applyStatus,jdbcType=INTEGER}
+      </if>
+      <if test="invoiceAmount != null">
+        and invoice_amount = #{invoiceAmount,jdbcType=DECIMAL}
+      </if>
+      <if test="email != null">
+        and email = #{email,jdbcType=VARCHAR}
+      </if>
+      <if test="invoiceOpen != null">
+        and invoice_open = #{invoiceOpen,jdbcType=VARCHAR}
+      </if>
+      <if test="dutyParagraph != null">
+        and duty_paragraph = #{dutyParagraph,jdbcType=VARCHAR}
+      </if>
+      <if test="orderAddressId != null">
+        and order_address_id = #{orderAddressId,jdbcType=BIGINT}
+      </if>
+      <if test="goodsSkuDutyType != null">
+        and goods_sku_duty_type = #{goodsSkuDutyType,jdbcType=INTEGER}
+      </if>
+      <if test="isDeleted != null">
+        and is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null">
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    order by create_time desc
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="listTotal" resultType="java.lang.Integer">
+    select COUNT(1)
+    from order_invoice
+    <where>
+      1=1
+      <if test="orderCode != null">
+        and order_code = #{orderCode,jdbcType=VARCHAR}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="mobile != null">
+        and mobile = #{mobile,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceType != null">
+        and source_type = #{sourceType,jdbcType=INTEGER}
+      </if>
+      <if test="initialType != null">
+        and initial_type = #{initialType,jdbcType=INTEGER}
+      </if>
+      <if test="applyStatus != null">
+        and apply_status = #{applyStatus,jdbcType=INTEGER}
+      </if>
+      <if test="invoiceAmount != null">
+        and invoice_amount = #{invoiceAmount,jdbcType=DECIMAL}
+      </if>
+      <if test="email != null">
+        and email = #{email,jdbcType=VARCHAR}
+      </if>
+      <if test="invoiceOpen != null">
+        and invoice_open = #{invoiceOpen,jdbcType=VARCHAR}
+      </if>
+      <if test="dutyParagraph != null">
+        and duty_paragraph = #{dutyParagraph,jdbcType=VARCHAR}
+      </if>
+      <if test="orderAddressId != null">
+        and order_address_id = #{orderAddressId,jdbcType=BIGINT}
+      </if>
+      <if test="goodsSkuDutyType != null">
+        and goods_sku_duty_type = #{goodsSkuDutyType,jdbcType=INTEGER}
+      </if>
+      <if test="isDeleted != null">
+        and is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null">
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectListByTemp" parameterType="com.xq.live.vo.in.OrderInvoiceInVo" resultType="com.xq.live.vo.out.OrderInvoiceOut">
+    select
+    oiv.id, oiv.order_code, oiv.user_id,oiv.mobile, oiv.source_type, oiv.initial_type, oiv.apply_status, oiv.invoice_amount,
+    oiv.email, oiv.invoice_open, oiv.duty_paragraph, oiv.order_address_id, oiv.goods_sku_duty_type, oiv.is_deleted,
+    oiv.create_time, oiv.update_time,
+    res.detail_address,
+    res.chat_name,
+    res.mobile address_mobile
+    from order_invoice oiv
+    left join order_address res on oiv.order_address_id=res.id
+    <where>
+      1=1
+      <if test="keywords != null and keywords != '' ">
+        AND
+        (
+        oiv.order_code LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+        oiv.mobile LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%')
+        )
+      </if>
+      <if test="beginTime !=null and endTime != ''">
+        and (oiv.create_time BETWEEN #{beginTime} and #{endTime})
+      </if>
+      <if test="applyStatus !=null">
+        and    oiv.apply_status =#{applyStatus}
+      </if>
+      and oiv.is_deleted=0
+    </where>
+    ORDER BY
+    oiv.apply_status asc ,oiv.create_time desc
+  </select>
+
+  <select id="selectById" parameterType="java.lang.Long" resultType="com.xq.live.model.OrderInvoice">
+        select
+        oiv.id, oiv.order_code, oiv.user_id,oiv.mobile, oiv.source_type, oiv.initial_type, oiv.apply_status, oiv.invoice_amount,
+        oiv.email, oiv.invoice_open, oiv.duty_paragraph, oiv.order_address_id, oiv.goods_sku_duty_type, oiv.is_deleted,
+        oiv.create_time, oiv.update_time,
+        res.detail_address,
+        res.chat_name,
+        res.mobile address_mobile,
+        ci.city_cname  as dict_city,
+        co.county_cname  as dict_county,
+        pr.province_cname as dict_province,
+        da.area_cname as dict_area
+        from order_invoice oiv
+        left join order_address res on oiv.order_address_id=res.id
+        left JOIN dict_city ci ON ci.id=res.dict_city_id
+        left JOIN dict_county co ON co.id=res.dict_county_id
+        left JOIN dict_province pr ON pr.id=res.dict_province_id
+        left join dict_area da on da.id=res.dict_area_id
+        where oiv.id in
+        <!--<foreach item="item" collection="ids.split" separator="," open="(" close=")" index="">
+        #{item}
+        </foreach>
+       <if test="approveStatus != null and approveStatus!=''">-->
+      <foreach item="item" collection="ids.split(',')" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+        and apply_status =1
+    </select>
+
+  <!--驳回原因-->
+  <select id="getReason" resultType="java.util.Map">
+    select * from pay_refund_reason
+    where type = 3
+    and is_delete=0
+    order by sort asc
+  </select>
+
+  <!--批量同意发票审核-->
+  <update id="updateById" parameterType="com.xq.live.model.OrderInvoice">
+    update order_invoice
+    <set>
+      <if test="applyStatus != null">
+        apply_status = #{applyStatus,jdbcType=TIMESTAMP},
+      </if>
+      update_time = now(),
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.BdShopRelationMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.BdShopRelation">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, shop_id, status, create_time, update_time
+  </sql>
+  <select id="shopHasRelation" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    select count(shop_id) from bd_shop_relation where shop_id = #{shopId,jdbcType=BIGINT} and status = true
+  </select>
+  <insert id="save" parameterType="com.xq.live.vo.in.ShopRelationInVo">
+    insert into bd_shop_relation(user_id, shop_id, create_time) values (
+        #{userId,jdbcType=BIGINT},#{shopId,jdbcType=BIGINT},now()
+    )
+  </insert>
+  <update id="remove" parameterType="com.xq.live.vo.in.ShopRelationInVo">
+    update bd_shop_relation set status = false, update_time = now() where user_id = #{userId,jdbcType=BIGINT} and shop_id = #{shopId,jdbcType=BIGINT}
+  </update>
+  <select id="showList" resultType="com.xq.live.vo.out.ShopRelationOut" parameterType="com.xq.live.vo.in.ShopRelationInVo">
+    select shop.*, bsr.user_id, bsr.create_time relation_create_time, user.user_name from shop
+    left join bd_shop_relation bsr on shop.id = bsr.shop_id and bsr.status = true
+    left join user on bsr.user_id = user.id
+    where shop.is_deleted = 0 and shop.apply_status = 1 and shop.shop_status = 1
+    <if test="searchKey != null and searchKey != ''">
+      and (
+        shop.shop_name like concat('%', #{searchKey,jdbcType=VARCHAR}, '%')
+        or shop.mobile like concat('%', #{searchKey,jdbcType=VARCHAR}, '%')
+      )
+    </if>
+    <if test="allRelation != null and !allRelation and userId != null and userId != ''">
+      and bsr.user_id = #{userId,jdbcType=BIGINT}
+    </if>
+    order by bsr.create_time, shop.create_time desc
+  </select>
+</mapper>

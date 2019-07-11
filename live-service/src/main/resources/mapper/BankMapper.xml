@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xq.live.dao.BankMapper" >
+  <resultMap id="BaseResultMap" type="com.xq.live.model.Bank" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+    <result column="account_no" property="accountNo" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="bank" property="bank" jdbcType="VARCHAR" />
+    <result column="card_name" property="cardName" jdbcType="VARCHAR" />
+    <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="CHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="prefecture" property="prefecture" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+    <result column="addr_code" property="addrCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, id_card, account_no, name, mobile, bank, card_name, card_type, sex, area, province, 
+    city, prefecture, birthday, addr_code
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from bank
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from bank
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.Bank" >
+    insert into bank (id, id_card, account_no, 
+      name, mobile, bank, 
+      card_name, card_type, sex, 
+      area, province, city, 
+      prefecture, birthday, addr_code
+      )
+    values (#{id,jdbcType=BIGINT}, #{idCard,jdbcType=VARCHAR}, #{accountNo,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{bank,jdbcType=VARCHAR}, 
+      #{cardName,jdbcType=VARCHAR}, #{cardType,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, 
+      #{area,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{prefecture,jdbcType=VARCHAR}, #{birthday,jdbcType=VARCHAR}, #{addrCode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.Bank" >
+    insert into bank
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="accountNo != null" >
+        account_no,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="bank != null" >
+        bank,
+      </if>
+      <if test="cardName != null" >
+        card_name,
+      </if>
+      <if test="cardType != null" >
+        card_type,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="prefecture != null" >
+        prefecture,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="addrCode != null" >
+        addr_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNo != null" >
+        #{accountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null" >
+        #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="cardName != null" >
+        #{cardName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=CHAR},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="prefecture != null" >
+        #{prefecture,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="addrCode != null" >
+        #{addrCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.Bank" >
+    update bank
+    <set >
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNo != null" >
+        account_no = #{accountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null" >
+        bank = #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="cardName != null" >
+        card_name = #{cardName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        card_type = #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=CHAR},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="prefecture != null" >
+        prefecture = #{prefecture,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="addrCode != null" >
+        addr_code = #{addrCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.Bank" >
+    update bank
+    set id_card = #{idCard,jdbcType=VARCHAR},
+      account_no = #{accountNo,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      bank = #{bank,jdbcType=VARCHAR},
+      card_name = #{cardName,jdbcType=VARCHAR},
+      card_type = #{cardType,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=CHAR},
+      area = #{area,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      prefecture = #{prefecture,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=VARCHAR},
+      addr_code = #{addrCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByParams" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/> FROM bank
+    WHERE 1=1
+    <if test="accountNo != null">
+      AND account_no = #{accountNo}
+    </if>
+    <if test="mobile != null">
+      AND mobile = #{mobile}
+    </if>
+    <if test="idCard != null">
+      AND id_card = #{idCard}
+    </if>
+    <if test="name != null">
+      AND name = #{name}
+    </if>
+    LIMIT 1
+  </select>
+</mapper>

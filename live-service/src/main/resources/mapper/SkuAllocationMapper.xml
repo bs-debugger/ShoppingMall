@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.SkuAllocationMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.SkuAllocation">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="sku_name" jdbcType="VARCHAR" property="skuName" />
+    <result column="sku_type" jdbcType="TINYINT" property="skuType" />
+    <result column="sell_price" jdbcType="DECIMAL" property="sellPrice" />
+    <result column="in_price" jdbcType="DECIMAL" property="inPrice" />
+    <result column="agio_price" jdbcType="DECIMAL" property="agioPrice" />
+    <result column="stock_num" jdbcType="INTEGER" property="stockNum" />
+    <result column="sell_num" jdbcType="INTEGER" property="sellNum" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opreator_id" jdbcType="BIGINT" property="opreatorId" />
+    <result column="opreator_name" jdbcType="VARCHAR" property="opreatorName" />
+    <result column="sku_info" jdbcType="VARCHAR" property="skuInfo" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, sku_code, sku_name, sku_type, sell_price, in_price, agio_price, stock_num, sell_num, 
+    is_deleted, pic_url, create_time, update_time, opreator_id, opreator_name, sku_info, 
+    remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sku_allocation
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sku_allocation
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.SkuAllocation">
+    insert into sku_allocation (id, sku_code, sku_name, 
+      sku_type, sell_price, in_price, 
+      agio_price, stock_num, sell_num, 
+      is_deleted, pic_url, create_time, 
+      update_time, opreator_id, opreator_name, 
+      sku_info, remark)
+    values (#{id,jdbcType=BIGINT}, #{skuCode,jdbcType=VARCHAR}, #{skuName,jdbcType=VARCHAR}, 
+      #{skuType,jdbcType=TINYINT}, #{sellPrice,jdbcType=DECIMAL}, #{inPrice,jdbcType=DECIMAL}, 
+      #{agioPrice,jdbcType=DECIMAL}, #{stockNum,jdbcType=INTEGER}, #{sellNum,jdbcType=INTEGER}, 
+      #{isDeleted,jdbcType=INTEGER}, #{picUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{opreatorId,jdbcType=BIGINT}, #{opreatorName,jdbcType=VARCHAR}, 
+      #{skuInfo,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.SkuAllocation">
+    insert into sku_allocation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="skuName != null">
+        sku_name,
+      </if>
+      <if test="skuType != null">
+        sku_type,
+      </if>
+      <if test="sellPrice != null">
+        sell_price,
+      </if>
+      <if test="inPrice != null">
+        in_price,
+      </if>
+      <if test="agioPrice != null">
+        agio_price,
+      </if>
+      <if test="stockNum != null">
+        stock_num,
+      </if>
+      <if test="sellNum != null">
+        sell_num,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="picUrl != null">
+        pic_url,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="opreatorId != null">
+        opreator_id,
+      </if>
+      <if test="opreatorName != null">
+        opreator_name,
+      </if>
+      <if test="skuInfo != null">
+        sku_info,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuName != null">
+        #{skuName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuType != null">
+        #{skuType,jdbcType=TINYINT},
+      </if>
+      <if test="sellPrice != null">
+        #{sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="inPrice != null">
+        #{inPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="agioPrice != null">
+        #{agioPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stockNum != null">
+        #{stockNum,jdbcType=INTEGER},
+      </if>
+      <if test="sellNum != null">
+        #{sellNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="picUrl != null">
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opreatorId != null">
+        #{opreatorId,jdbcType=BIGINT},
+      </if>
+      <if test="opreatorName != null">
+        #{opreatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuInfo != null">
+        #{skuInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.SkuAllocation">
+    update sku_allocation
+    <set>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuName != null">
+        sku_name = #{skuName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuType != null">
+        sku_type = #{skuType,jdbcType=TINYINT},
+      </if>
+      <if test="sellPrice != null">
+        sell_price = #{sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="inPrice != null">
+        in_price = #{inPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="agioPrice != null">
+        agio_price = #{agioPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stockNum != null">
+        stock_num = #{stockNum,jdbcType=INTEGER},
+      </if>
+      <if test="sellNum != null">
+        sell_num = #{sellNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="picUrl != null">
+        pic_url = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opreatorId != null">
+        opreator_id = #{opreatorId,jdbcType=BIGINT},
+      </if>
+      <if test="opreatorName != null">
+        opreator_name = #{opreatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuInfo != null">
+        sku_info = #{skuInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.SkuAllocation">
+    update sku_allocation
+    set sku_code = #{skuCode,jdbcType=VARCHAR},
+      sku_name = #{skuName,jdbcType=VARCHAR},
+      sku_type = #{skuType,jdbcType=TINYINT},
+      sell_price = #{sellPrice,jdbcType=DECIMAL},
+      in_price = #{inPrice,jdbcType=DECIMAL},
+      agio_price = #{agioPrice,jdbcType=DECIMAL},
+      stock_num = #{stockNum,jdbcType=INTEGER},
+      sell_num = #{sellNum,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      pic_url = #{picUrl,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      opreator_id = #{opreatorId,jdbcType=BIGINT},
+      opreator_name = #{opreatorName,jdbcType=VARCHAR},
+      sku_info = #{skuInfo,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="list" resultMap="BaseResultMap">
+    select * from sku_allocation
+    <where>
+      1=1
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sku_name like concat('%', #{skuName,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="skuType != null">
+        and sku_type = #{skuType,jdbcType=INTEGER}
+      </if>
+      and is_deleted = 0
+    </where>
+  </select>
+</mapper>

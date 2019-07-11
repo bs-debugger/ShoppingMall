@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.PayRefundApplicationMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.PayRefundApplication">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="out_trade_no" jdbcType="VARCHAR" property="outTradeNo" />
+    <result column="out_refund_no" jdbcType="VARCHAR" property="outRefundNo" />
+    <result column="order_type" jdbcType="INTEGER" property="orderType" />
+    <result column="total_fee" jdbcType="DECIMAL" property="totalFee" />
+    <result column="refund_fee" jdbcType="DECIMAL" property="refundFee" />
+    <result column="apply_reason" jdbcType="VARCHAR" property="applyReason" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="refund_status" jdbcType="INTEGER" property="refundStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="settlement_refund_fee" jdbcType="DECIMAL" property="settlementRefundFee" />
+    <result column="refund_time" jdbcType="TIMESTAMP" property="refundTime" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="other_reason" jdbcType="VARCHAR" property="otherReason" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, out_trade_no, out_refund_no, order_type, total_fee, refund_fee, apply_reason, 
+    status, remarks, refund_status, create_time, update_time, settlement_refund_fee, 
+    refund_time, type, user_id, otherReason
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pay_refund_application
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from pay_refund_application
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.PayRefundApplication">
+    insert into pay_refund_application (id, out_trade_no, out_refund_no, 
+      order_type, total_fee, refund_fee, 
+      apply_reason, status, remarks, 
+      refund_status, create_time, update_time, 
+      settlement_refund_fee, refund_time, type,user_id,other_reason
+      )
+    values (#{id,jdbcType=BIGINT}, #{outTradeNo,jdbcType=VARCHAR}, #{outRefundNo,jdbcType=VARCHAR}, 
+      #{orderType,jdbcType=INTEGER}, #{totalFee,jdbcType=DECIMAL}, #{refundFee,jdbcType=DECIMAL}, 
+      #{applyReason,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{remarks,jdbcType=VARCHAR}, 
+      #{refundStatus,jdbcType=INTEGER}, now(), now(),
+      #{settlementRefundFee,jdbcType=DECIMAL}, #{refundTime,jdbcType=TIMESTAMP}, #{type,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT}, #{otherReason,jdbcType=VARCHAR}
+      )
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.PayRefundApplication">
+    insert into pay_refund_application
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="outTradeNo != null">
+        out_trade_no,
+      </if>
+      <if test="outRefundNo != null">
+        out_refund_no,
+      </if>
+      <if test="orderType != null">
+        order_type,
+      </if>
+      <if test="totalFee != null">
+        total_fee,
+      </if>
+      <if test="refundFee != null">
+        refund_fee,
+      </if>
+      <if test="applyReason != null">
+        apply_reason,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="refundStatus != null">
+        refund_status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="settlementRefundFee != null">
+        settlement_refund_fee,
+      </if>
+      <if test="refundTime != null">
+        refund_time,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="outTradeNo != null">
+        #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="outRefundNo != null">
+        #{outRefundNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null">
+        #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="totalFee != null">
+        #{totalFee,jdbcType=DECIMAL},
+      </if>
+      <if test="refundFee != null">
+        #{refundFee,jdbcType=DECIMAL},
+      </if>
+      <if test="applyReason != null">
+        #{applyReason,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="refundStatus != null">
+        #{refundStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="settlementRefundFee != null">
+        #{settlementRefundFee,jdbcType=DECIMAL},
+      </if>
+      <if test="refundTime != null">
+        #{refundTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.PayRefundApplication">
+    update pay_refund_application
+    <set>
+      <if test="outTradeNo != null">
+        out_trade_no = #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="outRefundNo != null">
+        out_refund_no = #{outRefundNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null">
+        order_type = #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="totalFee != null">
+        total_fee = #{totalFee,jdbcType=DECIMAL},
+      </if>
+      <if test="refundFee != null">
+        refund_fee = #{refundFee,jdbcType=DECIMAL},
+      </if>
+      <if test="applyReason != null">
+        apply_reason = #{applyReason,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="refundStatus != null">
+        refund_status = #{refundStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="settlementRefundFee != null">
+        settlement_refund_fee = #{settlementRefundFee,jdbcType=DECIMAL},
+      </if>
+      <if test="refundTime != null">
+        refund_time = #{refundTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.PayRefundApplication">
+    update pay_refund_application
+    set out_trade_no = #{outTradeNo,jdbcType=VARCHAR},
+      out_refund_no = #{outRefundNo,jdbcType=VARCHAR},
+      order_type = #{orderType,jdbcType=INTEGER},
+      total_fee = #{totalFee,jdbcType=DECIMAL},
+      refund_fee = #{refundFee,jdbcType=DECIMAL},
+      apply_reason = #{applyReason,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      refund_status = #{refundStatus,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      settlement_refund_fee = #{settlementRefundFee,jdbcType=DECIMAL},
+      refund_time = #{refundTime,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="ListTotalPayRefundApplication" resultType="java.lang.Integer">
+    select count(1) from pay_refund_application
+    <where>
+      1=1
+      <if test="outTradeNo != null">
+        and out_trade_no = #{outTradeNo}
+      </if>
+      <if test="type != null">
+        and type = #{type}
+      </if>
+      <if test="orderType !=null">
+        and order_type = #{orderType}
+      </if>
+      <if test="status !=null">
+        and status != #{status}
+      </if>
+      <if test="refundStatus !=null">
+        and refund_status = #{refundStatus}
+      </if>
+    </where>
+  </select>
+
+  <select id="listPayRefundApplication" resultMap="BaseResultMap">
+    select * from pay_refund_application
+    <where>
+      1=1
+      <if test="outTradeNo != null">
+        and out_trade_no = #{outTradeNo}
+      </if>
+      <if test="type != null">
+        and type = #{type}
+      </if>
+      <if test="orderType !=null">
+        and order_type = #{orderType}
+      </if>
+      <if test="status !=null">
+        and status = #{status}
+      </if>
+      <if test="refundStatus !=null">
+        and refund_status = #{refundStatus}
+      </if>
+    </where>
+    order by create_time desc
+    limit #{start}, #{rows}
+  </select>
+
+</mapper>

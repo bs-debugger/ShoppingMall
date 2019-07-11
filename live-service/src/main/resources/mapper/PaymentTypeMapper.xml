@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.PaymentTypeMapper">
+
+  <!--获取支付类型列表-->
+  <select id="getList" parameterType="com.xq.live.vo.in.PaymentTypeInVo" resultType="com.xq.live.vo.out.PaymentTypeOut">
+    SELECT
+    o.real_unit_price,
+    i.pay_type,
+    o.user_name as mobile,
+    o.shop_name,
+    o.create_time
+    FROM
+    order_write_off o
+    LEFT JOIN order_info i ON o.order_id = i.id
+    <where>
+      1=1
+      <if test="keywords != null and keywords != '' ">
+        AND
+        (
+        o.user_name LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+        o.shop_name LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%')
+        )
+      </if>
+      <if test="payType != null">
+        AND i.pay_type=#{payType}
+      </if>
+      <if test="beginTime !=null and beginTime!='' and endTime !=null and endTime!=''">
+        and o.create_time BETWEEN DATE_FORMAT(#{beginTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+        and DATE_FORMAT(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+      </if>
+    </where>
+    ORDER BY o.create_time DESC
+  </select>
+</mapper>

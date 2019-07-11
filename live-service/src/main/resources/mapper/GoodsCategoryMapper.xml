@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.GoodsCategoryMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.GoodsCategory">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
+    <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, code, category_name, parent_id, level, image_url, sort_num, is_deleted, status, 
+    create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from goods_category
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from goods_category
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.GoodsCategory">
+    insert into goods_category (id, code, category_name, 
+      parent_id, level, image_url, 
+      sort_num, is_deleted, status, 
+      create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, #{categoryName,jdbcType=VARCHAR}, 
+      #{parentId,jdbcType=BIGINT}, #{level,jdbcType=INTEGER}, #{imageUrl,jdbcType=VARCHAR}, 
+      #{sortNum,jdbcType=INTEGER}, #{isDeleted,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.GoodsCategory">
+    insert into goods_category
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="categoryName != null">
+        category_name,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="imageUrl != null">
+        image_url,
+      </if>
+      <if test="sortNum != null">
+        sort_num,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null">
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="imageUrl != null">
+        #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNum != null">
+        #{sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.GoodsCategory">
+    update goods_category
+    <set>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null">
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="imageUrl != null">
+        image_url = #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNum != null">
+        sort_num = #{sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.GoodsCategory">
+    update goods_category
+    set code = #{code,jdbcType=VARCHAR},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      level = #{level,jdbcType=INTEGER},
+      image_url = #{imageUrl,jdbcType=VARCHAR},
+      sort_num = #{sortNum,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--01.自关联查询(从父到子)-->
+  <resultMap id="selectCategoriesByPid" type="com.xq.live.model.GoodsCategory">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
+    <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <collection property="children" ofType="com.xq.live.model.GoodsCategory" select="findCategoriesByParentId" column="id"/>
+  </resultMap>
+  <select id="findCategoriesByParentId" resultMap="selectCategoriesByPid">
+    select * from goods_category
+    where
+    parent_id=#{0}
+    and is_deleted = 0
+    and status in (1,3,4,5)
+    order by sort_num asc
+  </select>
+
+  <!--02.自关联查询(从子到父)-->
+  <resultMap id="selectCategoriesById" type="com.xq.live.model.GoodsCategory">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
+    <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <collection property="parent" ofType="com.xq.live.model.GoodsCategory" select="findCategoriesById" column="parent_id"/>
+  </resultMap>
+  <select id="findCategoriesById" resultMap="selectCategoriesById">
+    select * from goods_category
+    where
+    id=#{0}
+    and is_deleted = 0
+    order by sort_num asc
+  </select>
+</mapper>

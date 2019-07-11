@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.UserAdvanceMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.vo.out.UserAdvanceOut">
+    <id column="cash_id" jdbcType="BIGINT" property="cashId" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
+    <result column="account_name" jdbcType="VARCHAR" property="accountName" />
+    <result column="account_cardholder_name" jdbcType="VARCHAR" property="accountCardholderName" />
+    <result column="bank_card_name" jdbcType="VARCHAR" property="bankCardName" />
+    <result column="cash_amount" jdbcType="DECIMAL" property="cashAmount" />
+    <result column="service_amount" jdbcType="DECIMAL" property="serviceAmount" />
+    <result column="apply_status" jdbcType="BIGINT" property="applyStatus" />
+    <result column="paid_user_name" jdbcType="VARCHAR" property="paidUserName" />
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+      cash_apply.id  cash_id,
+      user.nick_name,
+      user.user_name,
+      user.mobile mobile,
+      DATE_FORMAT(cash_apply.begin_time,'%Y-%m-%d %H:%i:%s') begin_time,
+      cash_apply.account_name,
+      cash_apply.account_cardholder_name,
+      user_account.bank_card_name,
+      cash_apply.cash_amount,
+      cash_apply.service_amount,
+      cash_apply.apply_status,
+      cash_apply.paid_user_name,
+      case cash_apply.pay_type when 1 then '银行卡' else '微信' end pay_type,
+      cash_apply.create_time
+  </sql>
+    <!--用户提现列表-->
+    <select id="searchUserAdvanceList" resultMap="BaseResultMap" parameterType="com.xq.live.vo.in.UserAdvanceInVo">
+        select
+        <include refid="Base_Column_List" />
+        from cash_apply
+        inner join user on cash_apply.user_id = user.id
+        inner join user_account on cash_apply.account_id = user_account.id and user_account.account_type = 3
+        WHERE cash_apply.apply_type = 2
+        <if test="startTime !=null and startTime !=''">
+            and cash_apply.create_time <![CDATA[ >=]]> DATE_FORMAT(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+        </if>
+        <if test="endTime !=null and endTime !=''">
+            and cash_apply.create_time <![CDATA[ <=]]> DATE_FORMAT(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+        </if>
+        <if test="applyStatus != null and applyStatus !=''">
+            and cash_apply.apply_status=#{applyStatus,jdbcType=INTEGER}
+        </if>
+        <if test="searchKey !=null and searchKey !=''">
+            and (
+                user.mobile like concat('%',#{searchKey,jdbcType=VARCHAR},'%')
+                OR user.nick_name like concat('%',#{searchKey,jdbcType=VARCHAR},'%')
+            )
+        </if>
+        order by cash_apply.create_time desc
+        limit #{start}, #{rows}
+    </select>
+
+    <!--用户提现total-->
+    <select id="searchUserAdvanceTotal" resultType="java.lang.Integer" parameterType="com.xq.live.vo.in.UserAdvanceInVo">
+        select
+        count(1)
+        from cash_apply
+        inner join user on cash_apply.user_id = user.id
+        inner join user_account on cash_apply.account_id = user_account.id and user_account.account_type = 3
+        WHERE cash_apply.apply_type = 2
+        <if test="startTime !=null and startTime !=''">
+            and cash_apply.create_time <![CDATA[ >=]]> DATE_FORMAT(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+        </if>
+        <if test="endTime !=null and endTime !=''">
+            and cash_apply.create_time <![CDATA[ <=]]> DATE_FORMAT(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+        </if>
+        <if test="applyStatus != null and applyStatus !=''">
+            and cash_apply.apply_status=#{applyStatus,jdbcType=INTEGER}
+        </if>
+        <if test="searchKey !=null and searchKey !=''">
+            and (
+                user.mobile like concat('%',#{searchKey,jdbcType=VARCHAR},'%')
+                OR user.nick_name  like concat('%',#{searchKey,jdbcType=VARCHAR},'%')
+            )
+        </if>
+    </select>
+
+    <!--批量修改审批状态-->
+    <update id="batchMotifyApplyStatus">
+        update cash_apply set  apply_status = #{applyStatus,jdbcType=TINYINT}  where id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>

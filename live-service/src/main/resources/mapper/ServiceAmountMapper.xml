@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ServiceAmountMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ServiceAmount">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="paid_user_id" jdbcType="BIGINT" property="paidUserId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="service_price" jdbcType="DECIMAL" property="servicePrice" />
+    <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <resultMap id="ServiceAmountOutResultMap" type="com.xq.live.vo.out.ServiceAmountOut" extends="BaseResultMap">
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, paid_user_id, shop_id, service_price, begin_time, end_time, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from service_amount
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByShopId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from service_amount
+    where shop_id = #{shopId,jdbcType=BIGINT}
+    order by id
+  </select>
+<!--通过shopId查询商家的所有缴费记录-->
+  <select id="allByShopId" parameterType="com.xq.live.vo.in.ServiceAmountInVo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from service_amount
+    where shop_id = #{shopId,jdbcType=BIGINT}
+    limit #{start}, #{rows}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from service_amount
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.vo.in.ServiceAmountInVo">
+    insert into service_amount (id, paid_user_id, shop_id, 
+      service_price, begin_time, end_time, 
+      create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{paidUserId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, 
+      #{servicePrice,jdbcType=DECIMAL}, #{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
+    now(), now())
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.vo.in.ServiceAmountInVo">
+    insert into service_amount
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="paidUserId != null">
+        paid_user_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="servicePrice != null">
+        service_price,
+      </if>
+      <if test="beginTime != null">
+        begin_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="paidUserId != null">
+        #{paidUserId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="servicePrice != null">
+        #{servicePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="beginTime != null">
+        #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.vo.in.ServiceAmountInVo">
+    update service_amount
+    <set>
+      <if test="paidUserId != null">
+        paid_user_id = #{paidUserId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="servicePrice != null">
+        service_price = #{servicePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="beginTime != null">
+        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.vo.in.ServiceAmountInVo">
+    update service_amount
+    set paid_user_id = #{paidUserId,jdbcType=BIGINT},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      service_price = #{servicePrice,jdbcType=DECIMAL},
+      begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

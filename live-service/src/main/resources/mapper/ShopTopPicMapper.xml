@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ShopTopPicMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ShopTopPic">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="attachement_id" jdbcType="BIGINT" property="attachementId" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  
+  <resultMap id="ShopTopPicOutResultMap" type="com.xq.live.vo.out.ShopTopPicOut" extends="BaseResultMap">
+    <association property="attachment" javaType="com.xq.live.model.Attachment">
+      <id column="att_id" jdbcType="BIGINT" property="id" />
+      <result column="small_pic_url" jdbcType="VARCHAR" property="smallPicUrl" />
+      <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+      <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
+    </association>
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, shop_id, attachement_id, is_deleted, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shop_top_pic
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from shop_top_pic
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.ShopTopPic">
+    insert into shop_top_pic (id, shop_id, attachement_id, 
+      is_deleted, create_time)
+    values (#{id,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, #{attachementId,jdbcType=BIGINT}, 
+      0, now())
+      <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+          select last_insert_id() as id
+      </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.ShopTopPic">
+    insert into shop_top_pic
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="attachementId != null">
+        attachement_id,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="attachementId != null">
+        #{attachementId,jdbcType=BIGINT},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.ShopTopPic">
+    update shop_top_pic
+    <set>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="attachementId != null">
+        attachement_id = #{attachementId,jdbcType=BIGINT},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.ShopTopPic">
+    update shop_top_pic
+    set shop_id = #{shopId,jdbcType=BIGINT},
+      attachement_id = #{attachementId,jdbcType=BIGINT},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByShopId" resultMap="ShopTopPicOutResultMap">
+    select
+      s.id,
+      s.shop_id,
+      s.attachement_id,
+      s.is_deleted,
+      s.create_time,
+      a.id as att_id,
+      a.small_pic_url,
+      a.pic_url,
+      a.sort_num
+    from shop_top_pic s inner join attachment a on s.attachement_id = a.id
+    where s.shop_id = #{shopId, jdbcType=VARCHAR}
+    and s.is_deleted = 0
+  </select>
+</mapper>

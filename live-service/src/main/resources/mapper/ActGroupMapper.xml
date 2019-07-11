@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ActGroupMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ActGroup">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="act_id" jdbcType="BIGINT" property="actId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="group_code" jdbcType="VARCHAR" property="groupCode" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="group_vote_num" jdbcType="INTEGER" property="groupVoteNum" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <resultMap id="ActGroupOutMap" extends="BaseResultMap" type="com.xq.live.vo.out.ActGroupOut">
+
+  </resultMap>
+
+
+
+  <sql id="Base_Column_List">
+    id, act_id, shop_id, user_id, group_code, group_name, group_vote_num, is_deleted, 
+    create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from act_group
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByOutID" parameterType="com.xq.live.model.ActGroup" resultMap="ActGroupOutMap">
+    select
+    <include refid="Base_Column_List" />
+    from act_group
+    where act_id = #{actId,jdbcType=BIGINT} OR group_code= #{groupCode,jdbcType=VARCHAR}
+  </select>
+  <select id="selectOutAll" parameterType="java.lang.Long" resultMap="ActGroupOutMap">
+    select
+    <include refid="Base_Column_List" />
+    from act_group
+    WHERE act_id = #{actId,jdbcType=BIGINT}
+    and is_deleted = 0
+  </select>
+
+  <!--根据商家,和活动id查询信息-->
+  <select id="actByshopId" resultMap="ActGroupOutMap">
+    select
+    <include refid="Base_Column_List" />
+    from act_group
+    WHERE
+        shop_id= #{shopId,jdbcType=BIGINT}
+    AND act_id = #{actId,jdbcType=BIGINT}
+    AND is_deleted = 0
+  </select>
+
+  <select id="listForSoWrite" resultMap="ActGroupOutMap">
+    select
+    <include refid="Base_Column_List" />
+    from act_group
+    WHERE
+    (act_id = 34 or act_id = 35)
+    and  is_deleted = 0
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from act_group
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.xq.live.model.ActGroup">
+    insert into act_group (id, act_id, shop_id, 
+      user_id, group_code, group_name, 
+      group_vote_num, is_deleted, create_time, 
+      update_time)
+    values (#{id,jdbcType=BIGINT}, #{actId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, 
+      #{userId,jdbcType=BIGINT}, #{groupCode,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR}, 
+      #{groupVoteNum,jdbcType=INTEGER}, #{isDeleted,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.ActGroup">
+    insert into act_group
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="actId != null">
+        act_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="groupCode != null">
+        group_code,
+      </if>
+      <if test="groupName != null">
+        group_name,
+      </if>
+      <if test="groupVoteNum != null">
+        group_vote_num,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="actId != null">
+        #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="groupCode != null">
+        #{groupCode,jdbcType=VARCHAR},
+      </if>
+      <if test="groupName != null">
+        #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupVoteNum != null">
+        #{groupVoteNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <insert id="insertList" parameterType="java.util.List">
+    insert into act_group (id, act_id, shop_id,
+    user_id,group_code,create_time,update_time)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+      #{item.id,jdbcType=BIGINT}, #{item.actId,jdbcType=BIGINT}, #{item.shopId,jdbcType=BIGINT},
+      #{item.userId,jdbcType=BIGINT},#{item.groupCode,jdbcType=VARCHAR}, now(),
+      now()
+      )
+    </foreach>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.ActGroup">
+    update act_group
+    <set>
+      <if test="actId != null">
+        act_id = #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="groupCode != null">
+        group_code = #{groupCode,jdbcType=VARCHAR},
+      </if>
+      <if test="groupName != null">
+        group_name = #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupVoteNum != null">
+        group_vote_num = #{groupVoteNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.ActGroup">
+    update act_group
+    set act_id = #{actId,jdbcType=BIGINT},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      group_code = #{groupCode,jdbcType=VARCHAR},
+      group_name = #{groupName,jdbcType=VARCHAR},
+      group_vote_num = #{groupVoteNum,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByID" parameterType="com.xq.live.model.ActGroup">
+    update act_group
+    set
+    is_deleted = 1
+    <where>
+      1=1
+      <if test="id!=null">AND id=#{id,jdbcType=BIGINT}</if>
+      <if test="actId!=null">AND act_id=#{actId,jdbcType=BIGINT}</if>
+    </where>
+  </update>
+
+  <!--根据商家id和活动id更改票数-->
+  <update id="updateGroupNum" parameterType="com.xq.live.vo.in.ActGroupInVo">
+    update act_group
+    set group_vote_num=#{groupVoteNum,jdbcType=INTEGER}
+    <where>
+      1=1
+      <if test="shopId!=null">AND shop_id=#{shopId,jdbcType=BIGINT}</if>
+      <if test="actId!=null">AND act_id=#{actId,jdbcType=BIGINT}</if>
+    </where>
+  </update>
+
+
+  <!--根据传入的集合修改其他的小组落选状态-->
+  <update id="updateByGroup" parameterType="java.util.List">
+    update act_group
+    set
+    is_deleted =1
+    WHERE 1=1
+    AND id NOT IN
+    <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+    AND act_id IN
+    <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+      #{item.actId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <!--按票数的多少排序查询小组信息-->
+  <select id="listGroupOut" resultMap="ActGroupOutMap">
+    select
+    <include refid="Base_Column_List"/>
+    from act_group
+    <where>
+      1=1
+      <if test="actId != null">
+        AND  act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      and  is_deleted = 0
+    </where>
+    ORDER by group_vote_num DESC
+  </select>
+
+  <select id="findByInVo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from act_group
+    <where>
+      1=1
+      <if test="id != null">
+        and id = #{id}
+      </if>
+      <if test="actId != null">
+        and act_id = #{actId}
+      </if>
+      <if test="shopId != null">
+        and shop_id = #{shopId}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId}
+      </if>
+      and is_deleted = 0
+    </where>
+  </select>
+
+</mapper>

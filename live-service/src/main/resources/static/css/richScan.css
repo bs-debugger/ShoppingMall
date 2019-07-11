@@ -1,0 +1,86 @@
+html, body {
+    height: 100%;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    background-color: #EBEBEB;
+    padding: 0.28rem 0.28rem 0 0.28rem;
+    box-sizing: border-box;
+    font-size: 0.3rem;
+    height: 100%;
+    font-family: "PingFang-SC-Regular";
+}
+.inputBox {
+    position: relative;
+    width: 100%;
+    height: 1.08rem;
+    font-size: 0.36rem;
+}
+.inputBox span {
+    position: absolute;
+    left: 0.22rem;
+    height: 100%;
+    line-height: 1.08rem;
+    font-weight: 600;
+    color: #191919;
+}
+
+.inputBox input {
+    width: 100%;
+    height: 100%;
+    padding: 0 0.22rem;
+    box-sizing: border-box;
+    border: 0;
+    border-radius: 5px;
+    text-align: right;
+}
+
+.discountInfo, .paymentBox {
+    text-align: justify;
+    text-justify: distribute-all-lines;/*ie6-8*/
+    text-align-last: justify;/* ie9*/ 
+    -moz-text-align-last: justify;/*ff*/
+    -webkit-text-align-last: justify;/*chrome 20+*/
+}
+.discountInfo span, .paymentBox span {
+    display: inline-block;
+}
+.discountInfo {
+    margin: 0.4rem 0 0.46rem 0;
+    color: #FF4545;
+}
+.paymentBox {
+    margin-bottom: 0.52rem;
+    color: #555;
+}
+.okBtn {
+    display: block;
+    height: 1rem;
+    line-height: 1rem;
+    width: 100%;
+    border-radius: 5px;
+    background-color: #B1B1B1;
+    color: #fff;
+    font-size: 0.36rem;
+    text-align: center;
+}
+.okBtn.active {
+    background-color: #fc5e2d;
+}
+.notice {
+    position: fixed;
+    top: 5rem;
+    left: 50%;
+    margin-left: -1.5rem;
+    z-index: 100;
+    width: 3rem;
+    height: 1rem;
+    line-height: 1rem;
+    text-align: center;
+    background-color: #B1B1B1;
+    border-radius: 0.2rem;
+    color: #fff;
+    opacity: 0.7;
+    font-size: 0.36rem;
+}

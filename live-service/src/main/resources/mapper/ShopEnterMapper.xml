@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ShopEnterMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ShopEnter">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="business_cate" jdbcType="VARCHAR" property="businessCate" />
+    <result column="license_pic" jdbcType="VARCHAR" property="licensePic" />
+    <result column="health_pic" jdbcType="VARCHAR" property="healthPic" />
+    <result column="door_pic" jdbcType="VARCHAR" property="doorPic" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="status" jdbcType="INTEGER" property="status"/>
+    <result column="location_x" jdbcType="DECIMAL" property="locationX"/>
+    <result column="location_y" jdbcType="DECIMAL" property="locationY"/>
+    <result column="city" jdbcType="VARCHAR" property="city"/>
+    <result column="logo_pic" jdbcType="VARCHAR" property="logoPic" />
+    <result column="shop_hours" jdbcType="VARCHAR" property="shopHours" />
+    <result column="other_service" jdbcType="VARCHAR" property="otherService" />
+    <result column="shop_cate" jdbcType="VARCHAR" property="shopCate" />
+    <result column="small_logo_pic" jdbcType="VARCHAR" property="smallLogoPic" />
+    <result column="small_door_pic" jdbcType="VARCHAR" property="smallDoorPic" />
+
+  </resultMap>
+
+  <resultMap id="ShopEnterOutMap" extends="BaseResultMap" type="com.xq.live.vo.out.ShopEnterOut">
+
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, user_name, mobile, shop_name, address, business_cate, license_pic, health_pic,
+    door_pic, create_time, update_time, user_id,status,location_x,location_y,city,logo_pic,
+    shop_hours,other_service,shop_cate,small_logo_pic,small_door_pic
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ShopEnterOutMap">
+    select
+    <include refid="Base_Column_List" />
+    from shop_enter
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByUserId" parameterType="java.lang.Long" resultMap="ShopEnterOutMap">
+    select
+    <include refid="Base_Column_List" />
+    from shop_enter
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByUserIdAndShopName" parameterType="com.xq.live.model.ShopEnter" resultMap="ShopEnterOutMap">
+    select
+    <include refid="Base_Column_List" />
+    from shop_enter
+    where (user_id = #{userId,jdbcType=BIGINT}
+    or shop_name = #{shopName,jdbcType=VARCHAR}) and status !=2
+  </select>
+
+  <select id="selectByDuplicateChecking" parameterType="com.xq.live.model.ShopEnter" resultMap="ShopEnterOutMap">
+    select
+    <include refid="Base_Column_List" />
+    from shop_enter
+    where shop_name = #{shopName,jdbcType=VARCHAR} and status =0
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from shop_enter
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.ShopEnter">
+    insert into shop_enter (id, user_name, mobile,
+    shop_name, address, business_cate,
+    license_pic, health_pic, door_pic,
+    create_time, update_time, user_id,location_x,location_y,city,logo_pic,shop_hours,other_service,
+    shop_cate,small_logo_pic,small_door_pic
+    )
+    values (#{id,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR},
+    #{shopName,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{businessCate,jdbcType=VARCHAR},
+    #{licensePic,jdbcType=VARCHAR}, #{healthPic,jdbcType=VARCHAR}, #{doorPic,jdbcType=VARCHAR},
+    now(), now(), #{userId,jdbcType=BIGINT},#{locationX,jdbcType=DECIMAL},
+    #{locationY,jdbcType=DECIMAL},#{city,jdbcType=VARCHAR},#{logoPic,jdbcType=VARCHAR},#{shopHours,jdbcType=VARCHAR},#{otherService,jdbcType=VARCHAR},
+    #{shopCate,jdbcType=VARCHAR},#{smallLogoPic,jdbcType=VARCHAR},#{smallDoorPic,jdbcType=VARCHAR}
+    )
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.ShopEnter">
+    insert into shop_enter
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="shopName != null">
+        shop_name,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="businessCate != null">
+        business_cate,
+      </if>
+      <if test="licensePic != null">
+        license_pic,
+      </if>
+      <if test="healthPic != null">
+        health_pic,
+      </if>
+      <if test="doorPic != null">
+        door_pic,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="locationX != null">
+        location_x,
+      </if>
+      <if test="locationY != null">
+        location_y,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="logoPic != null">
+        logo_pic,
+      </if>
+      <if test="shopHours != null">
+        shop_hours,
+      </if>
+      <if test="otherService != null">
+        other_service,
+      </if>
+      <if test="shopCate != null">
+        shop_cate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null">
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="businessCate != null">
+        #{businessCate,jdbcType=VARCHAR},
+      </if>
+      <if test="licensePic != null">
+        #{licensePic,jdbcType=VARCHAR},
+      </if>
+      <if test="healthPic != null">
+        #{healthPic,jdbcType=VARCHAR},
+      </if>
+      <if test="doorPic != null">
+        #{doorPic,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="locationX != null">
+        #{locationX,jdbcType=DECIMAL},
+      </if>
+      <if test="locationY != null">
+        #{locationY,jdbcType=DECIMAL},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="logoPic != null">
+        #{logoPic,jdbcType=VARCHAR},
+      </if>
+      <if test="shopHours != null">
+        #{shopHours,jdbcType=VARCHAR},
+      </if>
+      <if test="otherService != null">
+        #{otherService,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCate != null">
+        #{shopCate,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.ShopEnter">
+    update shop_enter
+    <set>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null">
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="businessCate != null">
+        business_cate = #{businessCate,jdbcType=VARCHAR},
+      </if>
+      <if test="licensePic != null">
+        license_pic = #{licensePic,jdbcType=VARCHAR},
+      </if>
+      <if test="healthPic != null">
+        health_pic = #{healthPic,jdbcType=VARCHAR},
+      </if>
+      <if test="doorPic != null">
+        door_pic = #{doorPic,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="locationX != null">
+        location_x = #{locationX,jdbcType=DECIMAL},
+      </if>
+      <if test="locationY != null">
+        location_y = #{locationY,jdbcType=DECIMAL},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="logoPic != null">
+       logo_pic = #{logoPic,jdbcType=VARCHAR},
+      </if>
+      <if test="shopHours != null">
+       shop_hours = #{shopHours,jdbcType=VARCHAR},
+      </if>
+      <if test="otherService != null">
+       other_service = #{otherService,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCate != null">
+        shop_cate = #{shopCate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.ShopEnter">
+    update shop_enter
+    set user_name = #{userName,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      business_cate = #{businessCate,jdbcType=VARCHAR},
+      license_pic = #{licensePic,jdbcType=VARCHAR},
+      health_pic = #{healthPic,jdbcType=VARCHAR},
+      door_pic = #{doorPic,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=BIGINT},
+      location_x = #{locationX,jdbcType=DECIMAL},
+      location_y = #{locationY,jdbcType=DECIMAL},
+      city = #{city,jdbcType=VARCHAR},
+      logo_pic = #{logoPic,jdbcType=VARCHAR},
+      shop_hours = #{shopHours,jdbcType=VARCHAR},
+      other_service = #{otherService,jdbcType=VARCHAR},
+      shop_cate = #{shopCate,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="showList" parameterType="com.xq.live.vo.in.ShopEnterInVo" resultType="com.xq.live.vo.out.ShopEnterOut">
+    select
+    <include refid="Base_Column_List" />
+    from shop_enter
+    <where>
+      <if test="id != null and id != ''">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="status != null and status != ''">
+        and status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="searchKey != null and searchKey != ''">
+        and
+        (
+        shop_name like CONCAT('%',#{searchKey , jdbcType=VARCHAR},'%') or
+        mobile like CONCAT('%',#{searchKey , jdbcType=VARCHAR},'%')
+        )
+      </if>
+      <if test="city != null and city != ''">
+        and city like CONCAT('%',#{city , jdbcType=VARCHAR},'%')
+      </if>
+      <if test="beginTime != null and beginTime != ''">
+        and create_time <![CDATA[ >= ]]> #{beginTime}
+      </if>
+      <if test="endTime != null and endTime != ''">
+        and create_time <![CDATA[ <= ]]> #{endTime}
+      </if>
+    </where>
+    ORDER BY create_time DESC
+  </select>
+  <select id="selectById" resultType="com.xq.live.model.ShopEnter" parameterType="java.lang.Long">
+    select
+    <include refid="Base_Column_List" />
+    from shop_enter
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+</mapper>

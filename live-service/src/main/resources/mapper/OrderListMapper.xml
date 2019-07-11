@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.OrderListMapper">
+
+  <resultMap type="com.xq.live.vo.out.OrderListOut" id="BaseResultMap">
+    <id column="infoId" property="id"/>
+    <result column="order_code" property="orderCode"/>
+    <result column="mobile" property="mobile"/>
+    <result column="pay_type" property="payType"/>
+    <result column="sku_amount" property="skuAmount"/>
+    <result column="user_name" property="userName"/>
+    <result column="shop_name" property="shopName"/>
+    <result column="status" property="orderType"/>
+    <result column="create_time" property="createTime"/>
+
+    <collection property="orderItems" ofType="com.xq.live.model.OrderItem">
+      <id column="id" property="id"/>
+      <result column="goods_sku_name"  property="goodsSkuName" />
+      <result column="real_unit_price"  property="goodsPrice" />
+      <result column="is_used"  property="usageState" />
+      <result column="used_time"  property="verificationTime" />
+    </collection>
+  </resultMap>
+
+
+  <select id="getList" parameterType="com.xq.live.vo.in.OrderListInVo" resultMap="BaseResultMap">
+    SELECT
+    i.id as infoId,
+    i.order_code,
+    i.user_name as mobile,
+    i.pay_type,
+    i.sku_amount,
+    u.nick_name as user_name,
+    IFNULL(s.shop_name,'享七商城') as shop_name,
+    i.status,
+    i.create_time,
+    co.id,
+    co.goods_sku_name,
+    co.real_unit_price,
+    co.is_used,
+    co.used_time
+    FROM
+    order_info i
+    LEFT JOIN order_coupon co ON co.order_id = i.id
+    LEFT JOIN `user` u on i.user_id = u.id
+    LEFT JOIN shop s on i.shop_id = s.id
+    LEFT JOIN goods_sku sk on co.goods_sku_id = sk.id
+    WHERE  sk.spu_id !=11 and i.pay_type !=0 and i.status not in (1,10)
+  <if test="keywords != null and keywords != '' ">
+      AND
+      (
+      o.shop_name LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+      i.order_code LiKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%')
+      )
+  </if>
+  <if test="orderType != null and orderType != ''">
+    AND  i.flag_type=#{orderType}
+  </if>
+  <if test="orderStatus != null and orderStatus != ''">
+    AND i.status=#{orderStatus}
+  </if>
+  <if test="customerType == 1">
+    AND i.shop_id = 0
+  </if>
+  <if test="customerType == 2">
+      AND i.shop_id > 0
+  </if>
+  <if test="beginTime !=null and beginTime!='' and endTime !=null and endTime!=''">
+      and pra.create_time BETWEEN DATE_FORMAT(#{beginTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+      and DATE_FORMAT(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+  </if>
+  <if test="page!=null and rows>0">
+      limit #{start}, #{rows}
+  </if>
+  </select>
+
+  <select id="getListTotal" parameterType="com.xq.live.vo.in.OrderListInVo" resultType="Long">
+    SELECT
+    COUNT(1)
+    FROM
+    order_info i
+    LEFT JOIN order_coupon co ON co.order_id = i.id
+    LEFT JOIN `user` u on i.user_id = u.id
+    LEFT JOIN shop s on i.shop_id = s.id
+    LEFT JOIN goods_sku sk on co.goods_sku_id = sk.id
+    WHERE  sk.spu_id !=11 and i.pay_type !=0 and i.status not in (1,10)
+    <if test="keywords != null and keywords != '' ">
+      AND
+      (
+      o.shop_name LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+      i.order_code LiKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%')
+      )
+    </if>
+    <if test="orderType != null and orderType != ''">
+      AND  i.flag_type=#{orderType}
+    </if>
+    <if test="orderStatus != null and orderStatus != ''">
+      AND i.status=#{orderStatus}
+    </if>
+    <if test="customerType == 1">
+      AND i.shop_id = 0
+    </if>
+    <if test="customerType == 2">
+      AND i.shop_id > 0
+    </if>
+    <if test="beginTime !=null and beginTime!='' and endTime !=null and endTime!=''">
+      and pra.create_time BETWEEN DATE_FORMAT(#{beginTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+      and DATE_FORMAT(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+    </if>
+  </select>
+  <sql id="Base_Column_List">
+    id, order_code, user_id, user_name,shop_id, order_address_id,pay_type, send_type, send_time, sku_amount, send_amount,
+    real_amount, qrcode_url,parent_order_id,is_parent,order_type,status, expiry_date,create_time, paid_time, update_time,salepoint_id,
+    single_type, flag_type,act_id,source_type,is_dui,create_type,account_amount
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="Long" resultType="com.xq.live.vo.out.OrderCouponOut">
+    select
+    <include refid="Base_Column_List" />
+    from order_coupon
+    where id = #{orderId} and is_used=0
+  </select>
+</mapper>

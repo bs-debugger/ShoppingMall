@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.TopicMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.Topic">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="home_pic" jdbcType="VARCHAR" property="homePic" />
+    <result column="small_home_pic" jdbcType="VARCHAR" property="smallHomePic" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="pic_ids" jdbcType="VARCHAR" property="picIds" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="tp_status" jdbcType="INTEGER" property="tpStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="hit_num" jdbcType="INTEGER" property="hitNum" />
+    <result column="topic_type" jdbcType="INTEGER" property="topicType"/>
+    <result column="trans_num" jdbcType="INTEGER" property="transNum" />
+    <result column="shop_type" jdbcType="INTEGER" property="shopType"/>
+
+  </resultMap>
+
+  <resultMap id="ZanSelect" extends="BaseResultMap" type="com.xq.live.vo.out.TopicForZanOut">
+    <result column="zan" jdbcType="INTEGER" property="zan"/>
+    <result column="is_zan" jdbcType="INTEGER" property="isZan"/>
+    <result column="view_num" jdbcType="INTEGER" property="viewNum"/>
+    <result column="user_type" jdbcType="INTEGER" property="userType"/>
+    <result column="comment_num" jdbcType="INTEGER" property="commentNum"/>
+    <result column="icon_url" jdbcType="VARCHAR" property="iconUrl"/>
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    id, title, summary, home_pic,small_home_pic, content, create_time, user_id, user_name, update_time,
+    is_deleted, tp_status, nick_name, pic_ids, hit_num,topic_type,trans_num,shop_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from topic
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByZan" parameterType="com.xq.live.vo.in.TopicInVo" resultMap="ZanSelect">
+    select
+    <include refid="Base_Column_List" />,
+    (select count(1) from zan where ref_id = a.id and type = 2) as zan,
+    (select count(1) from zan where ref_id = a.id and type = 2
+    <if test="zanUserId != null">
+      AND  user_id = #{zanUserId}
+    </if>
+    ) as is_zan
+    from topic a
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByUserId" parameterType="com.xq.live.model.Favorites" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from topic
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from topic
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.Topic">
+    insert into topic (title, summary, home_pic,small_home_pic, content,
+      create_time, user_id, user_name,
+      update_time, nick_name, pic_ids,topic_type,shop_type)
+    values (#{title,jdbcType=VARCHAR}, #{summary,jdbcType=VARCHAR}, #{homePic,jdbcType=VARCHAR},#{smallHomePic,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR},
+      now(), #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR},
+      now(), #{nickName,jdbcType=VARCHAR}, #{picIds,jdbcType=VARCHAR},#{topicType,jdbcType=INTEGER},#{shopType,jdbcType=INTEGER})
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+        select last_insert_id() as id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.Topic">
+    insert into topic
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        title,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="topicType != null">
+        topic_type,
+      </if>
+      <if test="shopType != null">
+        shop_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="topicType != null">
+        #{topicType,jdbcType=INTEGER},
+      </if>
+      <if test="shopType != null">
+        #{shopType,jdbcType=INTEGER},
+      </if>
+    </trim>
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.Topic">
+    update topic
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="picIds != null">
+        pic_ids = #{picIds,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="tpStatus != null">
+        tp_status = #{tpStatus,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hitNum != null">
+        hit_num = #{hitNum,jdbcType=INTEGER},
+      </if>
+      <if test="topicType != null">
+        topic_type = #{topicType,jdbcType=INTEGER},
+      </if>
+      <if test="transNum != null">
+        trans_num = #{transNum,jdbcType=INTEGER},
+      </if>
+      <if test="shopType != null">
+        shop_type = #{shopType,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.Topic">
+    update topic
+    set title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=BIGINT},
+      user_name = #{userName,jdbcType=VARCHAR},
+      update_time = now(),
+      topic_type = #{topicType,jdbcType=INTEGER},
+      shop_type = #{shopType,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="list" resultMap="ZanSelect">
+    select
+    t.id,
+    t.title,
+    t.summary,
+    t.home_pic,
+    t.small_home_pic,
+    t.content,
+    t.create_time,
+    t.user_id,
+    t.user_name,
+    t.update_time,
+    t.is_deleted,
+    t.tp_status,
+    t.nick_name,
+    t.pic_ids,
+    t.hit_num,
+    t.topic_type,
+    t.trans_num,
+    t.shop_type,
+    (select count(1) from access_log al where t.id = al.ref_id and al.biz_type = 3) as view_num,
+    u.user_type,
+    (select count(1) from zan where ref_id = t.id and type = 2) as zan,
+    (select count(1) from zan where ref_id = t.id and type = 2
+    <if test="zanUserId != null">
+      AND  user_id = #{zanUserId}
+    </if>
+    ) as is_zan,
+    u.icon_url,
+    (select count(1) from comment c where c.ref_id = t.id and c.cmt_type = 2) as comment_num
+    from topic t
+    inner join user u on t.user_id = u.id
+    <where>
+      1=1
+      <if test="id != null">
+       and t.id =#{id}
+      </if>
+      <if test="title != null">
+        and t.title like concat('%', #{title}, '%')
+      </if>
+      <if test="content != null">
+        and t.content like concat('%', #{content}, '%')
+      </if>
+      <if test="summary != null">
+        and t.summary like concat('%', #{summary}, '%')
+      </if>
+      <if test="topicType != null">
+        and t.topic_type = #{topicType}
+      </if>
+      <if test="choiceType != null">
+        and u.user_type = #{choiceType}
+      </if>
+
+      <if test="shopType != null and shopType==2">
+        and t.shop_type = #{shopType}
+      </if>
+      <if test="shopType == null">
+        and t.shop_type = 1
+      </if>
+      AND t.tp_status=1
+      and is_deleted = 0
+    </where>
+    order by
+    <if test="sortType !=null and sortType == 1">
+      t.hit_num desc,
+    </if>
+    t.update_time desc
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="myList" resultMap="ZanSelect">
+    select
+    t.id,
+    t.title,
+    t.summary,
+    t.home_pic,
+    t.small_home_pic,
+    t.content,
+    t.create_time,
+    t.user_id,
+    t.user_name,
+    t.update_time,
+    t.is_deleted,
+    t.tp_status,
+    t.nick_name,
+    t.pic_ids,
+    t.hit_num,
+    t.topic_type,
+    t.trans_num,
+    t.shop_type,
+    (select count(1) from access_log al where t.id = al.ref_id and al.biz_type = 3) as view_num,
+    u.user_type,
+    (select count(1) from zan where ref_id = t.id and type = 2) as zan,
+    (select count(1) from zan where ref_id = t.id and type = 2
+    <if test="zanUserId != null">
+      AND  user_id = #{zanUserId}
+    </if>
+    ) as is_zan,
+    u.icon_url,
+    (select count(1) from comment c where c.ref_id = t.id and c.cmt_type = 2) as comment_num
+    from topic t
+    inner join user u on t.user_id = u.id
+    <where>
+      1=1
+      <if test="id != null">
+       and t.id =#{id}
+      </if>
+      <if test="userId !=null">
+        and t.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="shopId !=null">
+        and u.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="topicType != null">
+        and t.topic_type = #{topicType}
+      </if>
+      <if test="shopType != null and shopType==2">
+        and t.shop_type = #{shopType}
+      </if>
+      <if test="shopType == null">
+        and t.shop_type = 1
+      </if>
+      AND t.tp_status=1
+      and is_deleted = 0
+    </where>
+    order by
+    <if test="sortType !=null and sortType == 1">
+      t.hit_num desc,
+    </if>
+    t.update_time desc
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="zanTotalForUser" resultType="java.lang.Integer">
+    select
+     sum((select count(1) from zan where ref_id = t.id and type = 2)) as zanTotal
+    from topic t
+    <where>
+      1=1
+      <if test="id != null">
+        and t.id =#{id}
+      </if>
+      <if test="userId !=null">
+        and t.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="shopId !=null">
+        and t.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      AND t.tp_status=1
+      and t.is_deleted = 0
+      <!--<![CDATA[  and t.create_time >= DATE_FORMAT('2018-06-26 00:00:00','%Y-%m-%d %H:%i:%S')  ]]>-->
+    </where>
+  </select>
+
+  <select id="myListTotal" resultType="java.lang.Integer">
+    select count(1)
+    from topic t
+    inner join user u on t.user_id = u.id
+    <where>
+      1=1
+      <if test="id != null">
+       and t.id =#{id}
+      </if>
+      <if test="userId !=null">
+        and t.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="shopId !=null">
+        and u.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="topicType != null">
+        and t.topic_type = #{topicType}
+      </if>
+      <if test="shopType != null and shopType==2">
+        and t.shop_type = #{shopType}
+      </if>
+      <if test="shopType == null">
+        and t.shop_type = 1
+      </if>
+      AND t.tp_status=1
+      and is_deleted = 0
+    </where>
+    order by t.id desc
+  </select>
+
+  <select id="listTotal" resultType="java.lang.Integer">
+    select count(1)
+    from topic t
+    inner join user u on t.user_id = u.id
+    <where>
+      1=1
+      <if test="id != null">
+       and t.id =#{id}
+      </if>
+      <if test="title != null">
+        and t.title like concat('%', #{title}, '%')
+      </if>
+      <if test="content != null">
+        and t.content like concat('%', #{content}, '%')
+      </if>
+      <if test="summary != null">
+        and t.summary like concat('%', #{summary}, '%')
+      </if>
+      <if test="topicType != null">
+        and t.topic_type = #{topicType}
+      </if>
+      <if test="choiceType != null">
+        and u.user_type = #{choiceType}
+      </if>
+      <if test="shopType != null and shopType==2">
+        and t.shop_type = #{shopType}
+      </if>
+      <if test="shopType == null">
+        and t.shop_type = 1
+      </if>
+      AND t.tp_status=1
+      and is_deleted = 0
+    </where>
+  </select>
+</mapper>

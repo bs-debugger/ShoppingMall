@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ZanMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.Zan">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="ref_id" jdbcType="BIGINT" property="refId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, ref_id, type, user_id, is_deleted, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from zan
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from zan
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.Zan">
+    insert into zan (ref_id, type,
+      user_id, is_deleted, create_time
+      )
+    values (#{refId,jdbcType=BIGINT}, #{type,jdbcType=INTEGER},
+      #{userId,jdbcType=BIGINT}, 0, now()
+      )
+      <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+        select last_insert_id() as id
+      </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.Zan">
+    insert into zan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="refId != null">
+        ref_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="refId != null">
+        #{refId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.Zan">
+    update zan
+    <set>
+      <if test="refId != null">
+        ref_id = #{refId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.Zan">
+    update zan
+    set ref_id = #{refId,jdbcType=BIGINT},
+      type = #{type,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=BIGINT},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <delete id="deleteZan">
+    delete from zan
+    <where>
+      <if test="id != null">
+        id = #{id}
+      </if>
+      <if test="type != null">
+        and type = #{type}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId}
+      </if>
+      <if test="refId != null">
+        and ref_id = #{refId}
+      </if>
+    </where>
+  </delete>
+
+  <select id="total" resultType="java.lang.Integer">
+    select count(1)
+     from zan z
+     where z.ref_id = #{refId} and z.type = #{type}
+  </select>
+</mapper>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.PullUserMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.PullUser">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="pull_num" jdbcType="INTEGER" property="pullNum" />
+    <result column="pull_all_num" jdbcType="INTEGER" property="pullAllNum" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, pic_url, is_deleted, pull_num, pull_all_num,create_time,
+    update_time,type,group_id,parent_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pull_user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from pull_user
+    where user_id = #{userId,jdbcType=BIGINT}
+    AND type= 1
+  </select>
+  <!--查看邀请螃蟹人数-->
+  <select id="getByUserIdPX" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from pull_user
+    where user_id = #{userId,jdbcType=BIGINT}
+    AND type=  2
+  </select>
+  <!--查看邀请新人人数-->
+  <select id="getByUserId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from pull_user
+    where user_id = #{userId,jdbcType=BIGINT}
+    AND type= #{type,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from pull_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <!--配置邀请-->
+  <insert id="insert" parameterType="com.xq.live.model.PullUser">
+    insert into pull_user (id, user_id, pic_url, 
+      is_deleted, pull_num, pull_all_num,create_time,
+      update_time,type,group_id,parent_id)
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{picUrl,jdbcType=VARCHAR}, 
+      0, 0, 0, now(),
+      now(),#{type,jdbcType=INTEGER},#{groupId,jdbcType=BIGINT},
+            #{parentId,jdbcType=BIGINT})
+  </insert>
+
+
+  <insert id="insertSelective" parameterType="com.xq.live.model.PullUser">
+    insert into pull_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="picUrl != null">
+        pic_url,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="pullNum != null">
+        pull_num,
+      </if>
+      <if test="pullAllNum != null">
+        pull_all_num,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="picUrl != null">
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="pullNum != null">
+        #{pullNum,jdbcType=INTEGER},
+      </if>
+      <if test="pullAllNum != null">
+        #{pullAllNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.PullUser">
+    update pull_user
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="picUrl != null">
+        pic_url = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="pullNum != null">
+        pull_num = #{pullNum,jdbcType=INTEGER},
+      </if>
+      <if test="pullAllNum != null">
+        pull_all_num = #{pullAllNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.PullUser">
+    update pull_user
+    set user_id = #{userId,jdbcType=BIGINT},
+      pic_url = #{picUrl,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      pull_num = #{pullNum,jdbcType=INTEGER},
+      pull_all_num = #{pullAllNum,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updatePullNums" parameterType="com.xq.live.model.PullUser">
+    update pull_user
+    set
+    pull_num = pull_num+1,
+    pull_all_num = pull_all_num+1,
+    update_time = now()
+    where user_id = #{userId,jdbcType=BIGINT}
+    AND type=1
+  </update>
+
+  <!--清空邀请螃蟹人数-->
+  <update id="updatePullNumsPx" parameterType="com.xq.live.model.PullUser">
+    update pull_user
+    set
+    pull_num = #{pullNum,jdbcType=INTEGER},
+    update_time = now()
+    where user_id = #{userId,jdbcType=BIGINT}
+    AND type=#{type,jdbcType=INTEGER}
+  </update>
+
+  <!--邀请人数增加-->
+  <update id="updatePullNumsUp" parameterType="com.xq.live.model.PullUser">
+    update pull_user
+    set
+      pull_num = pull_num+1,
+      pull_all_num = pull_all_num+1,
+      update_time = now()
+    where user_id = #{userId,jdbcType=BIGINT}
+    AND type=#{type,jdbcType=INTEGER}
+    <if test="groupId != null">
+    AND group_id = #{groupId,jdbcType=BIGINT}
+    </if>
+  </update>
+
+  <!--查询邀请用户-->
+  <select id="selectUserByParentId" parameterType="com.xq.live.model.PullUser" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from pull_user
+    where parent_id = #{parentId,jdbcType=BIGINT}
+    <if test="groupId != null">
+      AND group_id = #{groupId,jdbcType=BIGINT}
+    </if>
+    AND type= #{type,jdbcType=INTEGER}
+  </select>
+
+</mapper>

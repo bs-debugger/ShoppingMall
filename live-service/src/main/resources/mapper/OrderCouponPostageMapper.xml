@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.OrderCouponPostageMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.OrderCouponPostage">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_coupon_id" jdbcType="BIGINT" property="orderCouponId" />
+    <result column="order_coupon_code" jdbcType="VARCHAR" property="orderCouponCode" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="send_amount" jdbcType="DECIMAL" property="sendAmount" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="coupon_address_id" jdbcType="BIGINT" property="couponAddressId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="paid_time" jdbcType="TIMESTAMP" property="paidTime" />
+    <result column="out_trade_no" jdbcType="VARCHAR" property="outTradeNo" />
+    <result column="real_weight" jdbcType="DECIMAL" property="realWeight" />
+    <result column="bulk" jdbcType="DECIMAL" property="bulk" />
+    <result column="piece" jdbcType="INTEGER" property="piece" />
+    <result column="template_id" jdbcType="BIGINT" property="templateId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="post_free" jdbcType="INTEGER" property="postFree" />
+    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, order_coupon_id, order_coupon_code, shop_id, send_amount, user_id, coupon_address_id, 
+    status, paid_time, out_trade_no, real_weight, bulk, piece, template_id, remark, post_free, 
+    send_time, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_coupon_postage
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from order_coupon_postage
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.OrderCouponPostage">
+    insert into order_coupon_postage (id, order_coupon_id, order_coupon_code, 
+      shop_id, send_amount, user_id, 
+      coupon_address_id, status, paid_time, 
+      out_trade_no, real_weight, bulk, 
+      piece, template_id, remark, 
+      post_free, send_time, create_time, 
+      update_time)
+    values (#{id,jdbcType=BIGINT}, #{orderCouponId,jdbcType=BIGINT}, #{orderCouponCode,jdbcType=VARCHAR}, 
+      #{shopId,jdbcType=BIGINT}, #{sendAmount,jdbcType=DECIMAL}, #{userId,jdbcType=BIGINT}, 
+      #{couponAddressId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{paidTime,jdbcType=TIMESTAMP}, 
+      #{outTradeNo,jdbcType=VARCHAR}, #{realWeight,jdbcType=DECIMAL}, #{bulk,jdbcType=DECIMAL}, 
+      #{piece,jdbcType=INTEGER}, #{templateId,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, 
+      #{postFree,jdbcType=INTEGER}, #{sendTime,jdbcType=TIMESTAMP}, now(),
+    now())
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS ID
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.OrderCouponPostage">
+    insert into order_coupon_postage
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderCouponId != null">
+        order_coupon_id,
+      </if>
+      <if test="orderCouponCode != null">
+        order_coupon_code,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="sendAmount != null">
+        send_amount,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="couponAddressId != null">
+        coupon_address_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="paidTime != null">
+        paid_time,
+      </if>
+      <if test="outTradeNo != null">
+        out_trade_no,
+      </if>
+      <if test="realWeight != null">
+        real_weight,
+      </if>
+      <if test="bulk != null">
+        bulk,
+      </if>
+      <if test="piece != null">
+        piece,
+      </if>
+      <if test="templateId != null">
+        template_id,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="postFree != null">
+        post_free,
+      </if>
+      <if test="sendTime != null">
+        send_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orderCouponId != null">
+        #{orderCouponId,jdbcType=BIGINT},
+      </if>
+      <if test="orderCouponCode != null">
+        #{orderCouponCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="sendAmount != null">
+        #{sendAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="couponAddressId != null">
+        #{couponAddressId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="paidTime != null">
+        #{paidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outTradeNo != null">
+        #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="realWeight != null">
+        #{realWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="bulk != null">
+        #{bulk,jdbcType=DECIMAL},
+      </if>
+      <if test="piece != null">
+        #{piece,jdbcType=INTEGER},
+      </if>
+      <if test="templateId != null">
+        #{templateId,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="postFree != null">
+        #{postFree,jdbcType=INTEGER},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.OrderCouponPostage">
+    update order_coupon_postage
+    <set>
+      <if test="orderCouponId != null">
+        order_coupon_id = #{orderCouponId,jdbcType=BIGINT},
+      </if>
+      <if test="orderCouponCode != null">
+        order_coupon_code = #{orderCouponCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="sendAmount != null">
+        send_amount = #{sendAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="couponAddressId != null">
+        coupon_address_id = #{couponAddressId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="paidTime != null">
+        paid_time = #{paidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outTradeNo != null">
+        out_trade_no = #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="realWeight != null">
+        real_weight = #{realWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="bulk != null">
+        bulk = #{bulk,jdbcType=DECIMAL},
+      </if>
+      <if test="piece != null">
+        piece = #{piece,jdbcType=INTEGER},
+      </if>
+      <if test="templateId != null">
+        template_id = #{templateId,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="postFree != null">
+        post_free = #{postFree,jdbcType=INTEGER},
+      </if>
+      <if test="sendTime != null">
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+        update_time = now(),
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.OrderCouponPostage">
+    update order_coupon_postage
+    set order_coupon_id = #{orderCouponId,jdbcType=BIGINT},
+      order_coupon_code = #{orderCouponCode,jdbcType=VARCHAR},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      send_amount = #{sendAmount,jdbcType=DECIMAL},
+      user_id = #{userId,jdbcType=BIGINT},
+      coupon_address_id = #{couponAddressId,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      paid_time = #{paidTime,jdbcType=TIMESTAMP},
+      out_trade_no = #{outTradeNo,jdbcType=VARCHAR},
+      real_weight = #{realWeight,jdbcType=DECIMAL},
+      bulk = #{bulk,jdbcType=DECIMAL},
+      piece = #{piece,jdbcType=INTEGER},
+      template_id = #{templateId,jdbcType=BIGINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      post_free = #{postFree,jdbcType=INTEGER},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

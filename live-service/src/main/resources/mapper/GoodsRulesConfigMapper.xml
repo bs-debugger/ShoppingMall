@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.GoodsRulesConfigMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.GoodsRulesConfig">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="ref_type" jdbcType="INTEGER" property="refType" />
+    <result column="ref_id" jdbcType="BIGINT" property="refId" />
+    <result column="user_service_amount" jdbcType="DECIMAL" property="userServiceAmount" />
+    <result column="shop_service_amount" jdbcType="DECIMAL" property="shopServiceAmount" />
+    <result column="min_market_price" jdbcType="DECIMAL" property="minMarketPrice" />
+    <result column="kj_min_price" jdbcType="DECIMAL" property="kjMinPrice" />
+    <result column="min_store" jdbcType="INTEGER" property="minStore" />
+    <result column="kj_min_store" jdbcType="INTEGER" property="kjMinStore" />
+    <result column="kj_max_store" jdbcType="INTEGER" property="kjMaxStore" />
+    <result column="ms_min_store" jdbcType="INTEGER" property="msMinStore" />
+    <result column="single_discount" jdbcType="DECIMAL" property="singleDiscount" />
+    <result column="discount" jdbcType="DECIMAL" property="discount" />
+    <result column="kj_min_num" jdbcType="INTEGER" property="kjMinNum" />
+    <result column="kj_max_num" jdbcType="INTEGER" property="kjMaxNum" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="kj_service_amount_rules" jdbcType="VARCHAR" property="kjServiceAmountRules" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, ref_type, ref_id, user_service_amount, shop_service_amount, min_market_price, 
+    kj_min_price, min_store, kj_min_store, kj_max_store, ms_min_store, single_discount, 
+    discount, kj_min_num, kj_max_num, is_deleted, create_time, update_time, kj_service_amount_rules
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from goods_rules_config
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from goods_rules_config
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.GoodsRulesConfig">
+    insert into goods_rules_config (id, ref_type, ref_id, 
+      user_service_amount, shop_service_amount, min_market_price, 
+      kj_min_price, min_store, kj_min_store, 
+      kj_max_store, ms_min_store, single_discount, 
+      discount, kj_min_num, kj_max_num, 
+      is_deleted, create_time, update_time,kj_service_amount_rules
+      )
+    values (#{id,jdbcType=BIGINT}, #{refType,jdbcType=INTEGER}, #{refId,jdbcType=BIGINT}, 
+      #{userServiceAmount,jdbcType=DECIMAL}, #{shopServiceAmount,jdbcType=DECIMAL}, #{minMarketPrice,jdbcType=DECIMAL}, 
+      #{kjMinPrice,jdbcType=DECIMAL}, #{minStore,jdbcType=INTEGER}, #{kjMinStore,jdbcType=INTEGER}, 
+      #{kjMaxStore,jdbcType=INTEGER}, #{msMinStore,jdbcType=INTEGER}, #{singleDiscount,jdbcType=DECIMAL}, 
+      #{discount,jdbcType=DECIMAL}, #{kjMinNum,jdbcType=INTEGER}, #{kjMaxNum,jdbcType=INTEGER}, 
+      #{isDeleted,jdbcType=TINYINT}, now(), now(),#{kjServiceAmountRules,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.GoodsRulesConfig">
+    insert into goods_rules_config
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="refType != null">
+        ref_type,
+      </if>
+      <if test="refId != null">
+        ref_id,
+      </if>
+      <if test="userServiceAmount != null">
+        user_service_amount,
+      </if>
+      <if test="shopServiceAmount != null">
+        shop_service_amount,
+      </if>
+      <if test="minMarketPrice != null">
+        min_market_price,
+      </if>
+      <if test="kjMinPrice != null">
+        kj_min_price,
+      </if>
+      <if test="minStore != null">
+        min_store,
+      </if>
+      <if test="kjMinStore != null">
+        kj_min_store,
+      </if>
+      <if test="kjMaxStore != null">
+        kj_max_store,
+      </if>
+      <if test="msMinStore != null">
+        ms_min_store,
+      </if>
+      <if test="singleDiscount != null">
+        single_discount,
+      </if>
+      <if test="discount != null">
+        discount,
+      </if>
+      <if test="kjMinNum != null">
+        kj_min_num,
+      </if>
+      <if test="kjMaxNum != null">
+        kj_max_num,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="kjServiceAmountRules != null">
+        kj_service_amount_rules,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="refType != null">
+        #{refType,jdbcType=INTEGER},
+      </if>
+      <if test="refId != null">
+        #{refId,jdbcType=BIGINT},
+      </if>
+      <if test="userServiceAmount != null">
+        #{userServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="shopServiceAmount != null">
+        #{shopServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="minMarketPrice != null">
+        #{minMarketPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="kjMinPrice != null">
+        #{kjMinPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="minStore != null">
+        #{minStore,jdbcType=INTEGER},
+      </if>
+      <if test="kjMinStore != null">
+        #{kjMinStore,jdbcType=INTEGER},
+      </if>
+      <if test="kjMaxStore != null">
+        #{kjMaxStore,jdbcType=INTEGER},
+      </if>
+      <if test="msMinStore != null">
+        #{msMinStore,jdbcType=INTEGER},
+      </if>
+      <if test="singleDiscount != null">
+        #{singleDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="discount != null">
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="kjMinNum != null">
+        #{kjMinNum,jdbcType=INTEGER},
+      </if>
+      <if test="kjMaxNum != null">
+        #{kjMaxNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="kjServiceAmountRules != null">
+        #{kjServiceAmountRules,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.GoodsRulesConfig">
+    update goods_rules_config
+    <set>
+      <if test="refType != null">
+        ref_type = #{refType,jdbcType=INTEGER},
+      </if>
+      <if test="refId != null">
+        ref_id = #{refId,jdbcType=BIGINT},
+      </if>
+      <if test="userServiceAmount != null">
+        user_service_amount = #{userServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="shopServiceAmount != null">
+        shop_service_amount = #{shopServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="minMarketPrice != null">
+        min_market_price = #{minMarketPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="kjMinPrice != null">
+        kj_min_price = #{kjMinPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="minStore != null">
+        min_store = #{minStore,jdbcType=INTEGER},
+      </if>
+      <if test="kjMinStore != null">
+        kj_min_store = #{kjMinStore,jdbcType=INTEGER},
+      </if>
+      <if test="kjMaxStore != null">
+        kj_max_store = #{kjMaxStore,jdbcType=INTEGER},
+      </if>
+      <if test="msMinStore != null">
+        ms_min_store = #{msMinStore,jdbcType=INTEGER},
+      </if>
+      <if test="singleDiscount != null">
+        single_discount = #{singleDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="discount != null">
+        discount = #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="kjMinNum != null">
+        kj_min_num = #{kjMinNum,jdbcType=INTEGER},
+      </if>
+      <if test="kjMaxNum != null">
+        kj_max_num = #{kjMaxNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="kjServiceAmountRules != null">
+        kj_service_amount_rules=#{kjServiceAmountRules,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.GoodsRulesConfig">
+    update goods_rules_config
+    set ref_type = #{refType,jdbcType=INTEGER},
+      ref_id = #{refId,jdbcType=BIGINT},
+      user_service_amount = #{userServiceAmount,jdbcType=DECIMAL},
+      shop_service_amount = #{shopServiceAmount,jdbcType=DECIMAL},
+      min_market_price = #{minMarketPrice,jdbcType=DECIMAL},
+      kj_min_price = #{kjMinPrice,jdbcType=DECIMAL},
+      min_store = #{minStore,jdbcType=INTEGER},
+      kj_min_store = #{kjMinStore,jdbcType=INTEGER},
+      kj_max_store = #{kjMaxStore,jdbcType=INTEGER},
+      ms_min_store = #{msMinStore,jdbcType=INTEGER},
+      single_discount = #{singleDiscount,jdbcType=DECIMAL},
+      discount = #{discount,jdbcType=DECIMAL},
+      kj_min_num = #{kjMinNum,jdbcType=INTEGER},
+      kj_max_num = #{kjMaxNum,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      kj_service_amount_rules=#{kjServiceAmountRules,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="list" parameterType="com.xq.live.vo.in.GoodsRulesConfigInVO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods_rules_config
+    <where>
+      1=1
+      <if test="refType != null">
+        and oin.ref_type = #{refType,jdbcType=INTEGER}
+      </if>
+      <if test="refId != null">
+        and oin.ref_id = #{refId,jdbcType=INTEGER}
+      </if>
+    </where>
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="listTotal" resultType="java.lang.Integer">
+    select
+    count(1)
+    from goods_rules_config
+    <where>
+      1=1
+      <if test="refType != null">
+        and oin.ref_type = #{refType,jdbcType=INTEGER}
+      </if>
+      <if test="refId != null">
+        and oin.ref_id = #{refId,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+
+</mapper>

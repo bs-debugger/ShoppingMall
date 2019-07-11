@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.MessageTextMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.MessageText">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+    <result column="act_id" jdbcType="BIGINT" property="actId" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, content, type, is_deleted, send_time, act_id,url
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from message_text
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from message_text
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.MessageText">
+    insert into message_text (id, title,content, type,
+      is_deleted, send_time,act_id,url)
+    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},
+      #{isDeleted,jdbcType=INTEGER}, now(),#{actId,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR})
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.MessageText">
+    insert into message_text
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="sendTime != null">
+        send_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="sendTime != null">
+        #{send_time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.MessageText">
+    update message_text
+    <set>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.MessageText">
+    update message_text
+    set content = #{content,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      send_time = #{sendTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

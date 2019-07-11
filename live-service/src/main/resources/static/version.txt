@@ -1,0 +1,175 @@
+﻿{
+	"version": 617,
+	"versionName": "3.4.7",
+	"apkUrl": "https://xqmp4-1256079679.file.myqcloud.com/13297932982_app-release.apk",
+	"flag": 1,
+	"isAppEdit": 1,
+	"kancai": 0,
+	"isForcedUpdate": true,
+	"hidecai": false,
+	"carousel": [{
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/13297932982_hehuating.png",
+		"linkUrl": "/pages/index/merchant-particulars/merchant-particulars?shopid=500&distance=377.7km"
+	}, {
+		"imgUrl": "https://xq-1256079679.file.myqcloud.com/15827324350_1547458475_20190114_173420344_52ef6e0b24eeb952132cd32ce29cec96_0.8.jpg",
+		"linkUrl": "/pages/index/merchant-particulars/merchant-particulars?shopid=1780&distance=410.4km"
+	}, {
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/15927505686__20181212154021.png",
+		"linkUrl": "/pages/index/merchant-particulars/merchant-particulars?shopid=367&distance=412.7km"
+	}, {
+		"imgUrl": "https://xq-1256079679.file.myqcloud.com/1535364395351test_B1CB1665-7362-4589-8CB6-D710EA789C55_0.3.jpg",
+		"linkUrl": "/pages/index/merchant-particulars/merchant-particulars?shopid=344&distance=411.1km"
+	}],
+	"sydish": [{
+			"shopId": "277",
+			"dishId": "1547"
+		},
+		{
+			"shopId": "277",
+			"dishId": "1546"
+		},
+		{
+			"shopId": "277",
+			"dishId": "1545"
+		}
+	],
+	"whdish": [{
+			"shopId": "323",
+			"dishId": "1551"
+		},
+		{
+			"shopId": "323",
+			"dishId": "1553"
+		},
+		{
+			"shopId": "323",
+			"dishId": "1550"
+		}
+	],
+	"fresh0": {
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/15927505686_f2d85e80ee675a9b654355999cc2703.jpg",
+		"linkUrl": "/packageA/pages/tourismAndHotel/tourismAndHotel?id=43"
+
+	},
+	"fresh1": {
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/15927505686_3a4f9d46021d28de21dd68083734f42.jpg",
+		"linkUrl": "/packageB/pages/wanda/shopZone/shopZone"
+
+	},
+	"fresh2": {
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/15927505686_a736279c76550614f26f355c0d4c287.jpg",
+		"linkUrl": "/packageB/pages/wanda/shopZone/shopZone?type=2",
+		"id": "11",
+		"msg": "即将开放",
+		"spuId": "1"
+	},
+	"fresh3": {
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/15927505686_e8cd3d09175f4da3e720f6e927b958a.jpg",
+		"linkUrl": "",
+		"id": "6",
+		"msg": "即将开放",
+		"spuId": "2"
+	},
+	"navs": [{
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/15927505686_2018111621312quan.png",
+		"linkUrl": "/pages/index/bargainirg-store/bargainirg-store",
+		"title": "砍价"
+	}, {
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/15927505686_201811162312312canting.png",
+		"linkUrl": "/pages/index/dining-room/dining-room?shopCate=1",
+		"title": "餐厅"
+	}, {
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/13297932982_shopping.png",
+		"linkUrl": "",
+		"title": "酒店"
+	}, {
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/15927505686_2018111712312312.png",
+		"linkUrl": "/pages/index/download-app/download?isshop=ind",
+		"title": "商家入驻"
+	}, {
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/15927505686_201811162321312shenghuo.png",
+		"linkUrl": "/pages/discover-plate/discover-plate",
+		"title": "短视频"
+	}],
+	"navsNewYear": [{
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/15927505686_nian.png",
+		"linkUrl": "/pages/index/bargainirg-store/bargainirg-store",
+		"title": "砍价"
+	}, {
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/15927505686_nian.png",
+		"linkUrl": "/pages/index/dining-room/dining-room?shopCate=1",
+		"title": "餐厅"
+	}, {
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/15927505686_you.png",
+		"linkUrl": "/packageB/pages/wanda/wanda",
+		"title": "商圈/超市"
+	}, {
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/15927505686_yu.png",
+		"linkUrl": "/pages/index/download-app/download?isshop=ind",
+		"title": "商家入驻"
+	}, {
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/15927505686_201811162321312shenghuo.png",
+		"linkUrl": "/pages/discover-plate/discover-plate",
+		"title": "短视频"
+	}],
+	"dsh": {
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/text_DSH.png"
+	},
+	"crabImgUrl": [
+		"https://xqmp4-1256079679.file.myqcloud.com/test_text132131313.png",
+		"https://xqmp4-1256079679.file.myqcloud.com/test_abcd32120180919114026.png",
+		"https://xqmp4-1256079679.file.myqcloud.com/test_testxq12343242 (2).png",
+		"https://xqmp4-1256079679.file.myqcloud.com/test_testxq12343242 (3).png",
+		"https://xqmp4-1256079679.file.myqcloud.com/test_testxq12343242 (4).png",
+		"https://xqmp4-1256079679.file.myqcloud.com/test_testxq12343242 (5).png",
+		"https://xqmp4-1256079679.file.myqcloud.com/test_testxq12343242 (6).png",
+		"https://xqmp4-1256079679.file.myqcloud.com/test_testxq12343242 (7).png",
+		"https://xqmp4-1256079679.file.myqcloud.com/test_testxq12343242 (8).png"
+	],
+	"indexShare": {
+		"url": "https://xq-1256079679.file.myqcloud.com/15927505686_1545389545_xiang7logo_0.png",
+		"title": " 享7,‘购’实惠"
+	},
+	"citylist": [{
+		"imgUrl": "https://xq-1256079679.file.myqcloud.com/15927505686_1547019366_wuhan_0.png",
+		"msg": "",
+		"name": "武汉市",
+		"isopen": "1"
+	}, {
+		"imgUrl": "https://xq-1256079679.file.myqcloud.com/15927505686_1547019410_shiyan_0.png",
+		"msg": "",
+		"name": "十堰市",
+		"isopen": "1"
+	}, {
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/15927505686_xiangyang.png",
+		"msg": "",
+		"name": "襄阳市",
+		"isopen": "1"
+	}, {
+		"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/15927505686_huanggang.png",
+		"msg": "",
+		"name": "黄冈市",
+		"isopen": "1"
+	}],
+	"activityList": [{
+			"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/13297932982_0783210ab14f6fce69c433a0fd7d6d7.png",
+			"linkUrl": "/packageB/pages/wanda/wandaActivity/wandaActivity",
+			"isOpen": "1",
+			"actId": "45",
+			"title": "湖北万达十大招牌菜",
+			"msg": ""
+		},
+		{
+			"imgUrl": "https://xqmp4-1256079679.file.myqcloud.com/13297932982_testt-20181219214654.png",
+			"linkUrl": "/packageA/pages/tourismAndHotel/tourismAndHotel?id=43",
+			"isOpen": "1",
+			"actId": "43",
+			"title": "全民拼购",
+			"msg": ""
+		}
+	],
+	"ruleImg": "https://xqmp4-1256079679.file.myqcloud.com/test_wxsm20180913192527.png",
+	"expressMsg": "尊敬的用户：因春节放假，各地物流公司相继停运。“享7购”从1月25日起至2月12日暂停订单发货，期间订单将于2月13日依订单顺序正常发货。如您有任何问题，请于2019年2月12日后拨打客服电话027-59728176进行咨询。如给您带来不便，敬请谅解。感谢您对享7购的支持！ ",
+	"isShowexpressMsg": "1"
+
+}

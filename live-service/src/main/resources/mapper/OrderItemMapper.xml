@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.OrderItemMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.OrderItem">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
+    <result column="goods_spu_id" jdbcType="BIGINT" property="goodsSpuId" />
+    <result column="goods_sku_id" jdbcType="BIGINT" property="goodsSkuId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="goods_sku_name" jdbcType="VARCHAR" property="goodsSkuName" />
+    <result column="goods_num" jdbcType="INTEGER" property="goodsNum" />
+    <result column="gift_num" jdbcType="INTEGER" property="giftNum" />
+    <result column="goods_price" jdbcType="DECIMAL" property="goodsPrice" />
+    <result column="real_unit_price" jdbcType="DECIMAL" property="realUnitPrice" />
+    <result column="packing_price" jdbcType="DECIMAL" property="packingPrice" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <resultMap id="OrderItemOutResultMap" type="com.xq.live.vo.out.OrderItemOut" extends="BaseResultMap">
+
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, order_code, goods_spu_id, goods_sku_id, shop_id, goods_sku_name, goods_num,gift_num, goods_price,packing_price,
+    create_time, update_time,remark,real_unit_price
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_item
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from order_item
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.OrderItem">
+    insert into order_item (id, order_code, goods_spu_id, 
+      goods_sku_id, shop_id, goods_sku_name, 
+      goods_num,
+      <if test="giftNum!=null">
+        gift_num,
+      </if>
+      goods_price,
+      <if test="packingPrice!=null">
+      packing_price,
+      </if>
+      real_unit_price,
+      create_time,
+      update_time,remark)
+    values (#{id,jdbcType=BIGINT}, #{orderCode,jdbcType=VARCHAR}, #{goodsSpuId,jdbcType=BIGINT}, 
+      #{goodsSkuId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, #{goodsSkuName,jdbcType=VARCHAR}, 
+      #{goodsNum,jdbcType=INTEGER},
+      <if test="giftNum!=null">
+        #{giftNum,jdbcType=INTEGER},
+      </if>
+      #{goodsPrice,jdbcType=DECIMAL},
+      <if test="packingPrice!=null">
+      #{packingPrice,jdbcType=DECIMAL},
+      </if>
+      #{realUnitPrice,jdbcType=DECIMAL},
+      now(),
+      now(),#{remark,jdbcType=VARCHAR})
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
+
+  <insert id="batchInsert" parameterType="com.xq.live.model.OrderItem">
+    insert into order_item (id, order_code, goods_spu_id,
+    goods_sku_id, shop_id, goods_sku_name,
+    goods_num,
+    <if test="giftNum!=null">
+      gift_num,
+    </if>
+    goods_price,
+    <if test="packingPrice!=null">
+      packing_price,
+    </if>
+    real_unit_price,
+    create_time,
+    update_time,remark)
+    values (#{id,jdbcType=BIGINT}, #{orderCode,jdbcType=VARCHAR}, #{goodsSpuId,jdbcType=BIGINT},
+    #{goodsSkuId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, #{goodsSkuName,jdbcType=VARCHAR},
+    #{goodsNum,jdbcType=INTEGER},
+    <if test="giftNum!=null">
+      #{giftNum,jdbcType=INTEGER},
+    </if>
+    #{goodsPrice,jdbcType=DECIMAL},
+    <if test="packingPrice!=null">
+      #{packingPrice,jdbcType=DECIMAL},
+    </if>
+    #{realUnitPrice,jdbcType=DECIMAL},
+    #{createTime,jdbcType=TIMESTAMP},
+    #{createTime,jdbcType=TIMESTAMP},#{remark,jdbcType=VARCHAR})
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.OrderItem">
+    insert into order_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderCode != null">
+        order_code,
+      </if>
+      <if test="goodsSpuId != null">
+        goods_spu_id,
+      </if>
+      <if test="goodsSkuId != null">
+        goods_sku_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="goodsSkuName != null">
+        goods_sku_name,
+      </if>
+      <if test="goodsNum != null">
+        goods_num,
+      </if>
+      <if test="giftNum != null">
+        gift_num,
+      </if>
+      <if test="goodsPrice != null">
+        goods_price,
+      </if>
+      <if test="packingPrice != null">
+        packing_price,
+      </if>
+      <if test="realUnitPrice != null">
+        real_unit_price,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orderCode != null">
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsSpuId != null">
+        #{goodsSpuId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuId != null">
+        #{goodsSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuName != null">
+        #{goodsSkuName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsNum != null">
+        #{goodsNum,jdbcType=INTEGER},
+      </if>
+      <if test="giftNum != null">
+        #{giftNum,jdbcType=INTEGER},
+      </if>
+      <if test="goodsPrice != null">
+        #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="packingPrice != null">
+        #{packingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="realUnitPrice != null">
+        #{realUnitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.OrderItem">
+    update order_item
+    <set>
+      <if test="orderCode != null">
+        order_code = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsSpuId != null">
+        goods_spu_id = #{goodsSpuId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuId != null">
+        goods_sku_id = #{goodsSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSkuName != null">
+        goods_sku_name = #{goodsSkuName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsNum != null">
+        goods_num = #{goodsNum,jdbcType=INTEGER},
+      </if>
+      <if test="giftNum != null">
+        gift_num = #{giftNum,jdbcType=INTEGER},
+      </if>
+      <if test="goodsPrice != null">
+        goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="packingPrice != null">
+        packing_price = #{packingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="realUnitPrice != null">
+        real_unit_price = #{realUnitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.OrderItem">
+    update order_item
+    set order_code = #{orderCode,jdbcType=VARCHAR},
+      goods_spu_id = #{goodsSpuId,jdbcType=BIGINT},
+      goods_sku_id = #{goodsSkuId,jdbcType=BIGINT},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      goods_sku_name = #{goodsSkuName,jdbcType=VARCHAR},
+      goods_num = #{goodsNum,jdbcType=INTEGER},
+      gift_num = #{giftNum,jdbcType=INTEGER},
+      goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      packing_price = #{packingPrice,jdbcType=DECIMAL},
+      real_unit_price = #{realUnitPrice,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--根据订单编号查询商品信息-->
+  <select id="getForCodelist" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from order_item
+    <where>
+      1=1
+      <if test="orderCode != null">
+       AND order_code = #{orderCode,jdbcType=VARCHAR}
+      </if>
+      <if test="shopId != null">
+        AND shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsSpuId != null">
+        AND goods_spu_id = #{goodsSpuId,jdbcType=BIGINT},
+      </if>
+    </where>
+  </select>
+
+</mapper>

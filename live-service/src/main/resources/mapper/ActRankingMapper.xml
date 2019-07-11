@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ActRankingMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ActRanking">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sku_id" jdbcType="BIGINT" property="skuId" />
+    <result column="act_goods_sku_id" jdbcType="BIGINT" property="actGoodsSkuId" />
+    <result column="act_id" jdbcType="BIGINT" property="actId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+
+
+  </resultMap>
+
+  <resultMap id="ActRankingResultMap" extends="BaseResultMap" type="com.xq.live.vo.out.ActRankingOut">
+    <result column="distance" jdbcType="INTEGER" property="distance" />
+    <association property="goodsCategory" javaType="com.xq.live.model.GoodsCategory">
+      <result column="code" jdbcType="VARCHAR" property="code" />
+      <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+      <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+      <result column="level" jdbcType="INTEGER" property="level" />
+      <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
+      <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
+      <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+      <result column="status" jdbcType="INTEGER" property="status" />
+    </association>
+    <association property="actInfo" javaType="com.xq.live.model.ActInfo">
+      <result column="act_name" jdbcType="VARCHAR" property="actName" />
+      <result column="act_desc" jdbcType="VARCHAR" property="actDesc" />
+      <result column="type" jdbcType="INTEGER" property="type" />
+    </association>
+    <association property="shop" javaType="com.xq.live.model.Shop">
+      <id column="id_shop_id" jdbcType="BIGINT" property="id" />
+      <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+      <result column="address" jdbcType="VARCHAR" property="address" />
+      <result column="city" jdbcType="VARCHAR" property="city" />
+      <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
+      <result column="small_index_url" jdbcType="VARCHAR" property="smallIndexUrl" />
+      <result column="small_logo_url" jdbcType="VARCHAR" property="smallLogoUrl" />
+      <result column="pop_num" jdbcType="INTEGER" property="popNum" />
+      <result column="other_service" jdbcType="VARCHAR" property="otherService" />
+    </association>
+    <association property="actGoodsSku" javaType="com.xq.live.model.ActGoodsSku">
+      <id column="id_actGoodsSku" jdbcType="BIGINT" property="id" />
+      <result column="act_id_actGoodsSku" jdbcType="BIGINT" property="actId" />
+      <result column="sku_id_actGoodsSku" jdbcType="BIGINT" property="skuId" />
+      <result column="shop_id_actGoodsSku" jdbcType="BIGINT" property="shopId" />
+      <result column="category_id_actGoodsSku" jdbcType="BIGINT" property="categoryId" />
+      <result column="goods_pr_id" jdbcType="BIGINT" property="goodsPrId" />
+      <result column="stock_num_actGoodsSku" jdbcType="INTEGER" property="stockNum" />
+      <result column="people_num_actGoodsSku" jdbcType="INTEGER" property="peopleNum" />
+      <result column="rule_desc_actGoodsSku" jdbcType="VARCHAR" property="ruleDesc" />
+      <result column="goods_sku_number_actGoodsSku" jdbcType="VARCHAR" property="goodsSkuNumber" />
+      <result column="vote_num_actGoodsSku" jdbcType="INTEGER" property="voteNum" />
+    </association>
+    <association property="goodsPromotionRules" javaType="com.xq.live.model.GoodsPromotionRules">
+      <id column="gpr_id" jdbcType="BIGINT" property="id" />
+      <result column="rule_type" jdbcType="INTEGER" property="ruleType" />
+      <result column="gpr_rule_desc" jdbcType="VARCHAR" property="ruleDesc" />
+      <result column="act_amount" jdbcType="DECIMAL" property="actAmount" />
+    </association>
+    <collection property="goodsSkuOut" ofType="com.xq.live.vo.out.GoodsSkuOut">
+      <result column="sku_name_goodsSkuOut" jdbcType="VARCHAR" property="skuName" />
+      <result column="spu_id_goodsSkuOut" jdbcType="VARCHAR" property="spuId" />
+      <result column="sku_id_goodsSkuOut" jdbcType="VARCHAR" property="id" />
+      <result column="sku_pic" jdbcType="VARCHAR" property="skuPic" />
+      <result column="sku_shop_id" jdbcType="VARCHAR" property="shopId" />
+      <result column="market_price" jdbcType="DECIMAL" property="marketPrice" />
+      <result column="sell_price" jdbcType="DECIMAL" property="sellPrice" />
+      <result column="single_type_goodsSkuOut" jdbcType="INTEGER" property="singleType" />
+    </collection>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, sku_id, act_goods_sku_id, act_id, user_id, shop_id, sort_num, type, is_deleted, 
+    create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from act_ranking
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from act_ranking
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.ActRanking">
+    insert into act_ranking (id, sku_id, act_goods_sku_id, 
+      act_id, user_id, shop_id, 
+      sort_num, type, is_deleted, 
+      create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{skuId,jdbcType=BIGINT}, #{actGoodsSkuId,jdbcType=BIGINT}, 
+      #{actId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, 
+      #{sortNum,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{isDeleted,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.ActRanking">
+    insert into act_ranking
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="skuId != null">
+        sku_id,
+      </if>
+      <if test="actGoodsSkuId != null">
+        act_goods_sku_id,
+      </if>
+      <if test="actId != null">
+        act_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="sortNum != null">
+        sort_num,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="skuId != null">
+        #{skuId,jdbcType=BIGINT},
+      </if>
+      <if test="actGoodsSkuId != null">
+        #{actGoodsSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="actId != null">
+        #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="sortNum != null">
+        #{sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.ActRanking">
+    update act_ranking
+    <set>
+      <if test="skuId != null">
+        sku_id = #{skuId,jdbcType=BIGINT},
+      </if>
+      <if test="actGoodsSkuId != null">
+        act_goods_sku_id = #{actGoodsSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="actId != null">
+        act_id = #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="sortNum != null">
+        sort_num = #{sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.ActRanking">
+    update act_ranking
+    set sku_id = #{skuId,jdbcType=BIGINT},
+      act_goods_sku_id = #{actGoodsSkuId,jdbcType=BIGINT},
+      act_id = #{actId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      sort_num = #{sortNum,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--查询获奖商品列表-->
+  <select id="selectActInfoList" parameterType="com.xq.live.vo.in.ActRankingInVo" resultMap="ActRankingResultMap">
+    SELECT
+    ark.*,
+    ags.id as  id_actGoodsSku,ags.act_id as act_id_actGoodsSku,ags.category_id as category_id_actGoodsSku,ags.goods_pr_id,
+    ags.stock_num as stock_num_actGoodsSku,
+    ags.rule_desc as rule_desc_actGoodsSku,ags.goods_sku_number as goods_sku_number_actGoodsSku,ags.vote_num as vote_num_actGoodsSku,
+    gc.code, gc.category_name, gc.parent_id, gc.level, gc.image_url, gc.sort_num, gc.is_deleted, gc.status,
+    ai.act_name,ai.act_desc,ai.type,
+    gs.sku_name as sku_name_goodsSkuOut,gs.sku_pic,gs.market_price,gs.sell_price,gs.single_type as single_type_goodsSkuOut,
+    gs.spu_id as spu_id_goodsSkuOut,
+    <choose>
+      <when test="locationX != null and locationY != null"> ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        <if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180 - shp.location_y * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS(<if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180) * COS(shp.location_y * PI() / 180) * POW(
+        SIN(
+        (
+        <if test="locationX != null">
+          #{locationX}
+        </if> * PI() / 180 - shp.location_x * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ) * 1000
+        )</when>
+      <when test="locationX == null or locationY == null">0</when>
+    </choose>
+    AS distance,
+    gpr.id as gpr_id, gpr.rule_type,gpr.rule_desc as gpr_rule_desc,gpr.act_amount,
+    shp.id as id_shop_id,shp.shop_name,shp.city,shp.pop_num,shp.small_index_url,shp.small_logo_url,
+    shp.other_service
+    FROM
+    act_ranking ark
+    INNER JOIN act_goods_sku ags on ags.id=ark.act_goods_sku_id
+    INNER JOIN goods_category gc on gc.id=ags.category_id
+    INNER JOIN goods_sku gs on gs.id=ark.sku_id
+    LEFT JOIN  shop shp on shp.id=ark.shop_id
+    inner join act_info ai on ags.act_id = ai.id
+    left join goods_promotion_rules gpr on ags.goods_pr_id = gpr.id
+    WHERE
+    ags.is_deleted = 0
+    AND ags.apply_status = 1
+    <if test="actId != null">
+      AND ark.act_id = #{actId,jdbcType=BIGINT}
+    </if>
+    <if test="skuId != null">
+      AND ark.sku_id=#{skuId,jdbcType=BIGINT}
+    </if>
+    <if test="type != null">
+      AND ark.type=#{type,jdbcType=INTEGER}
+    </if>
+    <if test="shopId != null">
+      AND ark.shop_id=#{shopId,jdbcType=BIGINT}
+    </if>
+    AND gs.status=1
+    AND ags.state=1
+    and ai.is_deleted = 0
+    AND ark.is_deleted = 0
+    ORDER BY ark.sort_num
+  </select>
+  <select id="selectActInfoTotal" parameterType="com.xq.live.vo.in.ActRankingInVo" resultType="java.lang.Integer">
+    SELECT
+    count(ark.id)
+    FROM
+    act_ranking ark
+    INNER JOIN act_goods_sku ags on ags.id=ark.act_goods_sku_id
+    INNER JOIN goods_category gc on gc.id=ags.category_id
+    INNER JOIN goods_sku gs on gs.id=ark.sku_id
+    inner join act_info ai on ags.act_id = ai.id
+    left join goods_promotion_rules gpr on ags.goods_pr_id = gpr.id
+    WHERE
+    ags.is_deleted = 0
+    AND ags.apply_status = 1
+    <if test="actId != null">
+      AND ark.act_id = #{actId,jdbcType=BIGINT}
+    </if>
+    <if test="skuId != null">
+      AND ark.sku_id=#{skuId,jdbcType=BIGINT}
+    </if>
+    <if test="type != null">
+      AND ark.type=#{type,jdbcType=INTEGER}
+    </if>
+    AND gs.status=1
+    AND ark.is_deleted = 0
+    AND ags.state=1
+    and ai.is_deleted = 0
+    ORDER BY ark.sort_num
+  </select>
+
+
+  <!--查询单个获奖商品-->
+  <select id="selectActInfo" parameterType="com.xq.live.vo.in.ActRankingInVo" resultMap="ActRankingResultMap">
+    SELECT
+    ark.*,
+    ags.id as  id_actGoodsSku,ags.act_id as act_id_actGoodsSku,ags.category_id as category_id_actGoodsSku,ags.goods_pr_id,
+    ags.stock_num as stock_num_actGoodsSku,
+    ags.rule_desc as rule_desc_actGoodsSku,ags.goods_sku_number as goods_sku_number_actGoodsSku,ags.vote_num as vote_num_actGoodsSku,
+    ai.act_name,ai.act_desc,ai.type
+    FROM
+    act_ranking ark
+    INNER JOIN act_goods_sku ags on ags.id=ark.act_goods_sku_id
+    inner join act_info ai on ags.act_id = ai.id
+    WHERE
+    ags.is_deleted = 0
+    AND ags.apply_status = 1
+    <if test="actId != null">
+      AND ark.act_id = #{actId,jdbcType=BIGINT}
+    </if>
+    <if test="skuId != null">
+      AND ark.sku_id=#{skuId,jdbcType=BIGINT}
+    </if>
+    <if test="type != null">
+      AND ark.type=#{type,jdbcType=INTEGER}
+    </if>
+    AND ags.state=1
+    and ai.is_deleted = 0
+    ORDER BY ark.sort_num
+  </select>
+</mapper>

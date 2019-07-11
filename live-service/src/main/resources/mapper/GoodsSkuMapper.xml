@@ -1,0 +1,1929 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.GoodsSkuMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.GoodsSku">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="sku_name" jdbcType="VARCHAR" property="skuName" />
+    <result column="sku_pic" jdbcType="VARCHAR" property="skuPic" />
+    <result column="small_sku_pic" jdbcType="VARCHAR" property="smallSkuPic" />
+
+    <result column="cost_price" jdbcType="DECIMAL" property="costPrice" />
+    <result column="market_price" jdbcType="DECIMAL" property="marketPrice" />
+    <result column="sell_price" jdbcType="DECIMAL" property="sellPrice" />
+    <result column="other_marker_price" jdbcType="DECIMAL" property="otherMarkerPrice" />
+    <result column="stock_num" jdbcType="INTEGER" property="stockNum" />
+    <result column="waring_stock" jdbcType="INTEGER" property="waringStock" />
+    <result column="spu_id" jdbcType="BIGINT" property="spuId" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="sell_num" jdbcType="INTEGER" property="sellNum" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="mini_num" jdbcType="INTEGER" property="miniNum" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="real_weight" jdbcType="DECIMAL" property="realWeight" />
+    <result column="delivery_template_id" jdbcType="BIGINT" property="deliveryTemplateId" />
+    <result column="send_type" jdbcType="INTEGER" property="sendType" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="single_type" jdbcType="INTEGER" property="singleType" />
+    <result column="expiry_date" jdbcType="INTEGER" property="expiryDate" />
+    <result column="piece" jdbcType="INTEGER" property="piece" />
+    <result column="bulk" jdbcType="DECIMAL" property="bulk" />
+    <result column="goods_sku_pics" jdbcType="VARCHAR" property="goodsSkuPics" />
+    <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
+    <result column="singly_price" jdbcType="DECIMAL" property="singlyPrice" />
+    <result column="auto_add_stock" jdbcType="INTEGER" property="autoAddStock" />
+    <result column="audit_status" jdbcType="TINYINT" property="auditStatus" />
+    <result column="use_sku_detail" jdbcType="INTEGER" property="useSkuDetail" />
+    <result column="show_type" jdbcType="INTEGER" property="showType" />
+  </resultMap>
+
+  <resultMap id="GoodsSkuOutResultMap" type="com.xq.live.vo.out.GoodsSkuOut" extends="BaseResultMap">
+    <result column="distance" jdbcType="INTEGER" property="distance" />
+    <result column="spu_name" jdbcType="VARCHAR" property="spuName" />
+    <result column="spu_code" jdbcType="VARCHAR" property="spuCode" />
+    <result column="spu_type" jdbcType="INTEGER" property="spuType" />
+    <result column="category_id" jdbcType="BIGINT" property="categoryId" />
+    <result column="brand_id" jdbcType="BIGINT" property="brandId" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
+    <result column="audit_status" jdbcType="TINYINT" property="auditStatus" />
+
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <association property="actGoodsSkuOut" javaType="com.xq.live.vo.out.ActGoodsSkuOut">
+      <result column="goods_sku_number" jdbcType="VARCHAR" property="goodsSkuNumber" />
+      <result column="vote_num" jdbcType="INTEGER" property="voteNum" />
+    </association>
+
+    <association property="goodsCategory" javaType="com.xq.live.model.GoodsCategory">
+      <result column="ca_id" jdbcType="BIGINT" property="id" />
+      <result column="ca_code" jdbcType="VARCHAR" property="code" />
+      <result column="ca_category_name" jdbcType="VARCHAR" property="categoryName" />
+      <result column="ca_parent_id" jdbcType="BIGINT" property="parentId" />
+    </association>
+
+    <collection property="goodsSkuSpecValues" ofType="com.xq.live.vo.out.GoodsSkuSpecValueOut">
+      <result column="goods_sku_spec_value_id" jdbcType="BIGINT" property="id" />
+      <result column="sku_id" jdbcType="BIGINT" property="skuId" />
+      <result column="spec_value_id" jdbcType="BIGINT" property="specValueId" />
+      <association property="goodsSpecValue" javaType="com.xq.live.model.GoodsSpecValue">
+        <id column="goods_spec_value_id" jdbcType="BIGINT" property="id" />
+        <result column="spec_id" jdbcType="BIGINT" property="specId" />
+        <result column="spec_value" jdbcType="VARCHAR" property="specValue" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+      </association>
+    </collection>
+    <collection property="goodsPromotionRules" ofType="com.xq.live.model.GoodsPromotionRules">
+      <id column="gpr_id" jdbcType="BIGINT" property="id" />
+      <result column="gpr_goods_sku_id" jdbcType="BIGINT" property="goodsSkuId" />
+      <result column="gpr_goods_sku_code" jdbcType="VARCHAR" property="goodsSkuCode" />
+      <result column="gpr_goods_sku_name" jdbcType="VARCHAR" property="goodsSkuName" />
+      <result column="rule_type" jdbcType="INTEGER" property="ruleType" />
+      <result column="rule_desc" jdbcType="VARCHAR" property="ruleDesc" />
+      <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+      <result column="man_num" jdbcType="INTEGER" property="manNum" />
+      <result column="gift_num" jdbcType="INTEGER" property="giftNum" />
+      <result column="act_amount" jdbcType="DECIMAL" property="actAmount" />
+      <result column="man_amount" jdbcType="DECIMAL" property="manAmount" />
+      <result column="jian_amount" jdbcType="DECIMAL" property="jianAmount" />
+    </collection>
+
+    <collection property="actGoodsSkuOuts" ofType="com.xq.live.vo.out.ActGoodsSkuOut">
+      <id column="ags_id" jdbcType="BIGINT" property="id" />
+      <result column="ags_actId" jdbcType="BIGINT" property="actId" />
+      <result column="ags_stockNum" jdbcType="INTEGER" property="stockNum" />
+      <association property="goodsPromotionRules" javaType="com.xq.live.model.GoodsPromotionRules">
+        <id column="gpra_id" jdbcType="BIGINT" property="id" />
+        <result column="gpra_rule_type" jdbcType="INTEGER" property="ruleType" />
+        <result column="gpra_rule_desc" jdbcType="VARCHAR" property="ruleDesc" />
+        <result column="gpra_act_amount" jdbcType="DECIMAL" property="actAmount" />
+        <result column="gpra_man_amount" jdbcType="DECIMAL" property="manAmount" />
+        <result column="gpra_jian_amount" jdbcType="DECIMAL" property="jianAmount" />
+      </association>
+    </collection>
+
+  </resultMap>
+
+  <resultMap id="GoodsSkuRecommendOutResultMap" type="com.xq.live.vo.out.GoodsSkuRecommendOut" extends="BaseResultMap">
+    <result column="shop_city" jdbcType="VARCHAR" property="shopCity" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="act_amount" jdbcType="DECIMAL" property="actAmount" />
+    <result column="discount" jdbcType="DECIMAL" property="discount" />
+    <result column="distance" jdbcType="DECIMAL" property="distance" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, sku_code, sku_name, sku_pic,cost_price, market_price, sell_price,other_marker_price, stock_num, waring_stock,
+    spu_id, is_deleted, status, shop_id, sell_num,unit,mini_num,create_time, update_time,real_weight,delivery_template_id,send_type,
+    small_sku_pic,send_type,remark,single_type,expiry_date,piece,bulk,goods_sku_pics,sort_num,singly_price, auto_add_stock,audit_status,use_sku_detail,show_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from goods_sku
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="countTotal" resultType="java.lang.Long">
+    select max(id) from goods_sku
+  </select>
+
+  <select id="selectDetailBySkuId" parameterType="java.lang.Long" resultMap="GoodsSkuOutResultMap">
+    select
+    sk.id, sk.sku_code, sk.sku_name, sk.sku_pic,sk.cost_price, sk.market_price, sk.sell_price,sk.other_marker_price,  sk.stock_num, sk.waring_stock,
+    sk.spu_id, sk.is_deleted, sk.status, sk.shop_id, sk.sell_num,sk.create_time, sk.update_time,sk.unit,sk.mini_num,sk.real_weight,sk.delivery_template_id,
+    sk.send_type,sk.small_sku_pic,sk.remark,sk.single_type,sk.expiry_date,sk.piece,sk.bulk,sk.goods_sku_pics,sk.sort_num,sk.singly_price,sk.auto_add_stock,sk.use_sku_detail,sk.show_type,
+    sp.spu_name, sp.spu_code, sp.spu_type,sp.category_id, sp.brand_id,
+    gssv.id as goods_sku_spec_value_id,gssv.sku_id,gssv.spec_value_id,gsv.id as goods_spec_value_id,gsv.spec_id,
+    gsv.spec_value,gs.name,
+    gpr.id as gpr_id,gpr.goods_sku_id as gpr_goods_sku_id,gpr.goods_sku_code as gpr_goods_sku_code,
+    gpr.goods_sku_name as gpr_goods_sku_name, gpr.rule_type,
+    gpr.rule_desc,gpr.end_time,gpr.man_num,gpr.gift_num,gpr.act_amount,sk.audit_status
+    from goods_sku sk
+    inner join goods_spu sp on sk.spu_id = sp.id
+    inner join goods_sku_spec_value gssv on sk.id = gssv.sku_id
+    inner join goods_spec_value gsv on gssv.spec_value_id = gsv.id
+    inner join goods_spec gs on gsv.spec_id = gs.id
+    left join goods_promotion_rules gpr on sk.id = gpr.goods_sku_id
+    where sk.id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectListBySkuId" parameterType="java.util.List" resultMap="GoodsSkuOutResultMap">
+    select
+    sk.id, sk.sku_code, sk.sku_name, sk.sku_pic,sk.cost_price, sk.market_price, sk.sell_price,sk.other_marker_price,  sk.stock_num, sk.waring_stock,
+    sk.spu_id, sk.is_deleted, sk.status, sk.shop_id, sk.sell_num,sk.create_time, sk.update_time,sk.unit,sk.mini_num,sk.real_weight,sk.delivery_template_id,
+    sk.send_type,sk.small_sku_pic,sk.remark,sk.single_type,sk.expiry_date,sk.piece,sk.bulk,sk.goods_sku_pics,sk.sort_num,sk.singly_price,sk.auto_add_stock,sk.use_sku_detail,sk.show_type,
+    gssv.id as goods_sku_spec_value_id,gssv.sku_id,gssv.spec_value_id,gsv.id as goods_spec_value_id,gsv.spec_id,
+    gsv.spec_value,gs.name,
+    gpr.id as gpr_id,gpr.rule_type,gpr.rule_desc,gpr.end_time,gpr.man_num,gpr.gift_num,sk.audit_status
+    from goods_sku sk
+    inner join goods_sku_spec_value gssv on sk.id = gssv.sku_id
+    inner join goods_spec_value gsv on gssv.spec_value_id = gsv.id
+    inner join goods_spec gs on gsv.spec_id = gs.id
+    left join goods_promotion_rules gpr on sk.id = gpr.goods_sku_id
+    where sk.id in
+    <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+      #{item.goodsSkuId,jdbcType=BIGINT}
+    </foreach>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from goods_sku
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.vo.in.GoodsSkuInVo">
+    insert into goods_sku (id, sku_code, sku_name, sku_pic, small_sku_pic,
+      cost_price, market_price, sell_price,other_marker_price,
+      stock_num, waring_stock, spu_id, delivery_template_id,
+      is_deleted, status, shop_id, sell_num,unit,mini_num,
+      create_time, update_time,send_type,single_type,expiry_date,
+      real_weight,piece,bulk,goods_sku_pics,sort_num,singly_price,auto_add_stock,audit_status,use_sku_detail,show_type)
+    values (#{id,jdbcType=BIGINT}, #{skuCode,jdbcType=VARCHAR}, #{skuName,jdbcType=VARCHAR}, #{skuPic,jdbcType=VARCHAR},#{smallSkuPic,jdbcType=VARCHAR},
+      #{costPrice,jdbcType=DECIMAL}, #{marketPrice,jdbcType=DECIMAL}, #{sellPrice,jdbcType=DECIMAL}, #{otherMarkerPrice,jdbcType=DECIMAL},
+      #{stockNum,jdbcType=INTEGER}, #{waringStock,jdbcType=INTEGER}, #{spuId,jdbcType=BIGINT}, #{deliveryTemplateId,jdbcType=BIGINT},
+      #{isDeleted,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{shopId,jdbcType=BIGINT},0,#{unit,jdbcType=VARCHAR}, #{miniNum,jdbcType=INTEGER},
+      now(), now(), #{sendType,jdbcType=INTEGER}, #{singleType,jdbcType=INTEGER}, #{expiryDate,jdbcType=INTEGER},
+      #{realWeight,jdbcType=DECIMAL},#{piece,jdbcType=INTEGER},#{bulk,jdbcType=DECIMAL},#{goodsSkuPics,jdbcType=VARCHAR},#{sortNum,jdbcType=INTEGER},
+      #{singlyPrice,jdbcType=DECIMAL},#{autoAddStock,jdbcType=INTEGER},#{auditStatus,jdbcType=TINYINT},#{useSkuDetail,jdbcType=INTEGER},#{showType,jdbcType=INTEGER})
+    <selectKey resultType="java.lang.Long" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.vo.in.GoodsSkuInVo">
+    insert into goods_sku
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="skuName != null">
+        sku_name,
+      </if>
+      <if test="skuPic != null">
+        sku_pic,
+      </if>
+      <if test="costPrice != null">
+        cost_price,
+      </if>
+      <if test="marketPrice != null">
+        market_price,
+      </if>
+      <if test="sellPrice != null">
+        sell_price,
+      </if>
+      <if test="stockNum != null">
+        stock_num,
+      </if>
+      <if test="waringStock != null">
+        waring_stock,
+      </if>
+      <if test="spuId != null">
+        spu_id,
+      </if>
+      <if test="deliveryTemplateId != null">
+        delivery_template_id,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="sendType != null">
+        send_type,
+      </if>
+      <if test="singleType != null">
+        single_type,
+      </if>
+      <if test="expiryDate != null">
+        expiry_date,
+      </if>
+      <if test="goodsSkuPics != null">
+        goods_sku_pics,
+      </if>
+      <if test="sortNum != null">
+        sort_num,
+      </if>
+      <if test="singlyPrice != null">
+        singly_price,
+      </if>
+      <if test="autoAddStock != null">
+        auto_add_stock,
+      </if>
+      <if test="auditStatus != null">
+        audit_status,
+      </if>
+      <if test="useSkuDetail != null">
+        use_sku_detail,
+      </if>
+      <if test="showType != null">
+        show_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuName != null">
+        #{skuName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuPic != null">
+        #{skuPic,jdbcType=VARCHAR},
+      </if>
+      <if test="costPrice != null">
+        #{costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="marketPrice != null">
+        #{marketPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="sellPrice != null">
+        #{sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stockNum != null">
+        #{stockNum,jdbcType=INTEGER},
+      </if>
+      <if test="waringStock != null">
+        #{waringStock,jdbcType=INTEGER},
+      </if>
+      <if test="spuId != null">
+        #{spuId,jdbcType=BIGINT},
+      </if>
+      <if test="deliveryTemplateId != null">
+        #{deliveryTemplateId,jdbcType=BIGINT},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendType != null">
+        #{sendType,jdbcType=INTEGER},
+      </if>
+      <if test="singleType != null">
+        #{singleType,jdbcType=INTEGER},
+      </if>
+      <if test="expiryDate != null">
+        #{expiryDate,jdbcType=INTEGER},
+      </if>
+      <if test="goodsSkuPics != null">
+        #{goodsSkuPics,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNum != null">
+        #{sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="singlyPrice != null">
+        #{singlyPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="autoAddStock != null">
+        #{autoAddStock,jdbcType=INTEGER},
+      </if>
+      <if test="auditStatus != null">
+        #{auditStatus,jdbcType=TINYINT},
+      </if>
+      <if test="useSkuDetail != null">
+        #{useSkuDetail,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.vo.in.GoodsSkuInVo">
+    update goods_sku
+    <set>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuName != null">
+        sku_name = #{skuName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuPic != null">
+        sku_pic = #{skuPic,jdbcType=VARCHAR},
+      </if>
+      <if test="costPrice != null">
+        cost_price = #{costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="marketPrice != null">
+        market_price = #{marketPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="sellPrice != null">
+        sell_price = #{sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stockNum != null">
+        stock_num = #{stockNum,jdbcType=INTEGER},
+      </if>
+      <if test="waringStock != null">
+        waring_stock = #{waringStock,jdbcType=INTEGER},
+      </if>
+      <if test="spuId != null">
+        spu_id = #{spuId,jdbcType=BIGINT},
+      </if>
+      <if test="deliveryTemplateId != null">
+        delivery_template_id = #{deliveryTemplateId,jdbcType=BIGINT},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="sellNum != null">
+        sell_num = #{sellNum,jdbcType=INTEGER},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="miniNum != null">
+        mini_num = #{miniNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = now(),
+      </if>
+      <if test="sendType != null">
+        send_type = #{sendType,jdbcType=INTEGER},
+      </if>
+      <if test="singleType != null">
+        single_type = #{singleType,jdbcType=INTEGER},
+      </if>
+      <if test="expiryDate != null">
+        expiry_date = #{expiryDate,jdbcType=INTEGER},
+      </if>
+      <if test="goodsSkuPics != null">
+        goods_sku_pics = #{goodsSkuPics,jdbcType=VARCHAR},
+      </if>
+      <if test="smallSkuPic != null">
+        small_sku_pic = #{smallSkuPic,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNum != null">
+        sort_num = #{sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="singlyPrice != null">
+        singly_price = #{singlyPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="autoAddStock != null">
+        auto_add_stock = #{autoAddStock,jdbcType=INTEGER},
+      </if>
+      <if test="auditStatus != null">
+        audit_status = #{auditStatus,jdbcType=TINYINT},
+      </if>
+      <if test="useSkuDetail != null">
+        use_sku_detail=#{useSkuDetail,jdbcType=INTEGER},
+      </if>
+      <if test="showType != null">
+        show_type=#{showType,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.vo.in.GoodsSkuInVo">
+    update goods_sku
+    set sku_code = #{skuCode,jdbcType=VARCHAR},
+      sku_name = #{skuName,jdbcType=VARCHAR},
+      sku_pic = #{skuPic,jdbcType=VARCHAR},
+      cost_price = #{costPrice,jdbcType=DECIMAL},
+      market_price = #{marketPrice,jdbcType=DECIMAL},
+      sell_price = #{sellPrice,jdbcType=DECIMAL},
+      stock_num = #{stockNum,jdbcType=INTEGER},
+      waring_stock = #{waringStock,jdbcType=INTEGER},
+      spu_id = #{spuId,jdbcType=BIGINT},
+      delivery_template_id = #{deliveryTemplateId,jdbcType=BIGINT},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      sell_num = #{sellNum,jdbcType=INTEGER},
+      unit = #{unit,jdbcType=VARCHAR},
+      mini_num = #{miniNum,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      send_type = #{sendType,jdbcType=INTEGER},
+      single_type = #{singleType,jdbcType=INTEGER},
+      expiry_date = #{expiryDate,jdbcType=INTEGER},
+      goods_sku_pics = #{goodsSkuPics,jdbcType=VARCHAR},
+      sort_num = #{sortNum,jdbcType=INTEGER},
+      singly_price = #{singlyPrice,jdbcType=DECIMAL},
+      auto_add_stock = #{autoAddStock,jdbcType=INTEGER},
+      audit_status = #{auditStatus,jdbcType=TINYINT},
+      use_sku_detail = #{useSkuDetail,jdbcType=TINYINT},
+      show_type = #{showType,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="listTotal" resultType="java.lang.Integer">
+    select count(1)
+    from goods_sku sk
+    inner join goods_spu sp on sk.spu_id = sp.id
+    inner join goods_category ca on sp.category_id = ca.id
+    inner join goods_brand br on sp.brand_id = br.id
+    <where>
+      1=1
+      <if test="skuCode != null">
+        and sk.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sk.sku_name = #{skuName,jdbcType=VARCHAR}
+      </if>
+      <if test="costPrice != null">
+        and sk.cost_price = #{costPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="marketPrice != null">
+        and sk.market_price = #{marketPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="sellPrice != null">
+        and sk.sell_price = #{sellPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="stockNum != null">
+        and sk.stock_num = #{stockNum,jdbcType=INTEGER}
+      </if>
+      <if test="waringStock != null">
+        and sk.waring_stock = #{waringStock,jdbcType=INTEGER}
+      </if>
+      <if test="spuId != null">
+        and sk.spu_id = #{spuId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sk.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="status != null">
+        and sk.status = #{status,jdbcType=INTEGER}
+        AND audit_status = 2
+      </if>
+      <if test="shopId != null">
+        and sk.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="createTime != null">
+        and sk.create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and sk.update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="spuType != null">
+        and sp.spu_type = #{spuType,jdbcType=INTEGER}
+      </if>
+      <if test="sendType != null">
+        and (sk.send_type = #{sendType,jdbcType=INTEGER} or sk.send_type = 0)
+      </if>
+      <if test="categoryId != null">
+        and sp.category_id = #{categoryId,jdbcType=BIGINT}
+      </if>
+      <if test="singleType != null">
+        and (sk.single_type = #{singleType,jdbcType=INTEGER} or sk.single_type = 0)
+      </if>
+      <if test="expiryDate != null">
+        and sk.expiry_date = #{expiryDate,jdbcType=INTEGER}
+      </if>
+      <if test="singlyPrice != null">
+        and sk.singly_price = #{singlyPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="autoAddStock != null">
+        and sk.auto_add_stock = #{autoAddStock,jdbcType=DECIMAL}
+      </if>
+      <if test="auditStatus != null  and auditStatus!=0">
+        AND  audit_status IN (-1,-2,3)
+      </if>
+      <if test="showType == null ">
+        AND  (show_type =0 or show_type is null)
+      </if>
+      <if test="showType != null  and showType!=-1">
+        AND  show_type =#{showType,jdbcType=INTEGER}
+      </if>
+      <if test="showType != null and showType==-1">
+        AND  show_type  in (1,2)
+      </if>
+      and sp.is_deleted = 0
+      and ca.is_deleted = 0
+      and br.is_deleted = 0
+      and sk.is_deleted = 0
+    </where>
+  </select>
+
+  <select id="list" resultMap="GoodsSkuOutResultMap">
+    select a.*,
+    gpr.id as gpr_id,gpr.rule_type,gpr.rule_desc,gpr.end_time,gpr.man_num,gpr.gift_num,gpr.act_amount,gpr.man_amount,gpr.jian_amount
+    from (select
+    sk.id, sk.sku_code, sk.sku_name,sk.sku_pic,sk.small_sku_pic, sk.cost_price, sk.market_price, sk.sell_price,sk.other_marker_price, sk.stock_num, sk.waring_stock,
+    sk.spu_id, sk.is_deleted, sk.status, sk.shop_id, sk.sell_num,sk.create_time, sk.update_time,sk.unit,sk.mini_num,sk.real_weight,sk.delivery_template_id,
+    sk.send_type,sk.remark,sk.singly_price,sk.auto_add_stock,sk.use_sku_detail,sk.show_type,
+    ca.id ca_id,ca.code ca_code,ca.category_name ca_category_name,ca.parent_id ca_parent_id,
+    sp.spu_name, sp.spu_code, sp.spu_type,sp.category_id, sp.brand_id,ca.category_name,br.brand_name,sk.audit_status
+    from goods_sku sk
+    inner join goods_spu sp on sk.spu_id = sp.id
+    inner join goods_category ca on sp.category_id = ca.id
+    inner join goods_brand br on sp.brand_id = br.id
+    <where>
+      1=1
+      <if test="skuCode != null">
+        and sk.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sk.sku_name = #{skuName,jdbcType=VARCHAR}
+      </if>
+      <if test="costPrice != null">
+        and sk.cost_price = #{costPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="marketPrice != null">
+        and sk.market_price = #{marketPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="sellPrice != null">
+        and sk.sell_price = #{sellPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="stockNum != null">
+        and sk.stock_num = #{stockNum,jdbcType=INTEGER}
+      </if>
+      <if test="waringStock != null">
+        and sk.waring_stock = #{waringStock,jdbcType=INTEGER}
+      </if>
+      <if test="spuId != null">
+        and sk.spu_id = #{spuId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sk.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="status != null">
+        and sk.status = #{status,jdbcType=INTEGER}
+        AND audit_status = 2
+      </if>
+      <if test="shopId != null">
+        and sk.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="createTime != null">
+        and sk.create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and sk.update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="spuType != null">
+        and sp.spu_type = #{spuType,jdbcType=INTEGER}
+      </if>
+      <if test="sendType != null">
+        and (sk.send_type = #{sendType,jdbcType=INTEGER} or sk.send_type = 0)
+      </if>
+      <if test="categoryId != null">
+        and sp.category_id = #{categoryId,jdbcType=BIGINT}
+      </if>
+      <if test="singleType != null">
+        and (sk.single_type = #{singleType,jdbcType=INTEGER} or sk.single_type = 0)
+      </if>
+      <if test="expiryDate != null">
+        and sk.expiry_date = #{expiryDate,jdbcType=INTEGER}
+      </if>
+      <if test="singlyPrice != null">
+        and sk.singly_price = #{singlyPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="autoAddStock != null">
+        and sk.auto_add_stock = #{autoAddStock,jdbcType=DECIMAL}
+      </if>
+      <if test="auditStatus != null  and auditStatus!=0">
+        AND  audit_status IN (-1,-2,3)
+      </if>
+      <if test="showType == null ">
+        AND  (show_type =0 or show_type is null)
+      </if>
+      <if test="showType != null and showType!=-1">
+        AND  show_type =#{showType,jdbcType=INTEGER}
+      </if>
+      <if test="showType != null and showType==-1">
+        AND  show_type  in (1,2)
+      </if>
+        and sp.is_deleted = 0
+        and ca.is_deleted = 0
+        and br.is_deleted = 0
+        and sk.is_deleted = 0
+    </where>
+    order by sk.sort_num ASC,sk.update_time DESC
+    limit #{start}, #{rows}) a
+    left join goods_promotion_rules gpr on a.id = gpr.goods_sku_id
+  </select>
+
+  <select id="listPlazaTotal" resultType="java.lang.Integer">
+    select count(1)
+    from goods_sku sk
+    inner join goods_spu sp on sk.spu_id = sp.id
+    inner join goods_category ca on sp.category_id = ca.id
+    inner join goods_brand br on sp.brand_id = br.id
+    <where>
+      1=1
+      <if test="skuCode != null">
+        and sk.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sk.sku_name = #{skuName,jdbcType=VARCHAR}
+      </if>
+      <if test="costPrice != null">
+        and sk.cost_price = #{costPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="marketPrice != null">
+        and sk.market_price = #{marketPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="stockNum != null">
+        and sk.stock_num = #{stockNum,jdbcType=INTEGER}
+      </if>
+      <if test="waringStock != null">
+        and sk.waring_stock = #{waringStock,jdbcType=INTEGER}
+      </if>
+      <if test="spuId != null">
+        and sk.spu_id = #{spuId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sk.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="status != null">
+        and sk.status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null">
+        and sk.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="createTime != null">
+        and sk.create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and sk.update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="spuType != null">
+        and sp.spu_type = #{spuType,jdbcType=INTEGER}
+      </if>
+      <if test="sendType != null">
+        and (sk.send_type = #{sendType,jdbcType=INTEGER} or sk.send_type = 0)
+      </if>
+      <if test="categoryId != null">
+        and sp.category_id = #{categoryId,jdbcType=BIGINT}
+      </if>
+      <if test="singleType != null">
+        and (sk.single_type = #{singleType,jdbcType=INTEGER} or sk.single_type = 0)
+      </if>
+      <if test="expiryDate != null">
+        and sk.expiry_date = #{expiryDate,jdbcType=INTEGER}
+      </if>
+      <if test="singlyPrice != null">
+        and sk.singly_price = #{singlyPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="autoAddStock != null">
+        and sk.auto_add_stock = #{autoAddStock,jdbcType=DECIMAL}
+      </if>
+      and sp.is_deleted = 0
+      and ca.is_deleted = 0
+      and br.is_deleted = 0
+      and sk.is_deleted = 0
+    </where>
+  </select>
+
+  <select id="plazaList" resultMap="GoodsSkuOutResultMap">
+    select a.*,
+    gpr.id as gpr_id,gpr.rule_type,gpr.rule_desc,gpr.end_time,gpr.man_num,gpr.gift_num
+    from (select
+    sk.id, sk.sku_code, sk.sku_name,sk.sku_pic,sk.small_sku_pic, sk.cost_price, sk.market_price, sk.sell_price,sk.other_marker_price, sk.stock_num, sk.waring_stock,
+    sk.spu_id, sk.is_deleted, sk.status, sk.shop_id, sk.sell_num,sk.create_time, sk.update_time,sk.unit,sk.mini_num,sk.real_weight,sk.delivery_template_id,
+    sk.send_type,sk.remark,sk.singly_price,sk.auto_add_stock,sk.use_sku_detail,sk.show_type,
+    sp.spu_name, sp.spu_code, sp.spu_type,sp.category_id, sp.brand_id,ca.category_name,br.brand_name
+    from goods_sku sk
+    inner join goods_spu sp on sk.spu_id = sp.id
+    inner join goods_category ca on sp.category_id = ca.id
+    inner join goods_brand br on sp.brand_id = br.id
+    <where>
+      1=1
+      <if test="skuCode != null">
+        and sk.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sk.sku_name = #{skuName,jdbcType=VARCHAR}
+      </if>
+      <if test="costPrice != null">
+        and sk.cost_price = #{costPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="sellPrice != null">
+        and sk.sell_price = #{sellPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="stockNum != null">
+        and sk.stock_num = #{stockNum,jdbcType=INTEGER}
+      </if>
+      <if test="waringStock != null">
+        and sk.waring_stock = #{waringStock,jdbcType=INTEGER}
+      </if>
+      <if test="spuId != null">
+        and sk.spu_id = #{spuId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sk.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="status != null">
+        and sk.status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null">
+        and sk.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="createTime != null">
+        and sk.create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and sk.update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="spuType != null">
+        and sp.spu_type = #{spuType,jdbcType=INTEGER}
+      </if>
+      <if test="sendType != null">
+        and (sk.send_type = #{sendType,jdbcType=INTEGER} or sk.send_type = 0)
+      </if>
+      <if test="categoryId != null">
+        and sp.category_id = #{categoryId,jdbcType=BIGINT}
+      </if>
+      <if test="singleType != null">
+        and (sk.single_type = #{singleType,jdbcType=INTEGER} or sk.single_type = 0)
+      </if>
+      <if test="expiryDate != null">
+        and sk.expiry_date = #{expiryDate,jdbcType=INTEGER}
+      </if>
+      <if test="singlyPrice != null">
+        and sk.singly_price = #{singlyPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="autoAddStock != null">
+        and sk.auto_add_stock = #{autoAddStock,jdbcType=DECIMAL}
+      </if>
+      and sp.is_deleted = 0
+      and ca.is_deleted = 0
+      and br.is_deleted = 0
+      and sk.is_deleted = 0
+    </where>
+    order by sk.sell_price
+    limit #{start}, #{rows}) a
+    left join goods_promotion_rules gpr on a.id = gpr.goods_sku_id
+  </select>
+
+<!--查询参与的活动商品-->
+  <!--start-->
+  <!--actListTotal-->
+  <select id="selectActTotal" resultType="java.lang.Integer">
+    select count(1)
+    from goods_sku sk
+    INNER JOIN act_goods_sku actgs on actgs.sku_id=sk.id
+    inner join goods_spu sp on sk.spu_id = sp.id
+    inner join goods_category ca on sp.category_id = ca.id
+    inner join goods_brand br on sp.brand_id = br.id
+    inner join goods_promotion_rules gpr on actgs.goods_pr_id = gpr.id
+    LEFT JOIN shop shp on shp.id=sk.shop_id
+    left join shop_zone_item szi on shp.shop_zone_item_id=szi.id
+    left join shop_zone sz on szi.shop_zone_id=sz.id
+    <where>
+      1=1
+      <if test="skuCode != null">
+        and sk.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sk.sku_name = #{skuName,jdbcType=VARCHAR}
+      </if>
+      <if test="costPrice != null">
+        and sk.cost_price = #{costPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="marketPrice != null">
+        and sk.market_price = #{marketPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="sellPrice != null">
+        and sk.sell_price = #{sellPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="stockNum != null">
+        and sk.stock_num = #{stockNum,jdbcType=INTEGER}
+      </if>
+      <if test="waringStock != null">
+        and sk.waring_stock = #{waringStock,jdbcType=INTEGER}
+      </if>
+      <if test="spuId != null">
+        and sk.spu_id = #{spuId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sk.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      and sk.status != 2
+      <if test="shopId != null">
+        and sk.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="createTime != null">
+        and sk.create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and sk.update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="spuType != null">
+        and sp.spu_type = #{spuType,jdbcType=INTEGER}
+      </if>
+      <if test="sendType != null">
+        and (sk.send_type = #{sendType,jdbcType=INTEGER} or sk.send_type = 0)
+      </if>
+      <if test="categoryId != null">
+        and sp.category_id = #{categoryId,jdbcType=BIGINT}
+      </if>
+      <if test="singleType != null">
+        and (sk.single_type = #{singleType,jdbcType=INTEGER} or sk.single_type = 0)
+      </if>
+      <if test="actId != null">
+        and actgs.act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      <if test="city != null">
+        and shp.city = #{city,jdbcType=VARCHAR}
+      </if>
+      <if test="groupState != null">
+        AND (actgs.state= 2 or actgs.state=3)
+      </if>
+      <if test="groupState == null">
+        AND actgs.state =1
+      </if>
+      <if test="shopZoneCity != null">
+        and sz.city = #{shopZoneCity,jdbcType=VARCHAR}
+      </if>
+      <if test="regionName != null">
+        AND sz.region_name= #{regionName,jdbcType=VARCHAR}
+      </if>
+      <if test="shopZoneItem != null">
+        AND szi.name= #{shopZoneItem,jdbcType=VARCHAR}
+      </if>
+      <if test="searchKey != null">
+        AND (shp.shop_name like concat('%', #{searchKey}, '%') or sk.sku_name  like concat('%', #{searchKey}, '%') or actgs.goods_sku_number like concat('%', #{searchKey}, '%'))
+      </if>
+      <if test="shopZoneItemId != null">
+        AND shp.shop_zone_item_id=#{shopZoneItemId,jdbcType=BIGINT}
+      </if>
+      <if test="singlyPrice != null">
+        and sk.singly_price = #{singlyPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="autoAddStock != null">
+        and sk.auto_add_stock = #{autoAddStock,jdbcType=DECIMAL}
+      </if>
+      <if test="shopCate != null and shopCate != ''">
+        and find_in_set(#{shopCate}, replace(replace(shp.shop_cate, '-', ','), '|', ','))
+      </if>
+      AND actgs.is_deleted = 0
+      AND actgs.apply_status = 1
+      and sp.is_deleted = 0
+      and ca.is_deleted = 0
+      and br.is_deleted = 0
+      and sk.is_deleted = 0
+    </where>
+  </select>
+
+  <select id="selectActList" resultMap="GoodsSkuOutResultMap">
+    select
+    sk.id, sk.sku_code, sk.sku_name,sk.sku_pic,sk.small_sku_pic, sk.cost_price, sk.market_price, sk.sell_price,sk.other_marker_price, sk.stock_num, sk.waring_stock,
+    sk.spu_id, sk.is_deleted, sk.status, sk.shop_id, sk.sell_num,sk.create_time, sk.update_time,sk.unit,sk.mini_num,sk.real_weight,sk.delivery_template_id,
+    sk.send_type,sk.remark,sk.singly_price,sk.auto_add_stock,sk.use_sku_detail,sk.show_type,
+    sp.spu_name, sp.spu_code, sp.spu_type,sp.category_id, sp.brand_id,ca.category_name,br.brand_name,
+    gpr.id as gpr_id,gpr.rule_type,gpr.rule_desc,gpr.end_time,gpr.man_num,gpr.gift_num,gpr.act_amount,
+    shp.shop_name,actgs.goods_sku_number, actgs.vote_num,
+    <choose>
+      <when test="locationX != null and locationY != null"> ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        <if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180 - shp.location_y * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS(<if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180) * COS(shp.location_y * PI() / 180) * POW(
+        SIN(
+        (
+        <if test="locationX != null">
+          #{locationX}
+        </if> * PI() / 180 - shp.location_x * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ) * 1000
+        )</when>
+      <when test="locationX == null or locationY == null">0</when>
+    </choose>
+    AS distance
+    from goods_sku sk
+    INNER JOIN act_goods_sku actgs on actgs.sku_id=sk.id
+    inner join goods_spu sp on sk.spu_id = sp.id
+    inner join goods_category ca on sp.category_id = ca.id
+    inner join goods_brand br on sp.brand_id = br.id
+    inner join goods_promotion_rules gpr on actgs.goods_pr_id = gpr.id
+    LEFT JOIN shop shp on shp.id=sk.shop_id
+    left join shop_zone_item szi on shp.shop_zone_item_id=szi.id
+    left join shop_zone sz on szi.shop_zone_id=sz.id
+    <where>
+      1=1
+      <if test="skuCode != null">
+        and sk.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sk.sku_name = #{skuName,jdbcType=VARCHAR}
+      </if>
+      <if test="costPrice != null">
+        and sk.cost_price = #{costPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="marketPrice != null">
+        and sk.market_price = #{marketPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="sellPrice != null">
+        and sk.sell_price = #{sellPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="stockNum != null">
+        and sk.stock_num = #{stockNum,jdbcType=INTEGER}
+      </if>
+      <if test="waringStock != null">
+        and sk.waring_stock = #{waringStock,jdbcType=INTEGER}
+      </if>
+      <if test="spuId != null">
+        and sk.spu_id = #{spuId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sk.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+        and sk.status != 2
+      <if test="shopId != null">
+        and sk.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="createTime != null">
+        and sk.create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and sk.update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="spuType != null">
+        and sp.spu_type = #{spuType,jdbcType=INTEGER}
+      </if>
+      <if test="sendType != null">
+        and (sk.send_type = #{sendType,jdbcType=INTEGER} or sk.send_type = 0)
+      </if>
+      <if test="categoryId != null">
+        and sp.category_id = #{categoryId,jdbcType=BIGINT}
+      </if>
+      <if test="singleType != null">
+        and (sk.single_type = #{singleType,jdbcType=INTEGER} or sk.single_type = 0)
+      </if>
+      <if test="actId != null">
+        and actgs.act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      <if test="city != null">
+        and shp.city = #{city,jdbcType=VARCHAR}
+      </if>
+      <if test="groupState != null">
+        AND (actgs.state= 2 or actgs.state=3)
+      </if>
+      <if test="groupState == null">
+        AND actgs.state =1
+      </if>
+      <if test="shopZoneCity != null">
+        and sz.city = #{shopZoneCity,jdbcType=VARCHAR}
+      </if>
+      <if test="regionName != null">
+        AND sz.region_name= #{regionName,jdbcType=VARCHAR}
+      </if>
+      <if test="shopZoneItem != null">
+        AND szi.name= #{shopZoneItem,jdbcType=VARCHAR}
+      </if>
+      <if test="searchKey != null">
+        AND (shp.shop_name like concat('%', #{searchKey}, '%') or sk.sku_name  like concat('%', #{searchKey}, '%') or actgs.goods_sku_number like concat('%', #{searchKey}, '%'))
+      </if>
+      <if test="shopZoneItemId != null">
+        AND shp.shop_zone_item_id=#{shopZoneItemId,jdbcType=BIGINT}
+      </if>
+      <if test="singlyPrice != null">
+        and sk.singly_price = #{singlyPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="autoAddStock != null">
+        and sk.auto_add_stock = #{autoAddStock,jdbcType=DECIMAL}
+      </if>
+      <if test="shopCate != null and shopCate != ''">
+        and find_in_set(#{shopCate}, replace(replace(shp.shop_cate, '-', ','), '|', ','))
+      </if>
+      AND actgs.is_deleted = 0
+      AND actgs.apply_status = 1
+      and sp.is_deleted = 0
+      and ca.is_deleted = 0
+      and br.is_deleted = 0
+      and sk.is_deleted = 0
+      and shp.is_deleted = 0
+      and (sk.create_type is NULL OR sk.create_type=0)
+    </where>
+    order by
+    <if test="rankingByVoteNum != null ">
+      actgs.vote_num desc,
+    </if>
+    sk.create_type,
+    <if test="browSort != null and browSort==0">
+      distance,
+    </if>
+    <if test="browSort != null and browSort==1">
+      sk.sell_num desc,
+    </if>
+    <if test="browSort != null and browSort==2">
+      sk.sell_price,
+    </if>
+    actgs.sort_num,actgs.id
+    limit #{start}, #{rows}
+  </select>
+
+  <!--首页用-->
+  <select id="selectActListNotAutotrophy" resultMap="GoodsSkuOutResultMap">
+    select
+    sk.id, sk.sku_code, sk.sku_name,sk.sku_pic,sk.small_sku_pic, sk.cost_price, sk.market_price, sk.sell_price,sk.other_marker_price, sk.stock_num, sk.waring_stock,
+    sk.spu_id, sk.is_deleted, sk.status, sk.shop_id, sk.sell_num,sk.create_time, sk.update_time,sk.unit,sk.mini_num,sk.real_weight,sk.delivery_template_id,
+    sk.send_type,sk.remark,sk.singlyPrice,sk.auto_add_stock,sk.use_sku_detail,sk.show_type,
+    sp.spu_name, sp.spu_code, sp.spu_type,sp.category_id, sp.brand_id,ca.category_name,br.brand_name,
+    gpr.id as gpr_id,gpr.rule_type,gpr.rule_desc,gpr.end_time,gpr.man_num,gpr.gift_num,gpr.act_amount,
+    <choose>
+      <when test="locationX != null and locationY != null"> ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        <if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180 - shp.location_y * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS(<if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180) * COS(shp.location_y * PI() / 180) * POW(
+        SIN(
+        (
+        <if test="locationX != null">
+          #{locationX}
+        </if> * PI() / 180 - shp.location_x * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ) * 1000
+        )</when>
+      <when test="locationX == null or locationY == null">0</when>
+    </choose>
+    AS distance
+    from goods_sku sk
+    INNER JOIN act_goods_sku actgs on actgs.sku_id=sk.id
+    inner join goods_spu sp on sk.spu_id = sp.id
+    inner join goods_category ca on sp.category_id = ca.id
+    inner join goods_brand br on sp.brand_id = br.id
+    inner join goods_promotion_rules gpr on actgs.goods_pr_id = gpr.id
+    LEFT JOIN shop shp on shp.id=sk.shop_id
+    <where>
+      1=1
+      <if test="skuCode != null">
+        and sk.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sk.sku_name = #{skuName,jdbcType=VARCHAR}
+      </if>
+      <if test="costPrice != null">
+        and sk.cost_price = #{costPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="marketPrice != null">
+        and sk.market_price = #{marketPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="sellPrice != null">
+        and sk.sell_price = #{sellPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="stockNum != null">
+        and sk.stock_num = #{stockNum,jdbcType=INTEGER}
+      </if>
+      <if test="waringStock != null">
+        and sk.waring_stock = #{waringStock,jdbcType=INTEGER}
+      </if>
+      <if test="spuId != null">
+        and sk.spu_id = #{spuId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sk.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      and sk.status != 2
+      <if test="shopId != null">
+        and sk.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="createTime != null">
+        and sk.create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and sk.update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="spuType != null">
+        and sp.spu_type = #{spuType,jdbcType=INTEGER}
+      </if>
+      <if test="sendType != null">
+        and (sk.send_type = #{sendType,jdbcType=INTEGER} or sk.send_type = 0)
+      </if>
+      <if test="categoryId != null">
+        and sp.category_id = #{categoryId,jdbcType=BIGINT}
+      </if>
+      <if test="singleType != null">
+        and (sk.single_type = #{singleType,jdbcType=INTEGER} or sk.single_type = 0)
+      </if>
+      <if test="actId != null">
+        and actgs.act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      <if test="city != null">
+        and shp.city = #{city,jdbcType=VARCHAR}
+      </if>
+      <if test="groupState != null">
+        AND (actgs.state= 2 or actgs.state=3)
+      </if>
+      <if test="groupState == null">
+        AND actgs.state =1
+      </if>
+      <if test="singlyPrice != null">
+        and sk.singly_price = #{singlyPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="autoAddStock != null">
+        and sk.auto_add_stock = #{autoAddStock,jdbcType=DECIMAL}
+      </if>
+      AND actgs.is_deleted = 0
+      AND actgs.apply_status = 1
+      and sp.is_deleted = 0
+      and ca.is_deleted = 0
+      and br.is_deleted = 0
+      and sk.is_deleted = 0
+      and (sk.create_type is NULL OR sk.create_type=0)
+    </where>
+    order by
+    sk.create_type,
+    <if test="browSort != null and browSort==0">
+      distance,
+    </if>
+    <if test="browSort != null and browSort==1">
+      sk.sell_num,
+    </if>
+    sk.sell_num
+    limit #{start}, #{rows}
+  </select>
+  <!--不分页查询推荐商品selectActListAll-->
+  <select id="selectNoPageActList" resultMap="GoodsSkuOutResultMap">
+    select
+    sk.id, sk.sku_code, sk.sku_name,sk.sku_pic,sk.small_sku_pic, sk.cost_price, sk.market_price, sk.sell_price,sk.other_marker_price, sk.stock_num, sk.waring_stock,
+    sk.spu_id, sk.is_deleted, sk.status, sk.shop_id, sk.sell_num,sk.create_time, sk.update_time,sk.unit,sk.mini_num,sk.real_weight,sk.delivery_template_id,
+    sk.send_type,sk.remark,sk.singly_price,sk.auto_add_stock,sk.use_sku_detail,sk.show_type,
+    sp.spu_name, sp.spu_code, sp.spu_type,sp.category_id, sp.brand_id,ca.category_name,br.brand_name,
+    gpr.id as gpr_id,gpr.rule_type,gpr.rule_desc,gpr.end_time,gpr.man_num,gpr.gift_num,gpr.act_amount
+    from goods_sku sk
+    INNER JOIN act_goods_sku actgs on actgs.sku_id=sk.id
+    inner join goods_spu sp on sk.spu_id = sp.id
+    inner join goods_category ca on sp.category_id = ca.id
+    inner join goods_brand br on sp.brand_id = br.id
+    left join goods_promotion_rules gpr on on actgs.goods_pr_id = gpr.id
+    <where>
+      1=1
+      <if test="skuCode != null">
+        and sk.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sk.sku_name = #{skuName,jdbcType=VARCHAR}
+      </if>
+      <if test="costPrice != null">
+        and sk.cost_price = #{costPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="marketPrice != null">
+        and sk.market_price = #{marketPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="sellPrice != null">
+        and sk.sell_price = #{sellPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="stockNum != null">
+        and sk.stock_num = #{stockNum,jdbcType=INTEGER}
+      </if>
+      <if test="waringStock != null">
+        and sk.waring_stock = #{waringStock,jdbcType=INTEGER}
+      </if>
+      <if test="spuId != null">
+        and sk.spu_id = #{spuId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sk.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+        and sk.status != 2
+      <if test="shopId != null">
+        and sk.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="createTime != null">
+        and sk.create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and sk.update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="spuType != null">
+        and sp.spu_type = #{spuType,jdbcType=INTEGER}
+      </if>
+      <if test="sendType != null">
+        and (sk.send_type = #{sendType,jdbcType=INTEGER} or sk.send_type = 0)
+      </if>
+      <if test="categoryId != null">
+        and sp.category_id = #{categoryId,jdbcType=BIGINT}
+      </if>
+      <if test="singleType != null">
+        and (sk.single_type = #{singleType,jdbcType=INTEGER} or sk.single_type = 0)
+      </if>
+      <if test="actId != null">
+        and actgs.act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      <if test="groupState != null">
+        and actgs.state= 2 or actgs.state=3
+      </if>
+      <if test="groupState == null">
+        and actgs.state = 1
+      </if>
+      <if test="singlyPrice != null">
+        and sk.singly_price = #{singlyPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="autoAddStock != null">
+        and sk.auto_add_stock = #{autoAddStock,jdbcType=DECIMAL}
+      </if>
+      AND actgs.is_deleted = 0
+      AND actgs.apply_status = 1
+      and sp.is_deleted = 0
+      and ca.is_deleted = 0
+      and br.is_deleted = 0
+      and sk.is_deleted = 0
+      AND (sk.create_type is NULL OR sk.create_type=0)
+    </where>
+    order by
+    sk.create_type,
+    actgs.sort_num , sk.sell_price
+  </select>
+
+  <!--查询推荐商品actListOutTotal剔除单个商品-->
+  <select id="selectActOutTotal" resultType="java.lang.Integer">
+    select count(1)
+    from goods_sku sk
+    INNER JOIN act_goods_sku actgs on actgs.sku_id=sk.id
+    inner join goods_spu sp on sk.spu_id = sp.id
+    inner join goods_category ca on sp.category_id = ca.id
+    inner join goods_brand br on sp.brand_id = br.id
+    left join goods_promotion_rules gpr on actgs.goods_pr_id = gpr.id
+    LEFT JOIN shop shp on shp.id=sk.shop_id
+    <where>
+      1=1
+      <if test="skuCode != null">
+        and sk.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sk.sku_name = #{skuName,jdbcType=VARCHAR}
+      </if>
+      <if test="costPrice != null">
+        and sk.cost_price = #{costPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="marketPrice != null">
+        and sk.market_price = #{marketPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="sellPrice != null">
+        and sk.sell_price = #{sellPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="stockNum != null">
+        and sk.stock_num = #{stockNum,jdbcType=INTEGER}
+      </if>
+      <if test="waringStock != null">
+        and sk.waring_stock = #{waringStock,jdbcType=INTEGER}
+      </if>
+      <if test="spuId != null">
+        and sk.spu_id = #{spuId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sk.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      and sk.status != 2
+      <if test="shopId != null">
+        and sk.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="createTime != null">
+        and sk.create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and sk.update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="spuType != null">
+        and sp.spu_type = #{spuType,jdbcType=INTEGER}
+      </if>
+      <if test="sendType != null">
+        and (sk.send_type = #{sendType,jdbcType=INTEGER} or sk.send_type = 0)
+      </if>
+      <if test="categoryId != null">
+        and sp.category_id = #{categoryId,jdbcType=BIGINT}
+      </if>
+      <if test="singleType != null">
+        and (sk.single_type = #{singleType,jdbcType=INTEGER} or sk.single_type = 0)
+      </if>
+      <if test="actId != null">
+        and actgs.act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      <if test="id != null">
+        and sk.id != #{id,jdbcType=BIGINT}
+      </if>
+      <if test="notCategoryId != null">
+        and ca.id != #{notCategoryId,jdbcType=BIGINT}
+        AND sk.shop_id=0
+        AND ca.level=2
+        AND ca.status=3
+      </if>
+      <if test="city != null">
+        and shp.city = #{city,jdbcType=VARCHAR}
+      </if>
+      <if test="singlyPrice != null">
+        and sk.singly_price = #{singlyPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="autoAddStock != null">
+        and sk.auto_add_stock = #{autoAddStock,jdbcType=DECIMAL}
+      </if>
+      AND actgs.is_deleted = 0
+      AND actgs.apply_status = 1
+      AND actgs.state=1
+      and sp.is_deleted = 0
+      and ca.is_deleted = 0
+      and br.is_deleted = 0
+      and sk.is_deleted = 0
+    </where>
+  </select>
+
+  <select id="selectOutActList" resultMap="GoodsSkuOutResultMap">
+    select
+    sk.id, sk.sku_code, sk.sku_name,sk.sku_pic,sk.small_sku_pic, sk.cost_price, sk.market_price, sk.sell_price,sk.other_marker_price, sk.stock_num, sk.waring_stock,
+    sk.spu_id, sk.is_deleted, sk.status, sk.shop_id, sk.sell_num,sk.create_time, sk.update_time,sk.unit,sk.mini_num,sk.real_weight,sk.delivery_template_id,
+    sk.send_type,sk.remark,sk.singly_price,sk.auto_add_stock,sk.use_sku_detail,sk.show_type,
+    sp.spu_name, sp.spu_code, sp.spu_type,sp.category_id, sp.brand_id,ca.category_name,br.brand_name,
+    gpr.id as gpr_id,gpr.rule_type,gpr.rule_desc,gpr.end_time,gpr.man_num,gpr.gift_num,gpr.act_amount
+    from goods_sku sk
+    INNER JOIN act_goods_sku actgs on actgs.sku_id=sk.id
+    inner join goods_spu sp on sk.spu_id = sp.id
+    inner join goods_category ca on sp.category_id = ca.id
+    inner join goods_brand br on sp.brand_id = br.id
+    left join goods_promotion_rules gpr on actgs.goods_pr_id = gpr.id
+    LEFT JOIN shop shp on shp.id=sk.shop_id
+    <where>
+      1=1
+      <if test="skuCode != null">
+        and sk.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sk.sku_name = #{skuName,jdbcType=VARCHAR}
+      </if>
+      <if test="costPrice != null">
+        and sk.cost_price = #{costPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="marketPrice != null">
+        and sk.market_price = #{marketPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="sellPrice != null">
+        and sk.sell_price = #{sellPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="stockNum != null">
+        and sk.stock_num = #{stockNum,jdbcType=INTEGER}
+      </if>
+      <if test="waringStock != null">
+        and sk.waring_stock = #{waringStock,jdbcType=INTEGER}
+      </if>
+      <if test="spuId != null">
+        and sk.spu_id = #{spuId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sk.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+        and sk.status != 2
+      <if test="shopId != null">
+        and sk.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="createTime != null">
+        and sk.create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and sk.update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="spuType != null">
+        and sp.spu_type = #{spuType,jdbcType=INTEGER}
+      </if>
+      <if test="sendType != null">
+        and (sk.send_type = #{sendType,jdbcType=INTEGER} or sk.send_type = 0)
+      </if>
+      <if test="categoryId != null">
+        and sp.category_id = #{categoryId,jdbcType=BIGINT}
+      </if>
+      <if test="singleType != null">
+        and (sk.single_type = #{singleType,jdbcType=INTEGER} or sk.single_type = 0)
+      </if>
+      <if test="actId != null">
+        and actgs.act_id = #{actId,jdbcType=BIGINT}
+      </if>
+      <if test="id != null">
+        and sk.id != #{id,jdbcType=BIGINT}
+      </if>
+      <if test="notCategoryId != null">
+        and ca.id != #{notCategoryId,jdbcType=BIGINT}
+        AND sk.shop_id=0
+        AND ca.level=2
+        AND ca.status=3
+    </if>
+      <if test="city != null">
+        and shp.city = #{city,jdbcType=VARCHAR}
+      </if>
+      <if test="singlyPrice != null">
+        and sk.singly_price = #{singlyPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="autoAddStock != null">
+        and sk.auto_add_stock = #{autoAddStock,jdbcType=DECIMAL}
+      </if>
+      AND actgs.is_deleted = 0
+      AND actgs.apply_status = 1
+      AND actgs.state=1
+      and sp.is_deleted = 0
+      and ca.is_deleted = 0
+      and br.is_deleted = 0
+      and sk.is_deleted = 0
+      AND (sk.create_type is NULL OR sk.create_type=0)
+    </where>
+    order by
+    sk.create_type,
+    actgs.sort_num , sk.sell_price,actgs.id
+    limit #{start}, #{rows}
+  </select>
+  <!--END-->
+
+
+  <!--订单取消后库存释放-->
+  <update id="updateByRollback" parameterType="java.util.List">
+    update goods_sku
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="stock_num =case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          <if test="item.stockNum !=null">
+            when id=#{item.id,jdbcType=BIGINT} then stock_num + #{item.stockNum,jdbcType=INTEGER}
+          </if>
+          <if test="item.stockNum == null">
+            when id=#{item.id} then stock_num
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <!--根据销售点信息查询销售点下的商品-->
+  <select id="listBySalepointId"  resultMap="GoodsSkuOutResultMap">
+    select
+    sk.id, sk.sku_code, sk.sku_name, sk.sku_pic,sk.small_sku_pic,sk.cost_price, sk.market_price, sk.sell_price,sk.other_marker_price,  sk.stock_num, sk.waring_stock,
+    sk.spu_id, sk.is_deleted, sk.status, sk.shop_id, sk.sell_num,sk.create_time, sk.update_time,sk.unit,sk.mini_num,sk.real_weight,sk.delivery_template_id,sk.remark,
+    sk.singly_price,sk.auto_add_stock,sk.use_sku_detail,sk.show_type,
+    gssv.id as goods_sku_spec_value_id,gssv.sku_id,gssv.spec_value_id,gsv.id as goods_spec_value_id,gsv.spec_id,
+    gsv.spec_value,gs.name,
+    gpr.id as gpr_id,gpr.rule_type,gpr.rule_desc,gpr.end_time,gpr.man_num,gpr.gift_num
+    from goods_sku sk
+    left join goods_sku_spec_value gssv on sk.id = gssv.sku_id
+    left join goods_spec_value gsv on gssv.spec_value_id = gsv.id
+    left join goods_spec gs on gsv.spec_id = gs.id
+    left join goods_promotion_rules gpr on sk.id = gpr.goods_sku_id
+    left join salepoint_goods spg on spg.sku_id=sk.id
+    where spg.salepoint_id = #{id,jdbcType=BIGINT}
+    <if test="sendType != null">
+      and sk.send_type = #{sendType,jdbcType=INTEGER}
+    </if>
+    <if test="singleType != null">
+      and sk.single_type = #{singleType,jdbcType=INTEGER}
+    </if>
+    and sk.is_deleted = 0
+    and sk.status != 2
+    order by sk.sell_price
+    limit #{start}, #{rows}
+  </select>
+
+  <!--根据销售点信息查询销售点下的商品总数-->
+  <select id="listTotalBySalepointId" resultType="java.lang.Integer">
+    select count(1)
+    from goods_sku sk
+    left join goods_sku_spec_value gssv on sk.id = gssv.sku_id
+    left join goods_spec_value gsv on gssv.spec_value_id = gsv.id
+    left join goods_spec gs on gsv.spec_id = gs.id
+    left join goods_promotion_rules gpr on sk.id = gpr.goods_sku_id
+    left join salepoint_goods spg on spg.sku_id=sk.id
+    where spg.salepoint_id = #{id,jdbcType=BIGINT}
+    <if test="sendType != null">
+      and sk.send_type = #{sendType,jdbcType=INTEGER}
+    </if>
+    <if test="singleType != null">
+      and sk.single_type = #{singleType,jdbcType=INTEGER}
+    </if>
+    and sk.is_deleted = 0
+    and sk.status != 2
+  </select>
+
+  <select id="listByShopId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods_sku
+    where shop_id = #{shopId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectOneGoodsSkuByShopId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods_sku
+    where shop_id = #{shopId,jdbcType=BIGINT}
+    and is_deleted = 0
+    and status != 2
+    limit 0,1
+  </select>
+
+  <!--查询库存不足的商品-->
+  <select id="selectStocklist" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods_sku
+    where
+    is_deleted=0 and
+    waring_stock &gt;= stock_num
+    AND status=1
+    AND shop_id &gt; 0
+  </select>
+
+  <!--轻餐需要查询41的砍价的价格-->
+  <select id="listForFastFood" resultMap="GoodsSkuOutResultMap">
+    select a.*,
+    gpr.id as gpr_id,gpr.rule_type,gpr.rule_desc,gpr.end_time,gpr.man_num,gpr.gift_num,gpr.act_amount
+    from (select
+    sk.id, sk.sku_code, sk.sku_name,sk.sku_pic,sk.small_sku_pic, sk.cost_price, sk.market_price, sk.sell_price,sk.other_marker_price, sk.stock_num, sk.waring_stock,
+    sk.spu_id, sk.is_deleted, sk.status, sk.shop_id, sk.sell_num,sk.create_time, sk.update_time,sk.unit,sk.mini_num,sk.real_weight,sk.delivery_template_id,
+    sk.send_type,sk.remark,sk.singly_price,sk.auto_add_stock,sk.use_sku_detail,sk.show_type,
+    sp.spu_name, sp.spu_code, sp.spu_type,sp.category_id, sp.brand_id,ca.category_name,br.brand_name
+    from goods_sku sk
+    inner join goods_spu sp on sk.spu_id = sp.id
+    inner join goods_category ca on sp.category_id = ca.id
+    inner join goods_brand br on sp.brand_id = br.id
+    <where>
+      1=1
+      <if test="skuCode != null">
+        and sk.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sk.sku_name = #{skuName,jdbcType=VARCHAR}
+      </if>
+      <if test="costPrice != null">
+        and sk.cost_price = #{costPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="marketPrice != null">
+        and sk.market_price = #{marketPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="sellPrice != null">
+        and sk.sell_price = #{sellPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="stockNum != null">
+        and sk.stock_num = #{stockNum,jdbcType=INTEGER}
+      </if>
+      <if test="waringStock != null">
+        and sk.waring_stock = #{waringStock,jdbcType=INTEGER}
+      </if>
+      <if test="spuId != null">
+        and sk.spu_id = #{spuId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sk.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="status != null">
+        and sk.status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null">
+        and sk.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="createTime != null">
+        and sk.create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and sk.update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="spuType != null">
+        and sp.spu_type = #{spuType,jdbcType=INTEGER}
+      </if>
+      <if test="sendType != null">
+        and (sk.send_type = #{sendType,jdbcType=INTEGER} or sk.send_type = 0)
+      </if>
+      <if test="categoryId != null">
+        and sp.category_id = #{categoryId,jdbcType=BIGINT}
+      </if>
+      <if test="singleType != null">
+        and (sk.single_type = #{singleType,jdbcType=INTEGER} or sk.single_type = 0)
+      </if>
+      <if test="expiryDate != null">
+        and sk.expiry_date = #{expiryDate,jdbcType=INTEGER}
+      </if>
+      <if test="singlyPrice != null">
+        and sk.singly_price = #{singlyPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="autoAddStock != null">
+        and sk.auto_add_stock = #{autoAddStock,jdbcType=DECIMAL}
+      </if>
+      and sp.is_deleted = 0
+      and ca.is_deleted = 0
+      and br.is_deleted = 0
+      and sk.is_deleted = 0
+    </where>
+    order by sk.sell_price
+    limit #{start}, #{rows}) a
+    left join act_goods_sku ags on ags.sku_id=a.id and ags.act_id=41
+    left join goods_promotion_rules gpr on gpr.id = ags.goods_pr_id
+  </select>
+
+  <!--商品置顶之后该商家排序在此商品之前的商品排序后移一位-->
+  <update id="updateSortNumBackOff" parameterType="com.xq.live.vo.in.GoodsSkuInVo">
+    update goods_sku
+    set sort_num=sort_num+1
+    where shop_id=#{shopId,jdbcType=BIGINT}
+    <if test="sortNum != null">
+      and sort_num &lt; #{sortNum,jdbcType=INTEGER}
+    </if>
+  </update>
+
+  <!-- 查询每日推荐的候选商品 -->
+  <select id="dailyRecommend" parameterType="com.xq.live.vo.in.GoodsSkuRecommendInVo" resultMap="GoodsSkuRecommendOutResultMap">
+    select
+      gs.*,
+      gc.category_name,
+      gpr.act_amount,
+      shp.city shop_city,
+      convert(gpr.act_amount / gs.sell_price, decimal(10, 3)) discount,
+      <choose>
+        <when test="locationX != null and locationY != null"> ROUND(
+          6378.138 * 2 * ASIN(
+          SQRT(
+          POW(
+          SIN(
+          (
+          <if test="locationY != null">
+            #{locationY}
+          </if> * PI() / 180 - shp.location_y * PI() / 180
+          ) / 2
+          ),
+          2
+          ) + COS(<if test="locationY != null">
+            #{locationY}
+          </if> * PI() / 180) * COS(shp.location_y * PI() / 180) * POW(
+          SIN(
+          (
+          <if test="locationX != null">
+            #{locationX}
+          </if> * PI() / 180 - shp.location_x * PI() / 180
+          ) / 2
+          ),
+          2
+          )
+          )
+          ) * 1000
+          )</when>
+        <when test="locationX == null or locationY == null">0</when>
+      </choose> AS distance
+    from goods_sku gs
+    left join act_goods_sku ags on ags.sku_id = gs.id
+    left join goods_spu spu on spu.id = gs.spu_id
+    left join goods_category gc on gc.id = spu.category_id
+    left join goods_promotion_rules gpr on gpr.id = ags.goods_pr_id
+    left join shop shp on shp.id = gs.shop_id
+    where gs.is_deleted = 0
+    and gs.status = 1
+    and gs.stock_num > 0
+    and ags.act_id = 41
+    and ags.apply_status = 1
+    and ags.state = 1
+    and ags.is_deleted = 0
+    and gpr.rule_type = 4
+    and shp.shop_zone_item_id > 0
+    and shp.city = #{city}
+    order by discount asc
+    limit 30
+  </select>
+
+  <update id="updateStatusByKey">
+    UPDATE goods_sku SET  audit_status = #{item.auditStatus},update_time = #{item.updateTime},status=#{item.status} WHERE id=#{item.id}
+  </update>
+
+  <select id="pageGoodsSkuForAudit" resultType="com.xq.live.vo.out.PageGoodsSkuVo">
+    SELECT
+    gs.id,
+    s.shop_name shopName,
+    s.shop_cate shopType,
+    gs.sku_name skuName,
+    gc.category_name skuType,
+    gs.market_price marketPrice,
+    gs.sell_price sellPrice,
+    gs.singly_price singlyPrice,
+    DATE_FORMAT(gs.update_time,'%Y-%m-%d %H:%i:%s') updateTime,
+    gs.sku_pic skuPic,
+    gd.content content,
+    gs.goods_sku_pics goodsSkuPics
+    FROM
+    goods_sku gs
+    LEFT JOIN goods_spu_desc gd ON gs.spu_id = gd.spu_id
+    LEFT JOIN shop s ON gs.shop_id = s.id
+    LEFT JOIN goods_spu gsp on gs.spu_id = gsp.id
+    LEFT JOIN goods_category gc ON gsp.category_id=gc.id
+    WHERE gs.is_deleted=0 AND s.is_deleted=0 AND  gs.audit_status IN (-1,-2)
+    <if test="startTime!=null and startTime!=''">
+      AND gs.update_time &gt;=#{startTime}
+    </if>
+    <if test="endTime!=null and endTime!=''">
+      AND gs.update_time &lt;=#{endTime}
+    </if>
+    <if test="skuName!=null and skuName!=''">
+      AND (gs.sku_name LIKE CONCAT('%',#{skuName},'%') OR s.shop_name LIKE CONCAT('%',#{skuName},'%'))
+    </if>
+    ORDER BY gs.update_time DESC
+    LIMIT #{start},#{limit}
+  </select>
+
+  <select id="pageGoodsSkuForAuditTotal" resultType="java.lang.Integer">
+    SELECT
+    COUNT(1)
+    FROM
+    goods_sku gs
+    LEFT JOIN goods_spu_desc gd ON gs.spu_id = gd.spu_id
+    LEFT JOIN shop s ON gs.shop_id = s.id
+    WHERE gs.is_deleted=0 AND s.is_deleted=0 AND  gs.audit_status IN (-1,-2)
+    <if test="startTime!=null and startTime!=''">
+      AND gs.update_time &gt;=#{startTime}
+    </if>
+    <if test="endTime!=null and endTime!=''">
+      AND gs.update_time &lt;=#{endTime}
+    </if>
+    <if test="skuName!=null and skuName!=''">
+      AND (gs.sku_name LIKE CONCAT('%',#{skuName},'%') OR s.shop_name LIKE CONCAT('%',#{skuName},'%'))
+    </if>
+  </select>
+
+  <update id="batchDeleteGoodsSku">
+    UPDATE goods_sku SET update_time =#{updateTime},is_deleted=1
+    WHERE id IN
+    <foreach collection="list" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </update>
+
+  <update id="batchUpdateStatusByKey">
+    <foreach collection="list" item="item" separator=";">
+      UPDATE goods_sku SET  audit_status = #{item.auditStatus},update_time = #{item.updateTime},status=#{item.status} WHERE id=#{item.id}
+    </foreach>
+  </update>
+
+  <select id="listForShopAct" resultMap="GoodsSkuOutResultMap">
+    select
+    sk.id, sk.sku_code, sk.sku_name,sk.sku_pic,sk.small_sku_pic, sk.cost_price, sk.market_price, sk.sell_price,sk.other_marker_price, sk.stock_num, sk.waring_stock,
+    sk.spu_id, sk.is_deleted, sk.status, sk.shop_id, sk.sell_num,sk.create_time, sk.update_time,sk.unit,sk.mini_num,sk.real_weight,sk.delivery_template_id,
+    sk.send_type,sk.remark,sk.singly_price,sk.auto_add_stock,sk.use_sku_detail,sk.show_type,
+    ca.id ca_id,ca.code ca_code,ca.category_name ca_category_name,ca.parent_id ca_parent_id,
+    sp.spu_name, sp.spu_code, sp.spu_type,sp.category_id, sp.brand_id,ca.category_name,br.brand_name,sk.audit_status,
+    gpr.id as gpra_id, gpr.rule_type as gpra_rule_type,gpr.rule_desc as gpra_rule_desc,gpr.act_amount as gpra_act_amount,
+    gpr.man_amount as gpra_man_amount, gpr.jian_amount as  gpra_jian_amount,
+    ags.id ags_id, ags.act_Id ags_actId, ags.stock_Num ags_stockNum
+    from goods_sku sk
+    inner join goods_spu sp on sk.spu_id = sp.id
+    inner join goods_category ca on sp.category_id = ca.id
+    inner join goods_brand br on sp.brand_id = br.id
+
+    left join act_goods_sku ags on ags.sku_id=sk.id
+    left join goods_promotion_rules gpr on ags.goods_pr_id=gpr.id
+    <where>
+      1=1
+     and ags.act_id=#{actId,jdbcType=INTEGER}
+      and ags.is_deleted=0
+      <if test="skuCode != null">
+        and sk.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sk.sku_name = #{skuName,jdbcType=VARCHAR}
+      </if>
+      <if test="costPrice != null">
+        and sk.cost_price = #{costPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="marketPrice != null">
+        and sk.market_price = #{marketPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="sellPrice != null">
+        and sk.sell_price = #{sellPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="stockNum != null">
+        and sk.stock_num = #{stockNum,jdbcType=INTEGER}
+      </if>
+      <if test="waringStock != null">
+        and sk.waring_stock = #{waringStock,jdbcType=INTEGER}
+      </if>
+      <if test="spuId != null">
+        and sk.spu_id = #{spuId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sk.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="status != null">
+        and sk.status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null">
+        and sk.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="createTime != null">
+        and sk.create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and sk.update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="spuType != null">
+        and sp.spu_type = #{spuType,jdbcType=INTEGER}
+      </if>
+      <if test="sendType != null">
+        and (sk.send_type = #{sendType,jdbcType=INTEGER} or sk.send_type = 0)
+      </if>
+      <if test="categoryId != null">
+        and sp.category_id = #{categoryId,jdbcType=BIGINT}
+      </if>
+      <if test="singleType != null">
+        and (sk.single_type = #{singleType,jdbcType=INTEGER} or sk.single_type = 0)
+      </if>
+      <if test="expiryDate != null">
+        and sk.expiry_date = #{expiryDate,jdbcType=INTEGER}
+      </if>
+      <if test="singlyPrice != null">
+        and sk.singly_price = #{singlyPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="autoAddStock != null">
+        and sk.auto_add_stock = #{autoAddStock,jdbcType=DECIMAL}
+      </if>
+      <if test="auditStatus != null and auditStatus!=0">
+        AND  audit_status = #{auditStatus,jdbcType=TINYINT}
+      </if>
+      and sp.is_deleted = 0
+      and ca.is_deleted = 0
+      and br.is_deleted = 0
+      and sk.is_deleted = 0
+    </where>
+    order by sk.sort_num,sk.sell_price
+    limit #{start}, #{rows}
+  </select>
+
+</mapper>

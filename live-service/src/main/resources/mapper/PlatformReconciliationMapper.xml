@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.PlatformReconciliationMapper">
+
+  <!--平台管理列表-->
+  <select id="getList" parameterType="com.xq.live.vo.in.PlatformReconciliationInVo" resultType="com.xq.live.vo.out.PlatformReconciliationOut">
+    SELECT
+    o.id,
+    o.real_unit_price,
+    i.flag_type,
+    o.user_name as mobile,
+    u.nick_name,
+    i.pay_type,
+    i.create_time,
+    o.create_time as payTime
+    FROM order_write_off o
+    LEFT JOIN goods_sku s
+    on s.id=o.goods_sku_id
+    LEFT JOIN order_info i
+    on o.order_id = i.id
+    LEFT JOIN user u
+    on i.user_id=u.id
+    WHERE o.shop_id=0 and s.spu_id !=11 and i.pay_type !=0
+    <if test="keywords != null and keywords != '' ">
+      AND
+      (
+      u.nick_name LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+      o.id LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+      o.user_name LiKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%')
+      )
+    </if>
+    <if test="beginTime !=null and endTime != ''">
+      and (i.create_time BETWEEN #{beginTime} and #{endTime})
+    </if>
+    <if test="flagType != null">
+      AND  i.flag_type=#{flagType}
+    </if>
+    <if test="page!=null and rows>0">
+      limit #{start}, #{rows}
+    </if>
+  </select>
+
+  <!--平台管理列表数量-->
+  <select id="getListCount" parameterType="com.xq.live.vo.in.PlatformReconciliationInVo"  resultType="java.lang.Integer">
+    SELECT
+    count(1)
+    FROM order_write_off o
+    LEFT JOIN goods_sku s
+    on s.id=o.goods_sku_id
+    LEFT JOIN order_info i
+    on o.order_id = i.id
+    LEFT JOIN user u
+    on i.user_id=u.id
+    WHERE o.shop_id=0 and s.spu_id !=11 and i.pay_type !=0
+    <if test="keywords != null and keywords != '' ">
+      AND
+      (
+      u.nick_name LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+      o.id LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+      u.nick_name LiKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%')
+      )
+    </if>
+    <if test="beginTime !=null  and endTime != ''">
+      and (i.create_time BETWEEN #{beginTime} and #{endTime})
+    </if>
+    <if test="flagType != null">
+      AND  i.flag_type=#{flagType}
+    </if>
+  </select>
+</mapper>

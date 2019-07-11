@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xq.live.dao.UserBankInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.xq.live.model.UserBankInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="bank_id" property="bankId" jdbcType="BIGINT" />
+    <result column="owner_id" property="ownerId" jdbcType="BIGINT" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+    <result column="card_name" property="cardName" jdbcType="VARCHAR" />
+    <result column="card_no" property="cardNo" jdbcType="VARCHAR" />
+    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+    <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="card_mobile" property="cardMobile" jdbcType="VARCHAR" />
+    <result column="card_status" property="cardStatus" jdbcType="TINYINT" />
+    <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="owner_type" property="ownerType" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bank_id, owner_id, bank_name, card_name, card_no, id_card, card_type, name, card_mobile, 
+    card_status, is_deleted, create_time, update_time, owner_type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_bank_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from user_bank_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.UserBankInfo" >
+    insert into user_bank_info (id, bank_id, owner_id, 
+      bank_name, card_name, card_no, 
+      id_card, card_type, name, 
+      card_mobile, card_status, is_deleted, 
+      create_time, update_time, owner_type
+      )
+    values (#{id,jdbcType=BIGINT}, #{bankId,jdbcType=BIGINT}, #{ownerId,jdbcType=BIGINT}, 
+      #{bankName,jdbcType=VARCHAR}, #{cardName,jdbcType=VARCHAR}, #{cardNo,jdbcType=VARCHAR}, 
+      #{idCard,jdbcType=VARCHAR}, #{cardType,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{cardMobile,jdbcType=VARCHAR}, #{cardStatus,jdbcType=TINYINT}, #{isDeleted,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{ownerType,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.UserBankInfo" >
+    insert into user_bank_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="bankId != null" >
+        bank_id,
+      </if>
+      <if test="ownerId != null" >
+        owner_id,
+      </if>
+      <if test="bankName != null" >
+        bank_name,
+      </if>
+      <if test="cardName != null" >
+        card_name,
+      </if>
+      <if test="cardNo != null" >
+        card_no,
+      </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="cardType != null" >
+        card_type,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="cardMobile != null" >
+        card_mobile,
+      </if>
+      <if test="cardStatus != null" >
+        card_status,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="ownerType != null" >
+        owner_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="bankId != null" >
+        #{bankId,jdbcType=BIGINT},
+      </if>
+      <if test="ownerId != null" >
+        #{ownerId,jdbcType=BIGINT},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardName != null" >
+        #{cardName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNo != null" >
+        #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cardMobile != null" >
+        #{cardMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="cardStatus != null" >
+        #{cardStatus,jdbcType=TINYINT},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ownerType != null" >
+        #{ownerType,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.UserBankInfo" >
+    update user_bank_info
+    <set >
+      <if test="bankId != null" >
+        bank_id = #{bankId,jdbcType=BIGINT},
+      </if>
+      <if test="ownerId != null" >
+        owner_id = #{ownerId,jdbcType=BIGINT},
+      </if>
+      <if test="bankName != null" >
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardName != null" >
+        card_name = #{cardName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNo != null" >
+        card_no = #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        card_type = #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cardMobile != null" >
+        card_mobile = #{cardMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="cardStatus != null" >
+        card_status = #{cardStatus,jdbcType=TINYINT},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ownerType != null" >
+        owner_type = #{ownerType,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.UserBankInfo" >
+    update user_bank_info
+    set bank_id = #{bankId,jdbcType=BIGINT},
+      owner_id = #{ownerId,jdbcType=BIGINT},
+      bank_name = #{bankName,jdbcType=VARCHAR},
+      card_name = #{cardName,jdbcType=VARCHAR},
+      card_no = #{cardNo,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      card_type = #{cardType,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      card_mobile = #{cardMobile,jdbcType=VARCHAR},
+      card_status = #{cardStatus,jdbcType=TINYINT},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      owner_type = #{ownerType,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="queryListByOwnerIdAndType" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/> FROM user_bank_info WHERE owner_id=#{ownerId}
+    AND owner_type =#{ownerType} AND card_status=1 AND is_deleted=0
+  </select>
+
+  <select id="queryByCardNoAndUserId" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/> FROM user_bank_info  WHERE owner_id=#{ownerId}
+    AND card_no = #{cardNo} AND  is_deleted=0
+  </select>
+</mapper>

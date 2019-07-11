@@ -1,0 +1,1 @@
+java -jar /opt/webapp-runner.jar $JAR_FILE

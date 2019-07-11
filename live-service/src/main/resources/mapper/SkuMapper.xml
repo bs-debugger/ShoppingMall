@@ -1,0 +1,1196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.SkuMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.Sku">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="sku_name" jdbcType="VARCHAR" property="skuName" />
+    <result column="sku_type" jdbcType="INTEGER" property="skuType" />
+    <result column="sell_price" jdbcType="DECIMAL" property="sellPrice" />
+    <result column="in_price" jdbcType="DECIMAL" property="inPrice" />
+    <result column="agio_price" jdbcType="DECIMAL" property="agioPrice" />
+    <result column="stock_num" jdbcType="INTEGER" property="stockNum" />
+    <result column="sell_num" jdbcType="INTEGER" property="sellNum" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+    <result column="small_pic_url" jdbcType="VARCHAR" property="smallPicUrl" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opreator_id" jdbcType="BIGINT" property="opreatorId" />
+    <result column="opreator_name" jdbcType="VARCHAR" property="opreatorName" />
+    <result column="sku_info" jdbcType="VARCHAR" property="skuInfo"/>
+    <result column="type" jdbcType="INTEGER" property="type" />
+  </resultMap>
+
+  <resultMap id="SkuOutResultMap" extends="BaseResultMap" type="com.xq.live.vo.out.SkuOut">
+    <!--票券的面值-->
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+    <!--折扣券是否已领-->
+    <result column="is_agio" jdbcType="INTEGER" property="isAgio" />
+    <!--活动券是否已领-->
+    <result column="is_act" jdbcType="INTEGER" property="isAct" />
+    <!-- 一个商品sku对应多个促销规则 -->
+    <collection property="promotionRules" ofType="com.xq.live.model.PromotionRules">
+      <result column="rule_id" jdbcType="BIGINT" property="id" />
+      <result column="rule_type" jdbcType="INTEGER" property="ruleType" />
+      <result column="rule_desc" jdbcType="VARCHAR" property="ruleDesc" />
+      <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+      <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+      <result column="sku_id" jdbcType="BIGINT" property="skuId" />
+    </collection>
+
+  </resultMap>
+
+  <resultMap id="TscZanResultMap" extends="BaseResultMap" type="com.xq.live.vo.out.SkuForTscOut">
+    <result column="zan" jdbcType="INTEGER" property="zan"/>
+    <result column="is_zan" jdbcType="INTEGER" property="isZan"/>
+    <result column="agio_level" jdbcType="DECIMAL" property="agioLevel"/>
+    <result column="is_sign" jdbcType="INTEGER" property="isSign"/>
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="distance" jdbcType="INTEGER" property="distance" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, sku_code, sku_name, sku_type, sell_price, in_price, agio_price,is_deleted, pic_url,small_pic_url, stock_num,sell_num, create_time, update_time,
+    opreator_id, opreator_name,sku_info,type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sku
+    where id = #{id,jdbcType=BIGINT}
+    and is_deleted = 0
+  </select>
+
+  <select id="selectByskuId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sku
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectBySkuCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sku
+    where sku_code = #{skuCode,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectForActSku" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sku
+    where sku_type = #{skuType,jdbcType=INTEGER}
+    and sku_name = #{skuName,jdbcType=VARCHAR}
+    <if test="sellPrice !=null">
+      and sell_price = #{sellPrice,jdbcType=DECIMAL}
+    </if>
+    <if test="isDeleted != null">
+      and is_deleted = #{isDeleted,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <!--分页查询  start-->
+  <select id="list" resultMap="SkuOutResultMap">
+    SELECT
+    sku.id,
+    sku.sku_code,
+    sku.sku_name,
+    sku.sku_type,
+    sku.sell_price,
+    sku.in_price,
+    sku.agio_price,
+    sku.stock_num,
+    sku.pic_url,
+    sku.small_pic_url,
+    sku.create_time,
+    sku.update_time,
+    sku.opreator_id,
+    sku.opreator_name,
+    sku.sku_info,
+    ' ' as rule_desc,
+    cs.amount,
+    (select count(1) from coupon where sku_id = sku.id) sell_num
+    <if test="id != null and userId != null">
+      ,(select
+      COUNT(1)
+      from so s LEFT JOIN so_detail sw on s.id = sw.so_id
+      where sw.sku_id = #{id,jdbcType=BIGINT} and s.so_status = 2 and s.user_id = #{userId,jdbcType=BIGINT}) as is_agio
+      ,(SELECT
+      count(1)
+      FROM so_detail sd
+      INNER JOIN so s ON sd.so_id = s.id
+      WHERE s.user_id = #{userId,jdbcType=BIGINT}
+      AND sd.sku_id = #{id,jdbcType=BIGINT}
+      AND (TO_DAYS(sd.create_time) = TO_DAYS(now()))) as is_act
+    </if>
+    FROM sku sku
+    LEFT JOIN coupon_sku cs on sku.id = cs.sku_id
+    <where>
+      1=1
+      <if test="id != null">
+        and sku.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and sku.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sku.sku_name like concat('%', #{skuName,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="skuType != null">
+        and sku.sku_type = #{skuType,jdbcType=INTEGER}
+      </if>
+      and sku.is_deleted = 0
+    </where>
+
+    order by sku.sell_price ASC
+    limit #{start}, #{rows}
+  </select>
+
+  <!--分页查询 start-->
+  <select id="selectById" parameterType="java.lang.Long" resultMap="SkuOutResultMap">
+    SELECT
+      sku.id,
+      sku.sku_code,
+      sku.sku_name,
+      sku.sku_type,
+      sku.sell_price,
+      sku.in_price,
+      sku.agio_price,
+      sku.stock_num,
+      sku.pic_url,
+      sku.small_pic_url,
+      sku.create_time,
+      sku.update_time,
+      sku.opreator_id,
+      sku.opreator_name,
+      sku.sku_info,
+      pr.id rule_id,
+      pr.rule_type,
+      pr.rule_desc,
+      pr.end_time,
+      pr.shop_id,
+      pr.sku_id,
+      cs.amount,
+      (select count(1) from coupon where sku_id = sku.id) sell_num
+    FROM sku sku
+    LEFT JOIN promotion_rules pr ON sku.id = pr.sku_id
+    LEFT JOIN coupon_sku cs on sku.id = cs.sku_id
+    where sku.id = #{id,jdbcType=BIGINT}
+    and sku.is_deleted = 0
+  </select>
+
+  <select id="listTotal" resultType="java.lang.Integer">
+    select count(1)
+    from sku
+    <where>
+      1=1
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sku_name like concat('%', #{skuName,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="skuType != null">
+        and sku_type = #{skuType,jdbcType=INTEGER}
+      </if>
+      and sku.is_deleted = 0
+    </where>
+  </select>
+
+
+  <select id="getTscForZan" resultMap="TscZanResultMap">
+    select
+    sku.id,
+    sku.sku_code,
+    sku.sku_name,
+    sku.sku_type,
+    sku.sell_price,
+    sku.in_price,
+    sku.agio_price,
+    sku.stock_num,
+    sku.sell_num,
+    sku.pic_url,
+    sku.small_pic_url,
+    sku.create_time,
+    sku.update_time,
+    sku.opreator_id,
+    sku.opreator_name,
+    sku.sku_info,
+    (select count(1) from zan z where ref_id = sku.id and z.type = 6) as zan,
+    (select count(1) from zan z where ref_id = sku.id and z.type = 6
+    <if test="zanUserId != null">
+      AND  user_id = #{zanUserId}
+    </if>
+    ) as is_zan,
+    round((sku.agio_price * 10)/sku.sell_price,1) as agio_level
+    ,s.id as shop_id,s.shop_name
+    from sku sku
+    inner join sku_shop ss on sku.id = ss.sku_id
+    inner join shop s on ss.shop_id = s.id
+    <where>
+      1=1
+      <if test="id != null">
+        and sku.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and sku.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sku.sku_name like concat('%', #{skuName,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="skuType != null">
+        and sku.sku_type = #{skuType,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null">
+        and ss.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      and sku.is_deleted = 0
+    </where>
+    order by id desc
+  </select>
+
+
+  <select id="getTscBySkuNameAndShopId" resultMap="TscZanResultMap">
+    select
+    sku.id,
+    sku.sku_code,
+    sku.sku_name
+    from sku sku
+    inner join sku_shop ss on sku.id = ss.sku_id
+    <where>
+      1=1
+      <if test="id != null">
+        and sku.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and sku.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sku.sku_name like concat('%', #{skuName,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="skuType != null">
+        and sku.sku_type = #{skuType,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null">
+        and ss.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      and sku.is_deleted = 0
+    </where>
+    order by id desc
+  </select>
+
+
+
+  <!--分页查询 start-->
+  <select id="queryTscList" resultMap="TscZanResultMap">
+    select
+      sku.id,
+      sku.sku_code,
+      sku.sku_name,
+      sku.sku_type,
+      sku.sell_price,
+      sku.in_price,
+      sku.agio_price,
+      sku.stock_num,
+      sku.sell_num,
+      sku.pic_url,
+      sku.small_pic_url,
+      sku.create_time,
+      sku.update_time,
+      sku.opreator_id,
+      sku.opreator_name,
+      sku.sku_info,
+    <choose>
+      <when test="locationX != null and locationY != null"> ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        <if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180 - s.location_y * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS(<if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180) * COS(s.location_y * PI() / 180) * POW(
+        SIN(
+        (
+        <if test="locationX != null">
+          #{locationX}
+        </if> * PI() / 180 - s.location_x * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ) * 1000
+        )</when>
+      <when test="locationX == null or locationY == null">0</when>
+    </choose>
+    AS distance,
+    (select count(1) from zan z where ref_id = sku.id and z.type = 6) as zan,
+    (select count(1) from zan z where ref_id = sku.id and z.type = 6
+    <if test="zanUserId != null">
+      AND  user_id = #{zanUserId}
+    </if>
+    ) as is_zan,
+    round((sku.agio_price * 10)/sku.sell_price,1) as agio_level
+    <if test="actId != null">
+      ,(select count(1) from act_sku ak where sku_id = sku.id and act_id = #{actId,jdbcType=BIGINT} and apply_status = 1
+      and is_luoxuan = 0) as is_sign
+    </if>
+    ,s.id as shop_id,s.shop_name
+    from sku sku
+    inner join sku_shop ss on sku.id = ss.sku_id
+    inner join shop s on ss.shop_id = s.id
+    <where>
+      1=1
+      <if test="id != null">
+        and sku.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and sku.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sku.sku_name like concat('%', #{skuName,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="skuType != null">
+        and sku.sku_type = #{skuType,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null">
+        and ss.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="city != null">
+        and s.city = #{city,jdbcType=VARCHAR}
+      </if>
+      and sku.is_deleted = 0
+    </where>
+    order by sku.sell_price desc
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="tscListTotal" resultType="java.lang.Integer">
+    select count(1)
+    from sku sku
+    inner join sku_shop ss on sku.id = ss.sku_id
+    inner join shop s on ss.shop_id = s.id
+    <where>
+      1=1
+      <if test="id != null">
+        sku.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and sku.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sku.sku_name like concat('%', #{skuName,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="skuType != null">
+        and sku.sku_type = #{skuType,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null">
+        and ss.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="type != null">
+        and sku.type = #{type,jdbcType=BIGINT}
+      </if>
+      and sku.is_deleted = 0
+    </where>
+  </select>
+  <!--分页查询 end-->
+
+  <select id="getKjcForZan" resultMap="TscZanResultMap">
+    select
+    sku.id,
+    sku.sku_code,
+    sku.sku_name,
+    sku.sku_type,
+    sku.sell_price,
+    sku.in_price,
+    sku.agio_price,
+    sku.stock_num,
+    sku.sell_num,
+    sku.is_deleted,
+    sku.pic_url,
+    sku.small_pic_url,
+    sku.create_time,
+    sku.update_time,
+    sku.opreator_id,
+    sku.opreator_name,
+    sku.sku_info,
+    (select count(1) from zan z where ref_id = sku.id and z.type = 6) as zan,
+    (select count(1) from zan z where ref_id = sku.id and z.type = 6
+    <if test="zanUserId != null">
+      AND  user_id = #{zanUserId}
+    </if>
+    ) as is_zan,
+    round((sku.agio_price * 10)/sku.sell_price,1) as agio_level
+    ,s.id as shop_id,s.shop_name
+    from sku sku
+    inner join sku_shop ss on sku.id = ss.sku_id
+    inner join shop s on ss.shop_id = s.id
+    <where>
+      1=1
+      <if test="id != null">
+        and sku.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and sku.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sku.sku_name like concat('%', #{skuName,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="skuType != null">
+        and sku.sku_type = #{skuType,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null">
+        and ss.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+    </where>
+    order by id desc
+  </select>
+
+  <!--分页查询 start-->
+  <select id="queryKjcList" resultMap="TscZanResultMap">
+    select
+    sku.id,
+    sku.sku_code,
+    sku.sku_name,
+    sku.sku_type,
+    sku.sell_price,
+    sku.in_price,
+    sku.agio_price,
+    sku.stock_num,
+    sku.sell_num,
+    sku.pic_url,
+    sku.small_pic_url,
+    sku.create_time,
+    sku.update_time,
+    sku.opreator_id,
+    sku.opreator_name,
+    sku.sku_info,
+    (select count(1) from zan z where ref_id = sku.id and z.type = 6) as zan,
+    (select count(1) from zan z where ref_id = sku.id and z.type = 6
+    <if test="zanUserId != null">
+      AND  user_id = #{zanUserId}
+    </if>
+    ) as is_zan,
+    round((sku.agio_price * 10)/sku.sell_price,1) as agio_level
+    <if test="actId != null">
+      ,(select count(1) from act_sku ak where sku_id = sku.id and act_id = #{actId,jdbcType=BIGINT} and apply_status = 1
+      and is_luoxuan = 0) as is_sign
+    </if>
+    ,s.id as shop_id,
+    <choose>
+      <when test="locationX != null and locationY != null"> ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        <if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180 - s.location_y * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS(<if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180) * COS(s.location_y * PI() / 180) * POW(
+        SIN(
+        (
+        <if test="locationX != null">
+          #{locationX}
+        </if> * PI() / 180 - s.location_x * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ) * 1000
+        )</when>
+      <when test="locationX == null or locationY == null">0</when>
+    </choose>
+    AS distance,
+    s.shop_name
+    from sku sku
+    inner join sku_shop ss on sku.id = ss.sku_id
+    inner join shop s on ss.shop_id = s.id
+    <where>
+      1=1
+      <if test="id != null">
+        and sku.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and sku.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sku.sku_name like concat('%', #{skuName,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="skuType != null">
+        and sku.sku_type = #{skuType,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null">
+        and ss.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sku.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="city != null">
+        and s.city = #{city,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by
+    <if test="browSort != null and browSort == 1 ">
+      sku.sell_num desc,
+    </if>
+    <if test="browSort != null and browSort == 2 ">
+      sku.agio_price asc,
+    </if>
+    <if test="browSort != null and browSort == 0 ">
+      distance asc,
+    </if>
+    sku.update_time desc
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="kjcListTotal" resultType="java.lang.Integer">
+    select count(1)
+    from sku sku
+    inner join sku_shop ss on sku.id = ss.sku_id
+    inner join shop s on ss.shop_id = s.id
+    <where>
+      1=1
+      <if test="id != null">
+        sku.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and sku.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sku.sku_name like concat('%', #{skuName,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="skuType != null">
+        and sku.sku_type = #{skuType,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null">
+        and ss.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sku.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="city != null">
+        and s.city = #{city,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <!--分页查询 end-->
+
+  <select id="getQgcForZan" resultMap="TscZanResultMap">
+    select
+    sku.id,
+    sku.sku_code,
+    sku.sku_name,
+    sku.sku_type,
+    sku.sell_price,
+    sku.in_price,
+    sku.agio_price,
+    sku.stock_num,
+    sku.sell_num,
+    sku.is_deleted,
+    sku.pic_url,
+    sku.small_pic_url,
+    sku.create_time,
+    sku.update_time,
+    sku.opreator_id,
+    sku.opreator_name,
+    sku.sku_info,
+    (select count(1) from zan z where ref_id = sku.id and z.type = 6) as zan,
+    (select count(1) from zan z where ref_id = sku.id and z.type = 6
+    <if test="zanUserId != null">
+      AND  user_id = #{zanUserId}
+    </if>
+    ) as is_zan,
+    round((sku.agio_price * 10)/sku.sell_price,1) as agio_level
+    ,s.id as shop_id,s.shop_name
+    from sku sku
+    inner join sku_shop ss on sku.id = ss.sku_id
+    inner join shop s on ss.shop_id = s.id
+    <where>
+      1=1
+      <if test="id != null">
+        and sku.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and sku.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sku.sku_name like concat('%', #{skuName,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="skuType != null">
+        and sku.sku_type = #{skuType,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null">
+        and ss.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+    </where>
+    order by id desc
+  </select>
+
+  <!--分页查询 start-->
+  <select id="queryQgcList" resultMap="TscZanResultMap">
+    select
+    sku.id,
+    sku.sku_code,
+    sku.sku_name,
+    sku.sku_type,
+    sku.sell_price,
+    sku.in_price,
+    sku.agio_price,
+    sku.stock_num,
+    sku.is_deleted,
+    sku.sell_num,
+    sku.pic_url,
+    sku.small_pic_url,
+    sku.create_time,
+    sku.update_time,
+    sku.opreator_id,
+    sku.opreator_name,
+    sku.sku_info,
+    (select count(1) from zan z where ref_id = sku.id and z.type = 6) as zan,
+    (select count(1) from zan z where ref_id = sku.id and z.type = 6
+    <if test="zanUserId != null">
+      AND  user_id = #{zanUserId}
+    </if>
+    ) as is_zan,
+    round((sku.agio_price * 10)/sku.sell_price,1) as agio_level
+    <if test="actId != null">
+      ,(select count(1) from act_sku ak where sku_id = sku.id and act_id = #{actId,jdbcType=BIGINT} and apply_status = 1
+      and is_luoxuan = 0) as is_sign
+    </if>
+    ,s.id as shop_id,
+    <choose>
+      <when test="locationX != null and locationY != null"> ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        <if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180 - s.location_y * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS(<if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180) * COS(s.location_y * PI() / 180) * POW(
+        SIN(
+        (
+        <if test="locationX != null">
+          #{locationX}
+        </if> * PI() / 180 - s.location_x * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ) * 1000
+        )</when>
+      <when test="locationX == null or locationY == null">0</when>
+    </choose>
+    AS distance,
+    s.shop_name
+    from sku sku
+    inner join sku_shop ss on sku.id = ss.sku_id
+    inner join shop s on ss.shop_id = s.id
+    <where>
+      1=1
+      <if test="id != null">
+        and sku.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and sku.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sku.sku_name like concat('%', #{skuName,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="skuType != null">
+        and sku.sku_type = #{skuType,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null">
+        and ss.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sku.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="city != null">
+        and s.city = #{city,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by
+    <if test="browSort != null and browSort == 1 ">
+      sku.sell_num desc
+    </if>
+    <if test="browSort != null and browSort == 2 ">
+      sku.agio_price asc
+    </if>
+    <if test="browSort != null and browSort == 0 ">
+      distance asc
+    </if>
+    <if test="browSort == null ">
+      sku.id desc
+    </if>
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="qgcListTotal" resultType="java.lang.Integer">
+    select count(1)
+    from sku sku
+    inner join sku_shop ss on sku.id = ss.sku_id
+    inner join shop s on ss.shop_id = s.id
+    <where>
+      1=1
+      <if test="id != null">
+        sku.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and sku.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sku.sku_name like concat('%', #{skuName,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="skuType != null">
+        and sku.sku_type = #{skuType,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null">
+        and ss.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sku.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="city != null">
+        and s.city = #{city,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <!--分页查询 end-->
+
+  <select id="getDhcForZan" resultMap="TscZanResultMap">
+    select
+    sku.id,
+    sku.sku_code,
+    sku.sku_name,
+    sku.sku_type,
+    sku.sell_price,
+    sku.in_price,
+    sku.agio_price,
+    sku.stock_num,
+    sku.sell_num,
+    sku.is_deleted,
+    sku.pic_url,
+    sku.small_pic_url,
+    sku.create_time,
+    sku.update_time,
+    sku.opreator_id,
+    sku.opreator_name,
+    sku.sku_info,
+    (select count(1) from zan z where ref_id = sku.id and z.type = 6) as zan,
+    (select count(1) from zan z where ref_id = sku.id and z.type = 6
+    <if test="zanUserId != null">
+      AND  user_id = #{zanUserId}
+    </if>
+    ) as is_zan,
+    round((sku.agio_price * 10)/sku.sell_price,1) as agio_level
+    ,s.id as shop_id,s.shop_name
+    from sku sku
+    inner join sku_shop ss on sku.id = ss.sku_id
+    inner join shop s on ss.shop_id = s.id
+    <where>
+      1=1
+      <if test="id != null">
+        and sku.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and sku.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sku.sku_name like concat('%', #{skuName,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="skuType != null">
+        and sku.sku_type = #{skuType,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null">
+        and ss.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+    </where>
+    order by id desc
+  </select>
+
+  <!--分页查询 start-->
+  <select id="queryDhcList" resultMap="TscZanResultMap">
+    select
+    sku.id,
+    sku.sku_code,
+    sku.sku_name,
+    sku.sku_type,
+    sku.sell_price,
+    sku.in_price,
+    sku.agio_price,
+    sku.stock_num,
+    sku.sell_num,
+    sku.pic_url,
+    sku.small_pic_url,
+    sku.create_time,
+    sku.update_time,
+    sku.opreator_id,
+    sku.opreator_name,
+    sku.sku_info,
+    (select count(1) from zan z where ref_id = sku.id and z.type = 6) as zan,
+    (select count(1) from zan z where ref_id = sku.id and z.type = 6
+    <if test="zanUserId != null">
+      AND  user_id = #{zanUserId}
+    </if>
+    ) as is_zan,
+    round((sku.agio_price * 10)/sku.sell_price,1) as agio_level
+    <if test="actId != null">
+      ,(select count(1) from act_sku ak where sku_id = sku.id and act_id = #{actId,jdbcType=BIGINT} and apply_status = 1
+      and is_luoxuan = 0) as is_sign
+    </if>
+    ,s.id as shop_id,
+    <choose>
+      <when test="locationX != null and locationY != null"> ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        <if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180 - s.location_y * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS(<if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180) * COS(s.location_y * PI() / 180) * POW(
+        SIN(
+        (
+        <if test="locationX != null">
+          #{locationX}
+        </if> * PI() / 180 - s.location_x * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ) * 1000
+        )</when>
+      <when test="locationX == null or locationY == null">0</when>
+    </choose>
+    AS distance,
+    s.shop_name
+    from sku sku
+    inner join sku_shop ss on sku.id = ss.sku_id
+    inner join shop s on ss.shop_id = s.id
+    <where>
+      1=1
+      <if test="id != null">
+        and sku.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and sku.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sku.sku_name like concat('%', #{skuName,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="skuType != null">
+        and sku.sku_type = #{skuType,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null">
+        and ss.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sku.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="city != null">
+        and s.city = #{city,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by
+    <if test="browSort != null and browSort == 1 ">
+      sku.sell_num desc,
+    </if>
+    <if test="browSort != null and browSort == 2 ">
+      sku.agio_price asc,
+    </if>
+    <if test="browSort != null and browSort == 0 ">
+      distance asc,
+    </if>
+    sku.update_time desc
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="dhcListTotal" resultType="java.lang.Integer">
+    select count(1)
+    from sku sku
+    inner join sku_shop ss on sku.id = ss.sku_id
+    inner join shop s on ss.shop_id = s.id
+    <where>
+      1=1
+      <if test="id != null">
+        sku.id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="skuCode != null">
+        and sku.sku_code = #{skuCode,jdbcType=VARCHAR}
+      </if>
+      <if test="skuName != null">
+        and sku.sku_name like concat('%', #{skuName,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="skuType != null">
+        and sku.sku_type = #{skuType,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null">
+        and ss.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted != null">
+        and sku.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="city != null">
+        and s.city = #{city,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <!--分页查询 end-->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sku
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertSkuShop" parameterType="com.xq.live.vo.in.SkuInVo">
+    insert into sku_shop (sku_id, shop_id,
+    create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT},
+    now(), now())
+  </insert>
+
+  <insert id="insert" parameterType="com.xq.live.model.Sku">
+    insert into sku (sku_code, sku_name,
+    sku_type, sell_price, in_price, agio_price,
+    stock_num,sell_num,
+    <if test="isDeleted != null">
+      is_deleted,
+     </if>
+       pic_url,small_pic_url,create_time, update_time,
+      opreator_id, opreator_name,sku_info,type)
+    values (#{skuCode,jdbcType=VARCHAR}, #{skuName,jdbcType=VARCHAR},
+    #{skuType,jdbcType=INTEGER}, #{sellPrice,jdbcType=DECIMAL}, #{inPrice,jdbcType=DECIMAL},#{agioPrice,jdbcType=DECIMAL},
+    #{stockNum,jdbcType=INTEGER},0,
+    <if test="isDeleted != null">
+      #{isDeleted,jdbcType=TINYINT},
+     </if>
+    #{picUrl,jdbcType=VARCHAR},#{smallPicUrl,jdbcType=VARCHAR},now(), now(),
+      #{opreatorId,jdbcType=BIGINT}, #{opreatorName,jdbcType=VARCHAR},#{skuInfo,jdbcType=VARCHAR},#{type,jdbcType=INTEGER})
+      <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+        select last_insert_id() as id
+      </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.Sku">
+    insert into sku
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="skuName != null">
+        sku_name,
+      </if>
+      <if test="skuType != null">
+        sku_type,
+      </if>
+      <if test="sellPrice != null">
+        sell_price,
+      </if>
+      <if test="inPrice != null">
+        in_price,
+      </if>
+      <if test="agioPrice != null">
+        agio_price,
+      </if>
+      <if test="stockNum != null">
+        stock_num,
+      </if>
+      <if test="picUrl != null">
+        pic_url,
+      </if>
+      <if test="smallPicUrl != null">
+        small_pic_url,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="opreatorId != null">
+        opreator_id,
+      </if>
+      <if test="opreatorName != null">
+        opreator_name,
+      </if>
+      <if test="skuInfo != null">
+        sku_info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuName != null">
+        #{skuName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuType != null">
+        #{skuType,jdbcType=INTEGER},
+      </if>
+      <if test="sellPrice != null">
+        #{sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="inPrice != null">
+        #{inPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="agioPrice != null">
+        #{agioPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stockNum != null">
+        #{stockNum,jdbcType=INTEGER},
+      </if>
+      <if test="picUrl != null">
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="smallPicUrl != null">
+        #{smallPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opreatorId != null">
+        #{opreatorId,jdbcType=BIGINT},
+      </if>
+      <if test="opreatorName != null">
+        #{opreatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuInfo != null">
+        #{skuInfo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.Sku">
+    update sku
+    <set>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuName != null">
+        sku_name = #{skuName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuType != null">
+        sku_type = #{skuType,jdbcType=INTEGER},
+      </if>
+      <if test="sellPrice != null">
+        sell_price = #{sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="inPrice != null">
+        in_price = #{inPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="agioPrice != null">
+        agio_price = #{agioPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stockNum != null">
+        stock_num = #{stockNum,jdbcType=INTEGER},
+      </if>
+      <if test="sellNum != null">
+        sell_num = #{sellNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="picUrl != null">
+        pic_url = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = now(),
+      </if>
+      <if test="opreatorId != null">
+        opreator_id = #{opreatorId,jdbcType=BIGINT},
+      </if>
+      <if test="opreatorName != null">
+        opreator_name = #{opreatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuInfo != null">
+        sku_info = #{skuInfo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.Sku">
+    update sku
+    set sku_code = #{skuCode,jdbcType=VARCHAR},
+      sku_name = #{skuName,jdbcType=VARCHAR},
+      sku_type = #{skuType,jdbcType=INTEGER},
+      sell_price = #{sellPrice,jdbcType=DECIMAL},
+      in_price = #{inPrice,jdbcType=DECIMAL},
+      agio_price = #{agioPrice,jdbcType=DECIMAL},
+      stock_num = #{stockNum,jdbcType=INTEGER},
+      sell_num = #{sellNum,jdbcType=INTEGER},
+      pic_url = #{picUrl,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      opreator_id = #{opreatorId,jdbcType=BIGINT},
+      opreator_name = #{opreatorName,jdbcType=VARCHAR},
+      sku_info = #{skuInfo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateToDeleteSkuAllocation" parameterType="com.xq.live.vo.in.SkuInVo">
+    update sku s
+    inner join sku_shop ss on s.id = ss.sku_id
+    inner join act_sku ask on ask.sku_id=s.id
+    set s.is_deleted = 1
+    where ss.shop_id = #{shopId,jdbcType=BIGINT}
+    and s.type = #{type,jdbcType=INTEGER}
+    and ask.act_id=#{actId,jdbcType=BIGINT}
+  </update>
+
+  <!--修改指定(螃蟹)的库存数量-->
+  <update id="updateSkuNum" parameterType="com.xq.live.vo.in.SkuInVo">
+    UPDATE sku s
+    SET s.stock_num = #{stockNum,jdbcType=INTEGER}
+    <where>
+      1=1
+      <if test="type != null">
+        AND s.type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="skuType != null">
+        AND s.sku_type=#{skuType,jdbcType=INTEGER}
+      </if>
+    </where>
+  </update>
+
+</mapper>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ZhiboMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.Zhibo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="anchor_id" jdbcType="INTEGER" property="anchorId" />
+    <result column="anchor_name" jdbcType="VARCHAR" property="anchorName" />
+    <result column="anchor_nick_name" jdbcType="VARCHAR" property="anchorNickName" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="vedio_url" jdbcType="VARCHAR" property="vedioUrl" />
+    <result column="main_pic_url" jdbcType="VARCHAR" property="mainPicUrl" />
+    <result column="click_num" jdbcType="INTEGER" property="clickNum" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, title, anchor_id, anchor_name, anchor_nick_name, summary, vedio_url, main_pic_url,
+    click_num, is_deleted, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from zhibo
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from zhibo
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.Zhibo">
+    insert into zhibo (title, anchor_id,
+      anchor_name, anchor_nick_name, summary,
+      vedio_url, main_pic_url, click_num, 
+      is_deleted, create_time, update_time
+      )
+    values (#{title,jdbcType=VARCHAR}, #{anchorId,jdbcType=INTEGER},
+      #{anchorName,jdbcType=VARCHAR}, #{anchorNickName,jdbcType=VARCHAR}, #{summary,jdbcType=VARCHAR},
+      #{vedioUrl,jdbcType=VARCHAR}, #{mainPicUrl,jdbcType=VARCHAR}, #{clickNum,jdbcType=INTEGER}, 
+      #{isDeleted,jdbcType=INTEGER}, now(), #{updateTime,jdbcType=TIMESTAMP}
+      )
+    <selectKey resultType="java.lang.Long" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.Zhibo">
+    insert into zhibo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        title,
+      </if>
+      <if test="anchorId != null">
+        anchor_id,
+      </if>
+      <if test="anchorName != null">
+        anchor_name,
+      </if>
+      <if test="anchorNickName != null">
+        anchor_nick_name,
+      </if>
+      <if test="summary != null">
+        summary,
+      </if>
+      <if test="vedioUrl != null">
+        vedio_url,
+      </if>
+      <if test="mainPicUrl != null">
+        main_pic_url,
+      </if>
+      <if test="clickNum != null">
+        click_num,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="anchorId != null">
+        #{anchorId,jdbcType=INTEGER},
+      </if>
+      <if test="anchorName != null">
+        #{anchorName,jdbcType=VARCHAR},
+      </if>
+      <if test="anchorNickName != null">
+        #{anchorNickName,jdbcType=VARCHAR},
+      </if>
+      <if test="summary != null">
+        #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="vedioUrl != null">
+        #{vedioUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="mainPicUrl != null">
+        #{mainPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="clickNum != null">
+        #{clickNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        now(),
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+    <selectKey resultType="java.lang.Long" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.Zhibo">
+    update zhibo
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="anchorId != null">
+        anchor_id = #{anchorId,jdbcType=INTEGER},
+      </if>
+      <if test="anchorName != null">
+        anchor_name = #{anchorName,jdbcType=VARCHAR},
+      </if>
+      <if test="anchorNickName != null">
+        anchor_nick_name = #{anchorNickName,jdbcType=VARCHAR},
+      </if>
+      <if test="summary != null">
+        summary = #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="vedioUrl != null">
+        vedio_url = #{vedioUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="mainPicUrl != null">
+        main_pic_url = #{mainPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="clickNum != null">
+        click_num = #{clickNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.Zhibo">
+    update zhibo
+    set title = #{title,jdbcType=VARCHAR},
+      anchor_id = #{anchorId,jdbcType=INTEGER},
+      anchor_name = #{anchorName,jdbcType=VARCHAR},
+      anchor_nick_name = #{anchorNickName,jdbcType=VARCHAR},
+      summary = #{summary,jdbcType=VARCHAR},
+      vedio_url = #{vedioUrl,jdbcType=VARCHAR},
+      main_pic_url = #{mainPicUrl,jdbcType=VARCHAR},
+      click_num = #{clickNum,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="listTotal" resultType="java.lang.Integer">
+    select count(1) from zhibo
+    <where>
+      <if test="id != null">
+        id = #{id}
+      </if>
+      <if test="title != null">
+        and  title = #{title}
+      </if>
+    </where>
+  </select>
+
+  <select id="list" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from zhibo
+    <where>
+      <if test="id != null">
+        id = #{id}
+      </if>
+      <if test="title != null">
+        and  title = #{title}
+      </if>
+    </where>
+    order by id desc
+    limit #{start}, #{rows}
+  </select>
+</mapper>

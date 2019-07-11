@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ShopCashierMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ShopCashier">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="cashier_id" jdbcType="BIGINT" property="cashierId" />
+    <result column="cashier_name" jdbcType="VARCHAR" property="cashierName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="is_admin" jdbcType="TINYINT" property="isAdmin" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator_id" jdbcType="BIGINT" property="creatorId" />
+    <result column="updator_id" jdbcType="BIGINT" property="updatorId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <resultMap id="ShopCashierOutResultMap" extends="BaseResultMap" type="com.xq.live.vo.out.ShopCashierOut">
+
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, cashier_id,cashier_name, password, shop_id, parent_id, is_admin, is_deleted, create_time,
+    creator_id, updator_id, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shop_cashier
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="adminByShopId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from shop_cashier
+    where shop_id = #{shopId,jdbcType=BIGINT}
+    and is_admin = 1
+    and is_deleted = 0
+  </select>
+
+  <select id="isHave" parameterType="com.xq.live.vo.in.ShopCashierInVo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from shop_cashier
+    where shop_id = #{shopId,jdbcType=BIGINT}
+    and cashier_id = #{cashierId,jdbcType=BIGINT}
+    and is_admin = 0
+    and is_deleted = #{isDeleted,jdbcType=TINYINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from shop_cashier
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.vo.in.ShopCashierInVo">
+    insert into shop_cashier (id, cashier_id,cashier_name, password,
+      shop_id, parent_id, is_admin, 
+      is_deleted, create_time, creator_id, 
+      updator_id, update_time)
+    values (#{id,jdbcType=BIGINT},#{cashierId,jdbcType=BIGINT}, #{cashierName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+      #{shopId,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{isAdmin,jdbcType=TINYINT},
+      0, now(), #{creatorId,jdbcType=BIGINT},
+      #{updatorId,jdbcType=BIGINT}, now())
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.vo.in.ShopCashierInVo">
+    insert into shop_cashier
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="cashierId != null">
+        cashier_id,
+      </if>
+      <if test="cashierName != null">
+        cashier_name,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="isAdmin != null">
+        is_admin,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creatorId != null">
+        creator_id,
+      </if>
+      <if test="updatorId != null">
+        updator_id,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="cashierId != null">
+        #{cashierId,jdbcType=BIGINT},
+      </if>
+      <if test="cashierName != null">
+        #{cashierName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="isAdmin != null">
+        #{isAdmin,jdbcType=TINYINT},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        now(),
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="updatorId != null">
+        #{updatorId,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        now(),
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.vo.in.ShopCashierInVo">
+    update shop_cashier
+    <set>
+      <if test="cashierId != null">
+        cashier_id = #{cashierId,jdbcType=BIGINT},
+      </if>
+      <if test="cashierName != null">
+        cashier_name = #{cashierName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="isAdmin != null">
+        is_admin = #{isAdmin,jdbcType=TINYINT},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = now(),
+      </if>
+      <if test="creatorId != null">
+        creator_id = #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="updatorId != null">
+        updator_id = #{updatorId,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = now(),
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.vo.in.ShopCashierInVo">
+    update shop_cashier
+    set cashier_id = #{cashierId,jdbcType=BIGINT},
+      cashier_name = #{cashierName,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      is_admin = #{isAdmin,jdbcType=TINYINT},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      create_time = now(),
+      creator_id = #{creatorId,jdbcType=BIGINT},
+      updator_id = #{updatorId,jdbcType=BIGINT},
+      update_time = now()
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--将此商家所有员工修改为核销员-->
+  <update id="updateAllByshop" parameterType="com.xq.live.vo.in.ShopCashierInVo">
+    update shop_cashier
+    set
+    is_admin = 0,
+    update_time = now()
+    where shop_id = #{shopId,jdbcType=BIGINT}
+    and is_deleted = 0
+  </update>
+  <!--将核销员修改为管理员-->
+  <update id="updateAdminByUser" parameterType="com.xq.live.vo.in.ShopCashierInVo">
+    update shop_cashier
+    set
+    parent_id =null,
+    is_admin = 1,
+    update_time = now()
+    where cashier_id = #{cashierId,jdbcType=BIGINT}
+    and shop_id = #{shopId,jdbcType=BIGINT}
+    and is_deleted = 0
+  </update>
+  <!--将该店员删除-->
+  <update id="deleteforUser" parameterType="com.xq.live.vo.in.ShopCashierInVo">
+    update shop_cashier
+    set
+    is_deleted =1,
+    update_time = now()
+    where cashier_id = #{cashierId,jdbcType=BIGINT}
+    and is_deleted = 0
+    and shop_id = #{shopId,jdbcType=BIGINT}
+  </update>
+
+
+  <!--判断用户是否在shopCashier中在别的商家中有配置-->
+  <select id="gethave" parameterType="com.xq.live.vo.in.ShopCashierInVo"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from shop_cashier
+    where cashier_id = #{cashierId,jdbcType=BIGINT}
+    <if test="isDeleted != null">
+    AND is_deleted = #{isDeleted,jdbcType=TINYINT}
+    </if>
+    AND shop_id != #{shopId,jdbcType=BIGINT}
+  </select>
+
+  <!--查询此用户是否在shopCashier中有配置-->
+  <select id="selectBycashier" parameterType="com.xq.live.vo.in.ShopCashierInVo"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from shop_cashier
+    where cashier_id = #{cashierId,jdbcType=BIGINT}
+    <if test="isDeleted != null">
+      AND is_deleted = #{isDeleted,jdbcType=TINYINT}
+    </if>
+    AND shop_id = #{shopId,jdbcType=BIGINT}
+  </select>
+
+  <!--修改店员信息-->
+  <update id="updateForShop" parameterType="com.xq.live.vo.in.ShopCashierInVo">
+    update shop_cashier
+    <set>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="isAdmin != null">
+        is_admin = #{isAdmin,jdbcType=TINYINT},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+        update_time = now(),
+    </set>
+    where cashier_id = #{cashierId,jdbcType=BIGINT}
+    and is_deleted = 1
+    and shop_id = #{shopId,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectAdminByCashierId" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/> FROM shop_cashier
+    WHERE is_admin=1 AND cashier_id=#{cashierId} AND is_deleted=0
+  </select>
+
+</mapper>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>核销</title>
+    <link rel="stylesheet" href="/assets/layer_mobile/need/layer.css" />
+    <link rel="stylesheet" href="/css/base.css?v=20180306" />
+    <link rel="stylesheet" href="/css/richScan.css?v=20180306" />
+    <title>扫一扫</title>
+    <link rel="icon" href="#" type="image/x-icon" />
+</head>
+<body>
+<div class="container">
+    <div class="inputBox">
+        <span>消费金额(元):</span>
+        <input id="accountInp" type="text" name="金额" placeholder="输入消费金额" maxlength="12" />
+    </div>
+    <div>
+        <p class="discountInfo">
+            <span id="discountTicket"></span>
+            <span id="discountMoney" class="discountMoney"></span>
+        </p>
+        <p class="paymentBox">
+            <span>实际需付款（元）</span>
+            <span id="actualAmount"></span>
+        </p>
+    </div>
+    <span id="okBtn" class="okBtn">确认核销</span>
+</div>
+<script src="/assets/jquery-1.10.2.js"></script>
+<script src="/assets/layer_mobile/layer.js"></script>
+<script src="/js/phone.js"></script>
+<script src="/js/richScan.js?v=20180306"></script>
+</body>
+</html>

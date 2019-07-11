@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.BdBusinessAllographMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.BdBusinessAllograph">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="address_detail" jdbcType="VARCHAR" property="addressDetail" />
+    <result column="schedule" jdbcType="TINYINT" property="schedule" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, phone, address, address_detail, schedule, remark, create_user_id, create_time, update_time
+  </sql>
+  <insert id="save" parameterType="com.xq.live.vo.in.BusinessAllographInVo">
+    insert into bd_business_allograph(name, phone, address, address_detail, schedule, remark, create_user_id, create_time, update_time)
+    values (
+        #{name,jdbcType=VARCHAR},
+        #{phone,jdbcType=VARCHAR},
+        #{address,jdbcType=VARCHAR},
+        #{addressDetail,jdbcType=VARCHAR},
+        #{schedule,jdbcType=TINYINT},
+        #{remark,jdbcType=VARCHAR},
+        #{createUserId,jdbcType=BIGINT},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP}
+    )
+  </insert>
+  <select id="showList" resultType="com.xq.live.vo.out.BusinessAllographOut">
+    select
+      bba.id, bba.name, bba.phone, bba.address, bba.address_detail, bba.remark, bba.create_user_id, bba.create_time, bba.update_time,
+      case bba.schedule when 0 then '正在跟进' when 1 then '已签约' when 2 then '签约失败' else '未知' end schedule_memo,
+      user.user_name create_user_name
+    from bd_business_allograph bba
+    left join user on bba.create_user_id = user.id
+  </select>
+</mapper>

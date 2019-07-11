@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.SalePointGoodsMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.SalePointGoods">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="salepoint_id" jdbcType="BIGINT" property="salepointId" />
+    <result column="sku_id" jdbcType="BIGINT" property="skuId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, salepoint_id, sku_id, shop_id, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from salepoint_goods
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectBySkuId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from salepoint_goods
+    where sku_id = #{skuId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from salepoint_goods
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.SalePointGoods">
+    insert into salepoint_goods (id, salepoint_id, sku_id, 
+      shop_id, create_time, update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{salepointId,jdbcType=BIGINT}, #{skuId,jdbcType=BIGINT}, 
+      #{shopId,jdbcType=BIGINT}, now(), now()
+      )
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.SalePointGoods">
+    insert into salepoint_goods
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="salepointId != null">
+        salepoint_id,
+      </if>
+      <if test="skuId != null">
+        sku_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="salepointId != null">
+        #{salepointId,jdbcType=BIGINT},
+      </if>
+      <if test="skuId != null">
+        #{skuId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.SalePointGoods">
+    update salepoint_goods
+    <set>
+      <if test="salepointId != null">
+        salepoint_id = #{salepointId,jdbcType=BIGINT},
+      </if>
+      <if test="skuId != null">
+        sku_id = #{skuId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.SalePointGoods">
+    update salepoint_goods
+    set salepoint_id = #{salepointId,jdbcType=BIGINT},
+      sku_id = #{skuId,jdbcType=BIGINT},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <delete id="deleteGoodsSkuBySalePointId" parameterType="com.xq.live.vo.in.SalePointInVo">
+    delete from salepoint_goods
+    where salepoint_id = #{id,jdbcType=BIGINT} and
+      sku_id = #{goodsSkuId,jdbcType=BIGINT}
+  </delete>
+</mapper>

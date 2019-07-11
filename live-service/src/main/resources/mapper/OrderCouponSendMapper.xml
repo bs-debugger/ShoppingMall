@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.OrderCouponSendMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.OrderCouponSend">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_coupon_code" jdbcType="VARCHAR" property="orderCouponCode" />
+    <result column="send_user_id" jdbcType="BIGINT" property="sendUserId" />
+    <result column="receive_user_id" jdbcType="BIGINT" property="receiveUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <resultMap id="OrderCouponSendOutResultMap" type="com.xq.live.vo.out.OrderCouponSendOut" extends="BaseResultMap">
+    <result column="send_user_name" jdbcType="VARCHAR" property="sendUserName" />
+    <result column="receive_user_name" jdbcType="VARCHAR" property="receiveUserName" />
+    <result column="send_icon_url" jdbcType="VARCHAR" property="sendIconUrl" />
+    <result column="receive_icon_url" jdbcType="VARCHAR" property="receiveIconUrl" />
+    <result column="send_nick_name" jdbcType="VARCHAR" property="sendNickName" />
+    <result column="receive_nick_name" jdbcType="VARCHAR" property="receiveNickName" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, order_coupon_code, send_user_id, receive_user_id, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_coupon_send
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from order_coupon_send
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.OrderCouponSend">
+    insert into order_coupon_send (id, order_coupon_code, send_user_id, 
+      receive_user_id, create_time, update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{orderCouponCode,jdbcType=VARCHAR}, #{sendUserId,jdbcType=BIGINT}, 
+      #{receiveUserId,jdbcType=BIGINT}, now(), now()
+      )
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.OrderCouponSend">
+    insert into order_coupon_send
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderCouponCode != null">
+        order_coupon_code,
+      </if>
+      <if test="sendUserId != null">
+        send_user_id,
+      </if>
+      <if test="receiveUserId != null">
+        receive_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orderCouponCode != null">
+        #{orderCouponCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sendUserId != null">
+        #{sendUserId,jdbcType=BIGINT},
+      </if>
+      <if test="receiveUserId != null">
+        #{receiveUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.OrderCouponSend">
+    update order_coupon_send
+    <set>
+      <if test="orderCouponCode != null">
+        order_coupon_code = #{orderCouponCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sendUserId != null">
+        send_user_id = #{sendUserId,jdbcType=BIGINT},
+      </if>
+      <if test="receiveUserId != null">
+        receive_user_id = #{receiveUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.OrderCouponSend">
+    update order_coupon_send
+    set order_coupon_code = #{orderCouponCode,jdbcType=VARCHAR},
+      send_user_id = #{sendUserId,jdbcType=BIGINT},
+      receive_user_id = #{receiveUserId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="list" resultMap="OrderCouponSendOutResultMap">
+    select
+    ocs.*,
+    u1.user_name as send_user_name,u1.icon_url as send_icon_url,u1.nick_name as send_nick_name,
+    u2.user_name as receive_user_name,u2.icon_url as receive_icon_url,u2.nick_name as receive_nick_name
+    FROM
+	order_coupon_send ocs
+    left join user u1 on ocs.send_user_id = u1.id
+    left join user u2 on ocs.receive_user_id = u2.id
+    where ocs.order_coupon_code = #{orderCouponCode,jdbcType=VARCHAR}
+    <if test="sendUserId != null">
+     and ocs.send_user_id = #{sendUserId,jdbcType=BIGINT}
+    </if>
+    <if test="receiveUserId != null">
+     and ocs.receive_user_id = #{receiveUserId,jdbcType=BIGINT}
+    </if>
+  </select>
+</mapper>

@@ -1,0 +1,42 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    background-color: #EBEBEB;
+}
+
+.same {
+    background-color: #fff;
+    margin-bottom: 0.2rem;
+    box-sizing: border-box;
+    padding: 0 0.38rem;
+}
+
+.activity {
+    font-size: 0.28rem;
+    color: #808080;
+    padding-bottom: 1rem;
+}
+
+.a_title, .shop_tit {
+    color: #191919;
+    font-size: 0.3rem;
+    font-weight: 500;
+}
+
+.a_title {
+    height: 0.88rem;
+    line-height: 0.88rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.shop_tit {
+    height: 0.8rem;
+    line-height: 0.8rem;
+
+}
+
+.a_shop, .a_rule, .a_remark {
+    padding-bottom: 0.28rem;
+    line-height: 0.48rem;
+}

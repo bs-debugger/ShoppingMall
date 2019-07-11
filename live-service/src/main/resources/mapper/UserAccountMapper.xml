@@ -1,0 +1,647 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.UserAccountMapper">
+    <resultMap id="BaseResultMap" type="com.xq.live.model.UserAccount">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="account_name" jdbcType="VARCHAR" property="accountName"/>
+        <result column="account_type" jdbcType="TINYINT" property="accountType"/>
+        <result column="account_amount" jdbcType="DECIMAL" property="accountAmount"/>
+        <result column="account_status" jdbcType="TINYINT" property="accountStatus"/>
+        <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="version_no" jdbcType="INTEGER" property="versionNo"/>
+        <result column="account_cardholder" jdbcType="VARCHAR" property="accountCardholder"/>
+        <result column="gold" jdbcType="INTEGER" property="gold" />
+        <result column="passed_amount" jdbcType="DECIMAL" property="passedAmount"/>
+        <result column="review_amount" jdbcType="DECIMAL" property="reviewAmount"/>
+        <result column="fail_amount" jdbcType="DECIMAL" property="failAmount"/>
+        <result column="card_bankname" jdbcType="VARCHAR" property="cardBankname"/>
+        <result column="user_amount" jdbcType="DECIMAL" property="userAmount"/>
+        <result column="account_bank_card" jdbcType="VARCHAR" property="accountBankCard"/>
+        <result column="bank_card_name" jdbcType="VARCHAR" property="bankCardName"/>
+        <result column="bank_card_phone" jdbcType="VARCHAR" property="bankCardPhone"/>
+        <result column="account_identity_card" jdbcType="VARCHAR" property="accountIdentityCard"/>
+        <result column="account_cardholder_name" jdbcType="VARCHAR" property="accountCardholderName"/>
+        <result column="shop_id" jdbcType="BIGINT" property="shopId"/>
+        <result column="user_account_type" jdbcType="TINYINT" property="userAccountType"/>
+        <result column="security_code" jdbcType="VARCHAR" property="securityCode"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, user_id, user_name, account_name, account_type, account_amount, account_status, 
+    is_deleted, create_time, update_time, version_no,account_cardholder,gold,
+    passed_amount,review_amount,fail_amount,card_bankname,user_amount,account_bank_card,bank_card_name
+    ,bank_card_phone,account_identity_card,account_cardholder_name,shop_id,user_account_type,security_code
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_account
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <!--根据UserID获取当前用户信息-->
+    <select id="findAccountByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_account
+        where user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <!--根据UserID获取当前用户信息-->
+    <select id="findGoldByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        id, user_id,gold
+        from user_account
+        where user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from user_account
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" parameterType="com.xq.live.model.UserAccount">
+        insert into user_account (id, user_id, user_name,
+        account_name, account_type, account_amount,
+        account_status, is_deleted, create_time,update_time, version_no,account_cardholder,gold,
+        passed_amount,review_amount,fail_amount,card_bankname,user_amount,account_bank_card,bank_card_name
+        ,bank_card_phone,account_identity_card,account_cardholder_name,shop_id,user_account_type,security_code
+        )
+        values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR},
+        #{accountName,jdbcType=VARCHAR}, #{accountType,jdbcType=TINYINT}, #{accountAmount,jdbcType=DECIMAL},
+        1, 0, now(), now(), 0,#{accountCardholder,jdbcType=VARCHAR},#{gold,jdbcType=TINYINT},
+        #{passedAmount,jdbcType=DECIMAL},#{reviewAmount,jdbcType=DECIMAL},#{failAmount,jdbcType=DECIMAL},
+        #{cardBankname,jdbcType=VARCHAR},#{userAmount,jdbcType=DECIMAL},#{accountBankCard,jdbcType=VARCHAR}
+        ,#{bankCardName,jdbcType=VARCHAR},#{bankCardPhone,jdbcType=VARCHAR},#{accountIdentityCard,jdbcType=VARCHAR}
+        ,#{accountCardholderName,jdbcType=VARCHAR},#{shopId,jdbcType=BIGINT},#{userAccountType,jdbcType=TINYINT}
+        ,#{securityCode,jdbcType=VARCHAR})
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            select last_insert_id() as id
+        </selectKey>
+    </insert>
+    <insert id="batchInsert" parameterType="com.xq.live.model.UserAccount">
+        insert into user_account (id, user_id, user_name,
+        account_name, account_type, account_amount,
+        account_status, is_deleted, create_time,update_time, version_no,account_cardholder,gold,
+        passed_amount,review_amount,fail_amount,card_bankname,user_amount,account_bank_card,bank_card_name
+        ,bank_card_phone,account_identity_card,account_cardholder_name,shop_id,user_account_type,security_code
+        )
+        values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR},
+        #{accountName,jdbcType=VARCHAR}, #{accountType,jdbcType=TINYINT}, #{accountAmount,jdbcType=DECIMAL},
+        1, 0, #{createTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 0,#{accountCardholder,jdbcType=VARCHAR},#{gold,jdbcType=TINYINT},
+        #{passedAmount,jdbcType=DECIMAL},#{reviewAmount,jdbcType=DECIMAL},#{failAmount,jdbcType=DECIMAL},
+        #{cardBankname,jdbcType=VARCHAR},#{userAmount,jdbcType=DECIMAL},#{accountBankCard,jdbcType=VARCHAR},
+        #{bankCardName,jdbcType=VARCHAR},#{bankCardPhone,jdbcType=VARCHAR},#{accountIdentityCard,jdbcType=VARCHAR}
+        ,#{accountCardholderName,jdbcType=VARCHAR},#{shopId,jdbcType=BIGINT},#{userAccountType,jdbcType=TINYINT}
+        ,#{securityCode,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.xq.live.model.UserAccount">
+        insert into user_account
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="accountName != null">
+                account_name,
+            </if>
+            <if test="accountBankCard != null">
+                account_bank_card,
+            </if>
+            <if test="accountType != null">
+                account_type,
+            </if>
+            <if test="accountAmount != null">
+                account_amount,
+            </if>
+            <if test="accountStatus != null">
+                account_status,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="accountCardholder != null">
+                account_cardholder,
+            </if>
+            <if test="gold != null">
+                gold,
+            </if>
+            <if test="passedAmount != null">
+                passed_amount,
+            </if>
+            <if test="reviewAmount != null">
+                review_amount,
+            </if>
+            <if test="failAmount != null">
+                fail_amount,
+            </if>
+            <if test="cardBankname != null">
+                card_bankname,
+            </if>
+            <if test="userAmount != null">
+                user_amount,
+            </if>
+            <if test="shopId != null">
+                shop_id,
+            </if>
+            <if test="userAccountType != null">
+                user_amount_type,
+            </if>
+            <if test="securityCode != null">
+                security_code,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="accountName != null">
+                #{accountName,jdbcType=VARCHAR},
+            </if>
+            <if test="accountBankCard != null">
+                #{accountBankCard,jdbcType=VARCHAR},
+            </if>
+            <if test="accountType != null">
+                #{accountType,jdbcType=TINYINT},
+            </if>
+            <if test="accountAmount != null">
+                #{accountAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="accountStatus != null">
+                #{accountStatus,jdbcType=TINYINT},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="accountCardholder != null">
+                #{accountCardholder,jdbcType=VARCHAR},
+            </if>
+            <if test="gold != null">
+                #{gold,jdbcType=TINYINT},
+            </if>
+            <if test="passedAmount != null">
+                #{passedAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="reviewAmount != null">
+                #{reviewAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="failAmount != null">
+                #{failAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="cardBankname != null">
+                #{cardBankname,jdbcType=VARCHAR},
+            </if>
+            <if test="userAmount != null">
+                #{userAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="shopId != null">
+                #{shopId,jdbcType=BIGINT},
+            </if>
+            <if test="userAmountType != null">
+                #{userAmountType,jdbcType=TINYINT},
+            </if>
+            <if test="securityCode != null">
+                #{securityCode,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.UserAccount">
+        update user_account
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="accountName != null">
+                account_name = #{accountName,jdbcType=VARCHAR},
+            </if>
+            <if test="accountType != null">
+                account_type = #{accountType,jdbcType=TINYINT},
+            </if>
+            <if test="accountAmount != null">
+                account_amount = #{accountAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="accountStatus != null">
+                account_status = #{accountStatus,jdbcType=TINYINT},
+            </if>
+            <if test="isDeleted != null">
+                is_deleted = #{isDeleted,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="accountCardholder != null">
+                account_cardholder = #{accountCardholder,jdbcType=VARCHAR},
+            </if>
+            <if test="gold != null">
+                gold=#{gold,jdbcType=TINYINT},
+            </if>
+            <if test="passedAmount != null">
+                passed_amount= #{passedAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="reviewAmount != null">
+                review_amount= #{reviewAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="failAmount != null">
+                fail_amount= #{failAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="cardBankname != null">
+                card_bankname= #{cardBankname,jdbcType=VARCHAR},
+            </if>
+            <if test="userAmount != null">
+                user_amount= #{userAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="shopId != null">
+                shop_id=#{shopId,jdbcType=BIGINT},
+            </if>
+            <if test="userAmountType != null">
+                user_account_type=#{userAmountType,jdbcType=TINYINT},
+            </if>
+            <if test="securityCode != null">
+                security_code=#{securityCode,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <where>
+            <if test="id!=null">id=#{id,jdbcType=BIGINT}</if>
+        </where>
+    </update>
+    <update id="batchUpdateByPrimaryKeySelective" parameterType="com.xq.live.model.UserAccount">
+        update user_account
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="accountName != null">
+                account_name = #{accountName,jdbcType=VARCHAR},
+            </if>
+            <if test="accountType != null">
+                account_type = #{accountType,jdbcType=TINYINT},
+            </if>
+            <if test="accountAmount != null">
+                account_amount = #{accountAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="accountStatus != null">
+                account_status = #{accountStatus,jdbcType=TINYINT},
+            </if>
+            <if test="isDeleted != null">
+                is_deleted = #{isDeleted,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="accountCardholder != null">
+                account_cardholder = #{accountCardholder,jdbcType=VARCHAR},
+            </if>
+            <if test="gold != null">
+                gold=#{gold,jdbcType=TINYINT},
+            </if>
+            <if test="passedAmount != null">
+                passed_amount= #{passedAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="reviewAmount != null">
+                review_amount= #{reviewAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="failAmount != null">
+                fail_amount= #{failAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="cardBankname != null">
+                card_bankname= #{cardBankname,jdbcType=VARCHAR},
+            </if>
+            <if test="userAmount != null">
+                user_amount= #{userAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="shopId != null">
+                shop_id=#{shopId,jdbcType=BIGINT},
+            </if>
+            <if test="userAmountType != null">
+                user_account_type=#{userAmountType,jdbcType=TINYINT},
+            </if>
+        </set>
+         where user_id=#{userId,jdbcType=BIGINT}
+    </update>
+    <!--根据活动ID或则ID修改信息-->
+    <update id="updateByUserID" parameterType="com.xq.live.model.UserAccount">
+        update user_account
+        <set>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="accountName != null">
+                account_name = #{accountName,jdbcType=VARCHAR},
+            </if>
+            <if test="accountBankCard != null">
+                account_bank_card = #{accountBankCard,jdbcType=VARCHAR},
+            </if>
+            <if test="bankCardName != null">
+                bank_card_name = #{bankCardName,jdbcType=VARCHAR},
+            </if>
+            <if test="bankCardPhone != null">
+                bankCardPhone = #{bankCardPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="accountIdentityCard != null">
+                accountIdentityCard = #{accountIdentityCard,jdbcType=VARCHAR},
+            </if>
+            <if test="accountCardholderName != null">
+                accountCardholderName = #{accountCardholderName,jdbcType=VARCHAR},
+            </if>
+            <if test="accountType != null">
+                account_type = #{accountType,jdbcType=TINYINT},
+            </if>
+            <if test="accountAmount != null">
+                account_amount = #{accountAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="accountStatus != null">
+                account_status = #{accountStatus,jdbcType=TINYINT},
+            </if>
+            <if test="isDeleted != null">
+                is_deleted = #{isDeleted,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="accountCardholder != null">
+                account_cardholder = #{accountCardholder,jdbcType=VARCHAR},
+            </if>
+            <if test="gold != null">
+                gold=#{gold,jdbcType=TINYINT},
+            </if>
+            <if test="passedAmount != null">
+                passed_amount= #{passedAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="reviewAmount != null">
+                review_amount= #{reviewAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="failAmount != null">
+                fail_amount= #{failAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="cardBankname != null">
+                card_bankname= #{cardBankname,jdbcType=VARCHAR},
+            </if>
+            <if test="userAmount != null">
+                user_amount= #{userAmount,jdbcType=DECIMAL},
+            </if>
+        </set>
+        <where>
+            <if test="id!=null">id=#{id,jdbcType=BIGINT}</if>
+            <if test="userId!=null">AND user_id=#{userId,jdbcType=BIGINT}</if>
+        </where>
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.xq.live.model.UserAccount">
+        update user_account
+        set user_id = #{userId,jdbcType=BIGINT},
+              user_name = #{userName,jdbcType=VARCHAR},
+              account_name = #{accountName,jdbcType=VARCHAR},
+              account_type = #{accountType,jdbcType=TINYINT},
+              account_amount = #{accountAmount,jdbcType=DECIMAL},
+              account_status = #{accountStatus,jdbcType=TINYINT},
+              is_deleted = #{isDeleted,jdbcType=TINYINT},
+              update_time = now(),
+              gold=#{gold,jdbcType=TINYINT},
+              account_cardholder = #{accountCardholder,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="income" parameterType="com.xq.live.vo.in.UserAccountInVo">
+         update user_account
+        set user_id = #{userId,jdbcType=BIGINT},
+              account_amount = account_amount + #{occurAmount,jdbcType=DECIMAL},
+              update_time = now(),
+              version_no = version_no + 1
+        where user_id = #{userId,jdbcType=BIGINT} and version_no = #{versionNo,jdbcType=INTEGER}
+    </update>
+    <!-- 账户支出 sql-->
+    <update id="payout" parameterType="com.xq.live.vo.in.UserAccountInVo">
+         update user_account
+        set user_id = #{userId,jdbcType=BIGINT},
+              account_amount = account_amount - #{occurAmount,jdbcType=DECIMAL},
+              update_time = now(),
+              version_no = version_no + 1
+        where user_id = #{userId,jdbcType=BIGINT} and version_no = #{versionNo,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByUserId" parameterType="com.xq.live.model.UserAccount">
+        update user_account
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="accountName != null">
+                account_name = #{accountName,jdbcType=VARCHAR},
+            </if>
+            <if test="accountType != null">
+                account_type = #{accountType,jdbcType=TINYINT},
+            </if>
+            <if test="accountAmount != null">
+                account_amount = #{accountAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="accountStatus != null">
+                account_status = #{accountStatus,jdbcType=TINYINT},
+            </if>
+            <if test="isDeleted != null">
+                is_deleted = #{isDeleted,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="accountCardholder != null">
+                account_cardholder = #{accountCardholder,jdbcType=VARCHAR},
+            </if>
+            <if test="gold != null">
+                gold=#{gold,jdbcType=TINYINT},
+            </if>
+            <if test="passedAmount != null">
+                passed_amount= #{passedAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="reviewAmount != null">
+                review_amount= #{reviewAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="failAmount != null">
+                fail_amount= #{failAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="cardBankname != null">
+                card_bankname= #{cardBankname,jdbcType=VARCHAR},
+            </if>
+            <if test="userAmount != null">
+                user_amount= #{userAmount,jdbcType=DECIMAL},
+            </if>
+        </set>
+        <where>
+            <if test="userId!=null">userId=#{userId,jdbcType=BIGINT}</if>
+        </where>
+    </update>
+
+    <!--根据UserID更改当前用户的余额信息-->
+    <update id="goldByUserId" parameterType="com.xq.live.model.UserAccount">
+        update user_account
+        set
+        gold = #{gold,jdbcType=INTEGER},
+        update_time = now(),
+        version_no = version_no + 1
+        where user_id = #{userId,jdbcType=BIGINT} and version_no = #{versionNo,jdbcType=INTEGER}
+    </update>
+
+    <!-- 账户余额增加 sql-->
+    <update id="updateByoccur" parameterType="com.xq.live.vo.in.UserAccountInVo">
+        update user_account
+        set user_id = #{userId,jdbcType=BIGINT},
+        account_amount = account_amount + #{occurAmount,jdbcType=DECIMAL},
+        update_time = now(),
+        version_no = version_no + 1
+        where user_id = #{userId,jdbcType=BIGINT} and version_no = #{versionNo,jdbcType=INTEGER}
+    </update>
+
+    <!-- 账户收入 sql-->
+    <update id="updateIncome" parameterType="com.xq.live.vo.in.UserAccountInVo">
+        update user_account
+        set user_id = #{userId,jdbcType=BIGINT},
+        <if test="type==1">
+            account_amount = account_amount + #{occurAmount,jdbcType=DECIMAL},
+        </if>
+        <if test="type==3">
+            user_amount = user_amount + #{occurAmount,jdbcType=DECIMAL},
+        </if>
+        <if test="type==4">
+            passed_amount = passed_amount + #{occurAmount,jdbcType=DECIMAL},
+        </if>
+        <if test="type==5">
+            review_amount = review_amount + #{occurAmount,jdbcType=DECIMAL},
+        </if>
+        <if test="type==6">
+            fail_amount = fail_amount + #{occurAmount,jdbcType=DECIMAL},
+        </if>
+        update_time = now(),
+        version_no = version_no + 1
+        where user_id = #{userId,jdbcType=BIGINT} and version_no = #{versionNo,jdbcType=INTEGER}
+    </update>
+    <!-- 账户支出 sql-->
+    <update id="updatePayout" parameterType="com.xq.live.vo.in.UserAccountInVo">
+        update user_account
+        set user_id = #{userId,jdbcType=BIGINT},
+        <if test="type==3">
+            user_amount = user_amount - #{occurAmount,jdbcType=DECIMAL},
+        </if>
+        <if test="type==4">
+            passed_amount = passed_amount - #{occurAmount,jdbcType=DECIMAL},
+        </if>
+        <if test="type==5">
+            review_amount = review_amount - #{occurAmount,jdbcType=DECIMAL},
+        </if>
+        <if test="type==6">
+            fail_amount = fail_amount - #{occurAmount,jdbcType=DECIMAL},
+        </if>
+        update_time = now(),
+        version_no = version_no + 1
+        where user_id = #{userId,jdbcType=BIGINT} and version_no = #{versionNo,jdbcType=INTEGER}
+    </update>
+
+    <!--修改账户用户提现绑定银行卡信息-->
+    <update id="updatePayBinding" parameterType="com.xq.live.vo.in.UserAccountInVo">
+        update user_account
+        <set>
+            <if test="accountBankCard != null">
+                account_bank_card = #{accountBankCard,jdbcType=VARCHAR},
+            </if>
+            <if test="accountType != null">
+                account_type = #{accountType,jdbcType=TINYINT},
+            </if>
+            <if test="bankCardName != null">
+                bank_card_name = #{bankCardName,jdbcType=VARCHAR},
+            </if>
+            <if test="bankCardPhone != null">
+                bank_card_phone = #{bankCardPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="accountIdentityCard != null">
+                account_identity_card = #{accountIdentityCard,jdbcType=VARCHAR},
+            </if>
+            <if test="accountCardholderName != null">
+                account_cardholder_name = #{accountCardholderName,jdbcType=VARCHAR},
+            </if>
+                update_time = now(),
+        </set>
+        <where>
+            id=#{id,jdbcType=BIGINT}
+        </where>
+    </update>
+
+    <select id="selectShopAccountByShopId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM user_account
+        WHERE shop_id=#{shopId} AND user_account_type=1 AND is_deleted=0 LIMIT 1
+    </select>
+
+    <!-- 账户支出 sql-->
+    <update id="payoutForAdmin" parameterType="com.xq.live.vo.in.UserAccountInVo">
+         update user_account
+        set account_amount = account_amount - #{occurAmount,jdbcType=DECIMAL},
+              update_time = now(),
+              version_no = version_no + 1
+        where shop_id = #{shopId,jdbcType=BIGINT} AND user_account_type=1 and version_no = #{versionNo,jdbcType=INTEGER}
+    </update>
+
+    <!-- 账户收入sql-->
+    <update id="incomeForAdmin" parameterType="com.xq.live.vo.in.UserAccountInVo">
+         update user_account
+        set account_amount = account_amount + #{occurAmount,jdbcType=DECIMAL},
+              update_time = now(),
+              version_no = version_no + 1
+        where shop_id = #{shopId,jdbcType=BIGINT} AND user_account_type=1 and version_no = #{versionNo,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateBankDetailByShopId">
+        UPDATE user_account
+          <set>
+              <if test="accountName!=null">
+                  account_name=#{accountName},
+              </if>
+              <if test="cardBankname!=null">
+                  card_bankname=#{cardBankname},
+              </if>
+              <if test="accountCardholder">
+                  account_cardholder = #{accountCardholder},
+              </if>
+          </set>
+        <where>
+            shop_id=#{shopId} AND user_account_type=1 AND is_deleted=0
+        </where>
+    </update>
+
+    <update id="updateSecurityCodeById">
+        UPDATE user_account
+        SET security_code=#{userAccount.securityCode},update_time=#{userAccount.updateTime}
+        WHERE id=#{userAccount.id}
+    </update>
+
+    <update id="updateShopIdByUserId">
+      UPDATE user_account SET shop_id = #{shopId}, update_time = now() WHERE user_id = #{userId}
+    </update>
+
+</mapper>

@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.SalePointMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.SalePoint">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="salepoint_code" jdbcType="VARCHAR" property="salepointCode" />
+    <result column="salepoint_name" jdbcType="VARCHAR" property="salepointName" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="index_url" jdbcType="VARCHAR" property="indexUrl" />
+    <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
+    <result column="salepoint_info" jdbcType="VARCHAR" property="salepointInfo" />
+    <result column="location_x" jdbcType="DECIMAL" property="locationX" />
+    <result column="location_y" jdbcType="DECIMAL" property="locationY" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
+    <result column="apply_status" jdbcType="TINYINT" property="applyStatus" />
+    <result column="salepoint_status" jdbcType="TINYINT" property="salepointStatus" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="business_cate" jdbcType="VARCHAR" property="businessCate" />
+    <result column="location_point" jdbcType="OTHER" property="locationPoint" />
+    <result column="salepoint_hours" jdbcType="VARCHAR" property="salepointHours" />
+    <result column="other_service" jdbcType="VARCHAR" property="otherService" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="chain_type" jdbcType="INTEGER" property="chainType" />
+  </resultMap>
+
+  <resultMap id="SalePointOutResultMap" type="com.xq.live.vo.out.SalePointOut" extends="BaseResultMap">
+    <result column="distance" jdbcType="INTEGER" property="distance" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, salepoint_code, salepoint_name, city, address, mobile, phone, index_url, logo_url, 
+    salepoint_info, location_x, location_y, is_deleted, apply_status, salepoint_status, 
+    remark, create_time, update_time, business_cate, location_point, salepoint_hours, 
+    other_service,type,chain_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from salepoint
+    where id = #{id,jdbcType=BIGINT}
+    and is_deleted = 0
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from salepoint
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.SalePoint">
+    insert into salepoint (id, salepoint_code, salepoint_name, 
+      city, address, mobile, 
+      phone, index_url, logo_url, 
+      salepoint_info, location_x, location_y, 
+      is_deleted, apply_status, salepoint_status, 
+      remark, create_time, update_time, 
+      business_cate, location_point, salepoint_hours, 
+      other_service,chain_type)
+    values (#{id,jdbcType=BIGINT}, #{salepointCode,jdbcType=VARCHAR}, #{salepointName,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{indexUrl,jdbcType=VARCHAR}, #{logoUrl,jdbcType=VARCHAR}, 
+      #{salepointInfo,jdbcType=VARCHAR}, #{locationX,jdbcType=DECIMAL}, #{locationY,jdbcType=DECIMAL}, 
+      #{isDeleted,jdbcType=TINYINT}, #{applyStatus,jdbcType=TINYINT}, #{salepointStatus,jdbcType=TINYINT}, 
+      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{businessCate,jdbcType=VARCHAR}, #{locationPoint,jdbcType=OTHER}, #{salepointHours,jdbcType=VARCHAR}, 
+      #{otherService,jdbcType=VARCHAR},#{chainType,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.SalePoint">
+    insert into salepoint
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="salepointCode != null">
+        salepoint_code,
+      </if>
+      <if test="salepointName != null">
+        salepoint_name,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="indexUrl != null">
+        index_url,
+      </if>
+      <if test="logoUrl != null">
+        logo_url,
+      </if>
+      <if test="salepointInfo != null">
+        salepoint_info,
+      </if>
+      <if test="locationX != null">
+        location_x,
+      </if>
+      <if test="locationY != null">
+        location_y,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="applyStatus != null">
+        apply_status,
+      </if>
+      <if test="salepointStatus != null">
+        salepoint_status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="businessCate != null">
+        business_cate,
+      </if>
+      <if test="locationPoint != null">
+        location_point,
+      </if>
+      <if test="salepointHours != null">
+        salepoint_hours,
+      </if>
+      <if test="otherService != null">
+        other_service,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="salepointCode != null">
+        #{salepointCode,jdbcType=VARCHAR},
+      </if>
+      <if test="salepointName != null">
+        #{salepointName,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="indexUrl != null">
+        #{indexUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="logoUrl != null">
+        #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="salepointInfo != null">
+        #{salepointInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="locationX != null">
+        #{locationX,jdbcType=DECIMAL},
+      </if>
+      <if test="locationY != null">
+        #{locationY,jdbcType=DECIMAL},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="applyStatus != null">
+        #{applyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="salepointStatus != null">
+        #{salepointStatus,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="businessCate != null">
+        #{businessCate,jdbcType=VARCHAR},
+      </if>
+      <if test="locationPoint != null">
+        #{locationPoint,jdbcType=OTHER},
+      </if>
+      <if test="salepointHours != null">
+        #{salepointHours,jdbcType=VARCHAR},
+      </if>
+      <if test="otherService != null">
+        #{otherService,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.SalePoint">
+    update salepoint
+    <set>
+      <if test="salepointCode != null">
+        salepoint_code = #{salepointCode,jdbcType=VARCHAR},
+      </if>
+      <if test="salepointName != null">
+        salepoint_name = #{salepointName,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="indexUrl != null">
+        index_url = #{indexUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="logoUrl != null">
+        logo_url = #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="salepointInfo != null">
+        salepoint_info = #{salepointInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="locationX != null">
+        location_x = #{locationX,jdbcType=DECIMAL},
+      </if>
+      <if test="locationY != null">
+        location_y = #{locationY,jdbcType=DECIMAL},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="applyStatus != null">
+        apply_status = #{applyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="salepointStatus != null">
+        salepoint_status = #{salepointStatus,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="businessCate != null">
+        business_cate = #{businessCate,jdbcType=VARCHAR},
+      </if>
+      <if test="locationPoint != null">
+        location_point = #{locationPoint,jdbcType=OTHER},
+      </if>
+      <if test="salepointHours != null">
+        salepoint_hours = #{salepointHours,jdbcType=VARCHAR},
+      </if>
+      <if test="otherService != null">
+        other_service = #{otherService,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.SalePoint">
+    update salepoint
+    set salepoint_code = #{salepointCode,jdbcType=VARCHAR},
+      salepoint_name = #{salepointName,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      index_url = #{indexUrl,jdbcType=VARCHAR},
+      logo_url = #{logoUrl,jdbcType=VARCHAR},
+      salepoint_info = #{salepointInfo,jdbcType=VARCHAR},
+      location_x = #{locationX,jdbcType=DECIMAL},
+      location_y = #{locationY,jdbcType=DECIMAL},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      apply_status = #{applyStatus,jdbcType=TINYINT},
+      salepoint_status = #{salepointStatus,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      business_cate = #{businessCate,jdbcType=VARCHAR},
+      location_point = #{locationPoint,jdbcType=OTHER},
+      salepoint_hours = #{salepointHours,jdbcType=VARCHAR},
+      other_service = #{otherService,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="list" resultMap="SalePointOutResultMap">
+    SELECT
+    s.id,
+    s.salepoint_name,
+    s.address,
+    s.mobile,
+    s.phone,
+    s.index_url,
+    s.logo_url,
+    s.salepoint_info,
+    s.location_x,
+    s.location_y,
+    s.is_deleted,
+    s.remark,
+    s.create_time,
+    s.update_time,
+    s.apply_status,
+    s.business_cate,
+    s.salepoint_code,
+    s.salepoint_hours,
+    s.other_service,
+    s.city,
+    s.type,
+    s.chain_type,
+    <choose>
+      <when test="locationX != null and locationY != null"> ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        <if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180 - s.location_y * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS(<if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180) * COS(s.location_y * PI() / 180) * POW(
+        SIN(
+        (
+        <if test="locationX != null">
+          #{locationX}
+        </if> * PI() / 180 - s.location_x * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ) * 1000
+        )</when>
+      <when test="locationX == null or locationY == null">0</when>
+    </choose>
+    AS distance,
+    ' ' as rule_desc
+    FROM
+    salepoint s
+    <where>
+      1=1 and s.is_deleted = 0
+      <if test="searchKey !=null">
+        and (s.id = #{searchKey} or salepoint_name like concat('%', #{searchKey}, '%'))
+      </if>
+      <if test="salepointName !=null">
+        and s.salepoint_name like concat('%', #{salepointName}, '%')
+      </if>
+      <if test="city !=null">
+        and s.city = #{city}
+      </if>
+      <if test="chainType !=null">
+        and s.chain_type = #{chainType}
+      </if>
+      <if test="type !=null">
+        and s.type = #{type}
+      </if>
+      <if test="salepointCode != null">
+        AND s.salepoint_code = #{salepointCode,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by
+    distance
+    limit #{start}, #{rows}
+  </select>
+
+  <select id="listTotal" resultType="java.lang.Integer">
+    select count(1) from salepoint s
+    <where>
+      1=1 and s.is_deleted = 0
+      <if test="searchKey !=null">
+        and (s.id = #{searchKey} or salepoint_name like concat('%', #{searchKey}, '%'))
+      </if>
+      <if test="salepointName !=null">
+        and s.salepoint_name like concat('%', #{salepointName}, '%')
+      </if>
+      <if test="city !=null">
+        and s.city = #{city}
+      </if>
+      <if test="type !=null">
+        and s.type = #{type}
+      </if>
+      <if test="salepointCode != null">
+        AND s.salepoint_code = #{salepointCode,jdbcType=VARCHAR}
+      </if>
+      <if test="chainType !=null">
+        and s.chain_type = #{chainType}
+      </if>
+    </where>
+  </select>
+
+  <select id="listSalepointByGoodsSkuId" resultMap="SalePointOutResultMap">
+    select
+    s.*,
+    <choose>
+      <when test="locationX != null and locationY != null"> ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        <if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180 - s.location_y * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS(<if test="locationY != null">
+          #{locationY}
+        </if> * PI() / 180) * COS(s.location_y * PI() / 180) * POW(
+        SIN(
+        (
+        <if test="locationX != null">
+          #{locationX}
+        </if> * PI() / 180 - s.location_x * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ) * 1000
+        )</when>
+      <when test="locationX == null or locationY == null">0</when>
+    </choose>
+    AS distance
+    from salepoint s
+    left join salepoint_goods sg
+    on s.id=sg.salepoint_id
+    where sg.sku_id= #{goodsSkuId}
+    and  s.is_deleted = 0
+  </select>
+
+</mapper>

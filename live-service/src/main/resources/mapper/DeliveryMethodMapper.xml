@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.DeliveryMethodMapper">
+    <resultMap id="BaseResultMap" type="com.xq.live.model.DeliveryMethod">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="delivery_template_id" jdbcType="BIGINT" property="deliveryTemplateId" />
+        <result column="region" jdbcType="LONGVARCHAR" property="region" />
+        <result column="region_desc" jdbcType="VARCHAR" property="regionDesc"/>
+        <result column="first_piece" jdbcType="INTEGER" property="firstPiece" />
+        <result column="first_weight" jdbcType="DECIMAL" property="firstWeight" />
+        <result column="first_bulk" jdbcType="DECIMAL" property="firstBulk" />
+        <result column="first_amount" jdbcType="DECIMAL" property="firstAmount" />
+        <result column="second_piece" jdbcType="INTEGER" property="secondPiece" />
+        <result column="second_weight" jdbcType="DECIMAL" property="secondWeight" />
+        <result column="second_bulk" jdbcType="DECIMAL" property="secondBulk" />
+        <result column="second_amount" jdbcType="DECIMAL" property="secondAmount" />
+        <result column="delivery_method_type" jdbcType="INTEGER" property="deliveryMethodType" />
+        <result column="is_default" jdbcType="INTEGER" property="isDefault" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, delivery_template_id, region, region_desc,first_piece, first_weight, first_bulk, first_amount,
+        second_piece, second_weight, second_bulk, second_amount, delivery_method_type, is_default,
+        create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from delivery_method
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="findListByTemplateId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from delivery_method
+        where delivery_template_id = #{deliveryTemplateId,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from delivery_method
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.xq.live.model.DeliveryMethod">
+        insert into delivery_method (id, delivery_template_id, region,region_desc,
+        first_piece, first_weight, first_bulk,
+        first_amount, second_piece, second_weight,
+        second_bulk, second_amount, delivery_method_type,
+        is_default, create_time, update_time
+        )
+        values (#{id,jdbcType=BIGINT}, #{deliveryTemplateId,jdbcType=BIGINT}, #{region,jdbcType=LONGVARCHAR},#{regionDesc,jdbcType=VARCHAR},
+        #{firstPiece,jdbcType=INTEGER}, #{firstWeight,jdbcType=DECIMAL}, #{firstBulk,jdbcType=DECIMAL},
+        #{firstAmount,jdbcType=DECIMAL}, #{secondPiece,jdbcType=INTEGER}, #{secondWeight,jdbcType=DECIMAL},
+        #{secondBulk,jdbcType=DECIMAL}, #{secondAmount,jdbcType=DECIMAL}, #{deliveryMethodType,jdbcType=INTEGER},
+        #{isDefault,jdbcType=INTEGER}, now(), now()
+        )
+        <selectKey resultType="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+    </insert>
+    <insert id="insertSelective" parameterType="com.xq.live.model.DeliveryMethod">
+        insert into delivery_method
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="deliveryTemplateId != null">
+                delivery_template_id,
+            </if>
+            <if test="region != null">
+                region,
+            </if>
+            <if test="regionDesc != null">
+                region_desc,
+            </if>
+            <if test="firstPiece != null">
+                first_piece,
+            </if>
+            <if test="firstWeight != null">
+                first_weight,
+            </if>
+            <if test="firstBulk != null">
+                first_bulk,
+            </if>
+            <if test="firstAmount != null">
+                first_amount,
+            </if>
+            <if test="secondPiece != null">
+                second_piece,
+            </if>
+            <if test="secondWeight != null">
+                second_weight,
+            </if>
+            <if test="secondBulk != null">
+                second_bulk,
+            </if>
+            <if test="secondAmount != null">
+                second_amount,
+            </if>
+            <if test="deliveryMethodType != null">
+                delivery_method_type,
+            </if>
+            <if test="isDefault != null">
+                is_default,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="deliveryTemplateId != null">
+                #{deliveryTemplateId,jdbcType=BIGINT},
+            </if>
+            <if test="region != null">
+                #{region,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="regionDesc != null">
+                #{regionDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="firstPiece != null">
+                #{firstPiece,jdbcType=INTEGER},
+            </if>
+            <if test="firstWeight != null">
+                #{firstWeight,jdbcType=DECIMAL},
+            </if>
+            <if test="firstBulk != null">
+                #{firstBulk,jdbcType=DECIMAL},
+            </if>
+            <if test="firstAmount != null">
+                #{firstAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="secondPiece != null">
+                #{secondPiece,jdbcType=INTEGER},
+            </if>
+            <if test="secondWeight != null">
+                #{secondWeight,jdbcType=DECIMAL},
+            </if>
+            <if test="secondBulk != null">
+                #{secondBulk,jdbcType=DECIMAL},
+            </if>
+            <if test="secondAmount != null">
+                #{secondAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="deliveryMethodType != null">
+                #{deliveryMethodType,jdbcType=INTEGER},
+            </if>
+            <if test="isDefault != null">
+                #{isDefault,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.DeliveryMethod">
+        update delivery_method
+        <set>
+            <if test="deliveryTemplateId != null">
+                delivery_template_id = #{deliveryTemplateId,jdbcType=BIGINT},
+            </if>
+            <if test="region != null">
+                region = #{region,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="regionDesc != null">
+                region_desc = #{regionDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="firstPiece != null">
+                first_piece = #{firstPiece,jdbcType=INTEGER},
+            </if>
+            <if test="firstWeight != null">
+                first_weight = #{firstWeight,jdbcType=DECIMAL},
+            </if>
+            <if test="firstBulk != null">
+                first_bulk = #{firstBulk,jdbcType=DECIMAL},
+            </if>
+            <if test="firstAmount != null">
+                first_amount = #{firstAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="secondPiece != null">
+                second_piece = #{secondPiece,jdbcType=INTEGER},
+            </if>
+            <if test="secondWeight != null">
+                second_weight = #{secondWeight,jdbcType=DECIMAL},
+            </if>
+            <if test="secondBulk != null">
+                second_bulk = #{secondBulk,jdbcType=DECIMAL},
+            </if>
+            <if test="secondAmount != null">
+                second_amount = #{secondAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="deliveryMethodType != null">
+                delivery_method_type = #{deliveryMethodType,jdbcType=INTEGER},
+            </if>
+            <if test="isDefault != null">
+                is_default = #{isDefault,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.xq.live.model.DeliveryMethod">
+        update delivery_method
+        set delivery_template_id = #{deliveryTemplateId,jdbcType=BIGINT},
+        region = #{region,jdbcType=LONGVARCHAR},
+        region_desc = #{regionDesc,jdbcType=VARCHAR},
+        first_piece = #{firstPiece,jdbcType=INTEGER},
+        first_weight = #{firstWeight,jdbcType=DECIMAL},
+        first_bulk = #{firstBulk,jdbcType=DECIMAL},
+        first_amount = #{firstAmount,jdbcType=DECIMAL},
+        second_piece = #{secondPiece,jdbcType=INTEGER},
+        second_weight = #{secondWeight,jdbcType=DECIMAL},
+        second_bulk = #{secondBulk,jdbcType=DECIMAL},
+        second_amount = #{secondAmount,jdbcType=DECIMAL},
+        delivery_method_type = #{deliveryMethodType,jdbcType=INTEGER},
+        is_default = #{isDefault,jdbcType=INTEGER},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

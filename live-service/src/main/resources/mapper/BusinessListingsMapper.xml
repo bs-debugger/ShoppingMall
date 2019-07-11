@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.BusinessListingsMapper">
+
+    <resultMap id="teamMap" type="com.xq.live.vo.out.BusinessListingsOut">
+        <!--team中的基本属性-->
+        <id column="id" property="id"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="city" property="city"/>
+        <result column="mobile" property="mobile"/>
+        <result column="create_time" property="settlingTime"/>
+        <result column="logo_url" property="logoUrl"/>
+        <result column="address" property="address"/>
+        <result column="orderToday" property="orderToday"/>
+        <result column="orderHistory" property="orderHistory"/>
+        <result column="adminMobile" property="adminMobile"/>
+    </resultMap>
+
+    <!--商家列表信息-->
+    <select id="getList" parameterType="com.xq.live.vo.in.BusinessListingsInVo"  resultMap="teamMap">
+    SELECT
+    s.id,
+	s.shop_name,
+    s.city,
+	s.mobile,
+	s.create_time,
+    s.logo_url,
+	s.address,
+    (select COUNT(1) from order_write_off  WHERE shop_id=s.id and to_days(create_time) = to_days(now())) as orderToday,
+    (select COUNT(1) from order_write_off  WHERE shop_id=s.id) as orderHistory,
+    (SELECT cashier_name from shop_cashier c WHERE c.shop_id = s.id and c.is_admin=1 and c.is_deleted=0 ) as adminMobile
+     FROM
+     shop s
+     LEFT JOIN shop_zone_item i
+     on s.shop_zone_item_id = i.id
+     where s.is_deleted=0
+         <if test="position != null and position != ''">
+         and    i.name =#{position}
+         </if>
+         <if test="beginTime !=null and beginTime!='' and endTime !=null and endTime!=''">
+             and s.create_time BETWEEN DATE_FORMAT(#{beginTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+             and DATE_FORMAT(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+         </if>
+         <if test="keywords != null and keywords != '' ">
+             AND
+             (
+             s.shop_name LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+             s.city LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%')
+             )
+         </if>
+         <if test="id != null and id != ''">
+         and   s.id=#{id}
+         </if>
+    </select>
+
+    <!--店铺所有商品-->
+    <select id="getShopList" parameterType="com.xq.live.vo.in.BusinessListingsInVo" resultType="com.xq.live.vo.out.BusinessListingsOut">
+     SELECT
+     s.id,
+	 s.sku_name,
+	 s.sell_price,
+	 s.sku_pic,
+     d.content,
+     s.goods_sku_pics,
+     (SELECT COUNT(1) from order_write_off o WHERE o.goods_sku_id=s.id and to_days(s.create_time) = to_days(now())) as orderToday,
+     (select COUNT(1) from order_write_off o WHERE o.goods_sku_id=s.id) as orderHistory
+     FROM
+	 goods_sku s
+     LEFT JOIN goods_spu_desc d on  d.spu_id=s.spu_id
+     where  1=1
+     <if test="id != null">
+      and  s.shop_id=#{id}
+     </if>
+     </select>
+
+    <!--店铺所有核销员-->
+    <select id="getClerkList" parameterType="String" resultType="com.xq.live.model.ShopCashier">
+        select id,cashier_name from shop_cashier  where shop_id=#{id}
+    </select>
+
+    <!--店铺主图-->
+    <select id="getShopOwnerList" parameterType="String" resultType="java.util.Map">
+       SELECT
+	   a.id,
+	   a.small_pic_url as smallPicUrl,
+	   a.pic_url as picUrl
+       FROM
+	   shop_top_pic p
+       LEFT JOIN attachment a ON p.attachement_id = a.id WHERE  p.is_deleted=0 and p.shop_id=#{id}
+    </select>
+
+    <!--编辑商品信息-->
+    <update id="updateGoods" parameterType="com.xq.live.vo.in.BusinessListingsInVo">
+    update goods_sku s
+    LEFT JOIN goods_spu_desc d on  d.spu_id=s.spu_id
+    <set>
+        <if test="skuName != null">s.sku_name=#{skuName},</if>
+        <if test="sellPrice != null">s.sell_price=#{sellPrice},</if>
+        <if test="skuPic != null">s.sku_pic=#{skuPic},</if>
+        <if test="content != null">d.content=#{content},</if>
+        <if test="goodsSkuPics != null">s.goods_sku_pics=#{goodsSkuPics}</if>
+    </set>
+        where s.id=#{id}
+    </update>
+
+    <!--编辑商家信息-->
+    <update id="updateBusinesses" parameterType="com.xq.live.vo.in.BusinessListingsInVo">
+    update shop s
+        LEFT JOIN shop_cashier d on s.id = d.shop_id
+        <set>
+            <if test="shopName != null">s.shop_name=#{shopName},</if>
+            <if test="mobile != null">s.mobile=#{mobile},</if>
+            <if test="address != null">s.address=#{address},</if>
+            <if test="adminMobile != null">d.cashier_name=#{adminMobile},</if>
+        </set>
+        where d.is_admin=1 and d.is_deleted=0 and s.id=#{id}
+    </update>
+
+    <!--删除核销员-->
+    <update id="updateClerk" parameterType="com.xq.live.vo.in.BusinessListingsInVo">
+        update  shop_cashier set is_deleted=1 where id=#{id}
+    </update>
+
+    <!--商铺主图删除-->
+    <update id="updateShopOwnerMap" parameterType="com.xq.live.vo.in.BusinessListingsInVo">
+        update shop_top_pic set is_deleted = 1 where attachement_id=#{id}
+    </update>
+
+    <!--获取核销员cashier_id-->
+    <select id="getCashier" parameterType="com.xq.live.vo.in.BusinessListingsInVo" resultType="java.lang.String">
+        select id from user where user_name=#{mobile}
+    </select>
+
+    <!--新增核销员-->
+    <insert id="insertClerk" parameterType="com.xq.live.vo.in.BusinessListingsInVo">
+        INSERT INTO shop_cashier (cashier_id,cashier_name,shop_id,is_admin,is_deleted,create_time) values(#{CashierId},#{mobile},#{id},0,0,NOW())
+    </insert>
+
+    <!--删除商家信息-->
+    <delete id="deleteBusinesses" parameterType="com.xq.live.vo.in.BusinessListingsInVo" >
+          update shop set is_deleted=1 where id=#{id}
+    </delete>
+
+    <!--新增商家信息-->
+    <insert id="insertShopOwnerMap" parameterType="com.xq.live.vo.in.BusinessListingsInVo" useGeneratedKeys="true" keyProperty="id">
+         insert into attachment (small_pic_url,pic_url,sort_num,create_time) values (#{smallPidcUrl},#{picUrl},0,NOW())
+    </insert>
+
+    <!--新增中间表-->
+    <insert id="insertShopTopPic" parameterType="com.xq.live.vo.in.BusinessListingsInVo">
+        insert  into shop_top_pic (shop_id,attachement_id,is_deleted,create_time) values (#{id},#{attachementId},0,NOW())
+    </insert>
+</mapper>

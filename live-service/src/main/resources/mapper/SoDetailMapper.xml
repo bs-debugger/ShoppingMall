@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.SoDetailMapper">
+    <resultMap id="BaseResultMap" type="com.xq.live.model.SoDetail">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="so_id" jdbcType="BIGINT" property="soId"/>
+        <result column="sku_id" jdbcType="BIGINT" property="skuId"/>
+        <result column="sku_code" jdbcType="VARCHAR" property="skuCode"/>
+        <result column="sku_name" jdbcType="VARCHAR" property="skuName"/>
+        <result column="sku_num" jdbcType="INTEGER" property="skuNum"/>
+        <result column="unit_price" jdbcType="DECIMAL" property="unitPrice"/>
+        <result column="dish_sku_id" jdbcType="BIGINT" property="dishSkuId"/>
+        <result column="dish_sku_name" jdbcType="VARCHAR" property="dishSkuName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+      id, so_id, sku_id, sku_code, sku_name, sku_num, unit_price, dish_sku_id,dish_sku_name,create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from so_detail
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from so_detail
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.xq.live.model.SoDetail">
+        insert into so_detail (so_id, sku_id,
+        sku_code, sku_name, sku_num,
+        unit_price, dish_sku_id,dish_sku_name,create_time, update_time
+        )
+        values (#{soId,jdbcType=BIGINT}, #{skuId,jdbcType=BIGINT},
+        #{skuCode,jdbcType=VARCHAR}, #{skuName,jdbcType=VARCHAR}, #{skuNum,jdbcType=INTEGER},
+        #{unitPrice,jdbcType=DECIMAL}, #{dishSkuId,jdbcType=BIGINT},#{dishSkuName,jdbcType=VARCHAR},now(), now()
+        )
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            select last_insert_id() as id
+        </selectKey>
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.xq.live.model.SoDetail">
+        insert into so_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="soId != null">
+                so_id,
+            </if>
+            <if test="skuId != null">
+                sku_id,
+            </if>
+            <if test="skuCode != null">
+                sku_code,
+            </if>
+            <if test="skuName != null">
+                sku_name,
+            </if>
+            <if test="skuNum != null">
+                sku_num,
+            </if>
+            <if test="unitPrice != null">
+                unit_price,
+            </if>
+            <if test="dishSkuId != null">
+                dish_sku_id,
+            </if>
+            <if test="dishSkuName != null">
+                dish_sku_name,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="soId != null">
+                #{soId,jdbcType=BIGINT},
+            </if>
+            <if test="skuId != null">
+                #{skuId,jdbcType=BIGINT},
+            </if>
+            <if test="skuCode != null">
+                #{skuCode,jdbcType=VARCHAR},
+            </if>
+            <if test="skuName != null">
+                #{skuName,jdbcType=VARCHAR},
+            </if>
+            <if test="skuNum != null">
+                #{skuNum,jdbcType=INTEGER},
+            </if>
+            <if test="unitPrice != null">
+                #{unitPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="dishSkuId != null">
+                #{dishSkuId,jdbcType=BIGINT},
+            </if>
+            <if test="dishSkuName != null">
+                #{dishSkuName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.SoDetail">
+        update so_detail
+        <set>
+            <if test="soId != null">
+                so_id = #{soId,jdbcType=BIGINT},
+            </if>
+            <if test="skuId != null">
+                sku_id = #{skuId,jdbcType=BIGINT},
+            </if>
+            <if test="skuCode != null">
+                sku_code = #{skuCode,jdbcType=VARCHAR},
+            </if>
+            <if test="skuName != null">
+                sku_name = #{skuName,jdbcType=VARCHAR},
+            </if>
+            <if test="skuNum != null">
+                sku_num = #{skuNum,jdbcType=INTEGER},
+            </if>
+            <if test="unitPrice != null">
+                unit_price = #{unitPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="dishSkuId != null">
+               dish_sku_id = #{dishSkuId,jdbcType=BIGINT},
+            </if>
+            <if test="dishSkuName != null">
+               dish_sku_name = #{dishSkuName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.xq.live.model.SoDetail">
+    update so_detail
+    set so_id = #{soId,jdbcType=BIGINT},
+      sku_id = #{skuId,jdbcType=BIGINT},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      sku_name = #{skuName,jdbcType=VARCHAR},
+      sku_num = #{skuNum,jdbcType=INTEGER},
+      unit_price = #{unitPrice,jdbcType=DECIMAL},
+      dish_sku_id = #{dishSkuId,jdbcType=BIGINT},
+      dish_sku_name = #{dishSkuName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

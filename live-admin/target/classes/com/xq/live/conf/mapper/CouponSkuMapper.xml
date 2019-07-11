@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.CouponSkuDao">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.CouponSku">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sku_id" jdbcType="BIGINT" property="skuId" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="sku_name" jdbcType="VARCHAR" property="skuName" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, sku_id, sku_code,sku_name, amount, type, is_deleted, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from coupon_sku
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from coupon_sku
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.CouponSku">
+    insert into coupon_sku (id, sku_id, sku_code, sku_name,
+      amount, type, is_deleted, 
+      create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{skuId,jdbcType=BIGINT}, #{skuCode,jdbcType=VARCHAR}, #{skuName,jdbcType=VARCHAR},
+    #{amount,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, 0,
+      now(),now())
+      <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+        select last_insert_id() as id
+      </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.CouponSku">
+    insert into coupon_sku
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="skuId != null">
+        sku_id,
+      </if>
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="skuId != null">
+        #{skuId,jdbcType=BIGINT},
+      </if>
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.CouponSku">
+    update coupon_sku
+    <set>
+      <if test="skuId != null">
+        sku_id = #{skuId,jdbcType=BIGINT},
+      </if>
+      <if test="skuCode != null and skuCode != ''">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuName != null and skuName !=''">
+        sku_name = #{skuName,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.CouponSku">
+    update coupon_sku
+    set sku_id = #{skuId,jdbcType=BIGINT},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      sku_name = #{skuName,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      update_time = now()
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+  <!-- 查询条件 -->
+  <sql id="Example_Where_Clause">
+    where 1=1
+    <trim  suffixOverrides="," >
+      <if test="id != null and id !=''">
+        and id = #{id}
+      </if>
+      <if test="skuId != null and skuId !=''">
+        and sku_id = #{skuId}
+      </if>
+      <if test="skuCode != null and skuCode !=''">
+        and sku_code = #{skuCode}
+      </if>
+      <if test="skuName != null and skuName !=''">
+        and sku_name like concat('%',#{skuName}, '%')
+      </if>
+      <if test="amount != null and amount !=''">
+        and amount = #{amount}
+      </if>
+      <if test="type != null and type !=''">
+        and type = #{type}
+      </if>
+      <if test="isDeleted != null and type !=''">
+        and is_deleted = #{isDeleted}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="queryWithPg" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from coupon_sku
+    <include refid="Example_Where_Clause"/>
+    <if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      ${pager.orderCondition}
+    </if>
+    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+      ${pager.mysqlQueryCondition}
+    </if>
+  </select>
+
+  <select id="queryWithCount" resultType="java.lang.Integer">
+    select count(1)
+    from coupon_sku
+    <include refid="Example_Where_Clause"/>
+  </select>
+</mapper>

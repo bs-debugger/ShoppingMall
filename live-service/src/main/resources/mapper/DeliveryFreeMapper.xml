@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.DeliveryFreeMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.DeliveryFree">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="delivery_template_id" jdbcType="BIGINT" property="deliveryTemplateId" />
+    <result column="region" jdbcType="LONGVARCHAR" property="region" />
+    <result column="piece_num" jdbcType="INTEGER" property="pieceNum" />
+    <result column="weight_num" jdbcType="DECIMAL" property="weightNum" />
+    <result column="bulk_num" jdbcType="DECIMAL" property="bulkNum" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, delivery_template_id, region, piece_num, weight_num, bulk_num, amount, create_time, 
+    update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from delivery_free
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="findListByTemplateId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from delivery_free
+    where delivery_template_id = #{deliveryTemplateId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from delivery_free
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.DeliveryFree">
+    insert into delivery_free (id, delivery_template_id, region, 
+      piece_num, weight_num, bulk_num, 
+      amount, create_time, update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{deliveryTemplateId,jdbcType=BIGINT}, #{region,jdbcType=LONGVARCHAR},
+      #{pieceNum,jdbcType=INTEGER}, #{weightNum,jdbcType=DECIMAL}, #{bulkNum,jdbcType=DECIMAL}, 
+      #{amount,jdbcType=DECIMAL}, now(), now()
+      )
+    <selectKey resultType="java.lang.Long" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.DeliveryFree">
+    insert into delivery_free
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="deliveryTemplateId != null">
+        delivery_template_id,
+      </if>
+      <if test="region != null">
+        region,
+      </if>
+      <if test="pieceNum != null">
+        piece_num,
+      </if>
+      <if test="weightNum != null">
+        weight_num,
+      </if>
+      <if test="bulkNum != null">
+        bulk_num,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="deliveryTemplateId != null">
+        #{deliveryTemplateId,jdbcType=BIGINT},
+      </if>
+      <if test="region != null">
+        #{region,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="pieceNum != null">
+        #{pieceNum,jdbcType=INTEGER},
+      </if>
+      <if test="weightNum != null">
+        #{weightNum,jdbcType=DECIMAL},
+      </if>
+      <if test="bulkNum != null">
+        #{bulkNum,jdbcType=DECIMAL},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.DeliveryFree">
+    update delivery_free
+    <set>
+      <if test="deliveryTemplateId != null">
+        delivery_template_id = #{deliveryTemplateId,jdbcType=BIGINT},
+      </if>
+      <if test="region != null">
+        region = #{region,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="pieceNum != null">
+        piece_num = #{pieceNum,jdbcType=INTEGER},
+      </if>
+      <if test="weightNum != null">
+        weight_num = #{weightNum,jdbcType=DECIMAL},
+      </if>
+      <if test="bulkNum != null">
+        bulk_num = #{bulkNum,jdbcType=DECIMAL},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.DeliveryFree">
+    update delivery_free
+    set delivery_template_id = #{deliveryTemplateId,jdbcType=BIGINT},
+      region = #{region,jdbcType=LONGVARCHAR},
+      piece_num = #{pieceNum,jdbcType=INTEGER},
+      weight_num = #{weightNum,jdbcType=DECIMAL},
+      bulk_num = #{bulkNum,jdbcType=DECIMAL},
+      amount = #{amount,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

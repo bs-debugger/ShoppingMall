@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.ActTimeRulesMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.ActTimeRules">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="rule_type" jdbcType="INTEGER" property="ruleType" />
+    <result column="ref_id" jdbcType="BIGINT" property="refId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="week_days" jdbcType="VARCHAR" property="weekDays" />
+    <result column="start_hour" jdbcType="INTEGER" property="startHour" />
+    <result column="start_minuts" jdbcType="INTEGER" property="startMinuts" />
+    <result column="end_hour" jdbcType="INTEGER" property="endHour" />
+    <result column="end_minuts" jdbcType="INTEGER" property="endMinuts" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, rule_type, ref_id, create_time, update_time, is_deleted, week_days, start_hour, 
+    start_minuts, end_hour, end_minuts
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from act_time_rules
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from act_time_rules
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.ActTimeRules">
+    insert into act_time_rules (id, rule_type, ref_id, 
+      create_time, update_time, is_deleted, 
+      week_days, start_hour, start_minuts, 
+      end_hour, end_minuts)
+    values (#{id,jdbcType=BIGINT}, #{ruleType,jdbcType=INTEGER}, #{refId,jdbcType=BIGINT}, 
+      now(), now(), 0,
+      #{weekDays,jdbcType=VARCHAR}, #{startHour,jdbcType=INTEGER}, #{startMinuts,jdbcType=INTEGER}, 
+      #{endHour,jdbcType=INTEGER}, #{endMinuts,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.ActTimeRules">
+    insert into act_time_rules
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="ruleType != null">
+        rule_type,
+      </if>
+      <if test="refId != null">
+        ref_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="weekDays != null">
+        week_days,
+      </if>
+      <if test="startHour != null">
+        start_hour,
+      </if>
+      <if test="startMinuts != null">
+        start_minuts,
+      </if>
+      <if test="endHour != null">
+        end_hour,
+      </if>
+      <if test="endMinuts != null">
+        end_minuts,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="ruleType != null">
+        #{ruleType,jdbcType=INTEGER},
+      </if>
+      <if test="refId != null">
+        #{refId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="weekDays != null">
+        #{weekDays,jdbcType=VARCHAR},
+      </if>
+      <if test="startHour != null">
+        #{startHour,jdbcType=INTEGER},
+      </if>
+      <if test="startMinuts != null">
+        #{startMinuts,jdbcType=INTEGER},
+      </if>
+      <if test="endHour != null">
+        #{endHour,jdbcType=INTEGER},
+      </if>
+      <if test="endMinuts != null">
+        #{endMinuts,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.ActTimeRules">
+    update act_time_rules
+    <set>
+      <if test="ruleType != null">
+        rule_type = #{ruleType,jdbcType=INTEGER},
+      </if>
+      <if test="refId != null">
+        ref_id = #{refId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="weekDays != null">
+        week_days = #{weekDays,jdbcType=VARCHAR},
+      </if>
+      <if test="startHour != null">
+        start_hour = #{startHour,jdbcType=INTEGER},
+      </if>
+      <if test="startMinuts != null">
+        start_minuts = #{startMinuts,jdbcType=INTEGER},
+      </if>
+      <if test="endHour != null">
+        end_hour = #{endHour,jdbcType=INTEGER},
+      </if>
+      <if test="endMinuts != null">
+        end_minuts = #{endMinuts,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.ActTimeRules">
+    update act_time_rules
+    set rule_type = #{ruleType,jdbcType=INTEGER},
+      ref_id = #{refId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      week_days = #{weekDays,jdbcType=VARCHAR},
+      start_hour = #{startHour,jdbcType=INTEGER},
+      start_minuts = #{startMinuts,jdbcType=INTEGER},
+      end_hour = #{endHour,jdbcType=INTEGER},
+      end_minuts = #{endMinuts,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.VipGradeConfigMapper">
+  <resultMap id="BaseResultMap" type="com.xq.live.model.VipGradeConfig">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="vip_type_id" jdbcType="BIGINT" property="vipTypeId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="grade" jdbcType="INTEGER" property="grade" />
+    <result column="grade_name" jdbcType="VARCHAR" property="gradeName" />
+    <result column="points" jdbcType="INTEGER" property="points" />
+    <result column="discount" jdbcType="DECIMAL" property="discount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, vip_type_id, create_time, update_time, is_deleted, grade, grade_name, points, 
+    discount
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from vip_grade_config
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from vip_grade_config
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xq.live.model.VipGradeConfig">
+    insert into vip_grade_config (id, vip_type_id, create_time, 
+      update_time, is_deleted, grade, 
+      grade_name, points, discount
+      )
+    values (#{id,jdbcType=BIGINT}, #{vipTypeId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=INTEGER}, #{grade,jdbcType=INTEGER}, 
+      #{gradeName,jdbcType=VARCHAR}, #{points,jdbcType=INTEGER}, #{discount,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xq.live.model.VipGradeConfig">
+    insert into vip_grade_config
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="vipTypeId != null">
+        vip_type_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="grade != null">
+        grade,
+      </if>
+      <if test="gradeName != null">
+        grade_name,
+      </if>
+      <if test="points != null">
+        points,
+      </if>
+      <if test="discount != null">
+        discount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="vipTypeId != null">
+        #{vipTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="grade != null">
+        #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="gradeName != null">
+        #{gradeName,jdbcType=VARCHAR},
+      </if>
+      <if test="points != null">
+        #{points,jdbcType=INTEGER},
+      </if>
+      <if test="discount != null">
+        #{discount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xq.live.model.VipGradeConfig">
+    update vip_grade_config
+    <set>
+      <if test="vipTypeId != null">
+        vip_type_id = #{vipTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="grade != null">
+        grade = #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="gradeName != null">
+        grade_name = #{gradeName,jdbcType=VARCHAR},
+      </if>
+      <if test="points != null">
+        points = #{points,jdbcType=INTEGER},
+      </if>
+      <if test="discount != null">
+        discount = #{discount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xq.live.model.VipGradeConfig">
+    update vip_grade_config
+    set vip_type_id = #{vipTypeId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      grade = #{grade,jdbcType=INTEGER},
+      grade_name = #{gradeName,jdbcType=VARCHAR},
+      points = #{points,jdbcType=INTEGER},
+      discount = #{discount,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--过会员类型和等级查询会员等级配置-->
+  <select id="selectByTypeAndGrade"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vip_grade_config
+    where vip_type_id = #{vipTypeId,jdbcType=BIGINT}
+    and grade = #{grade,jdbcType=INTEGER}
+    and is_deleted=0
+  </select>
+
+</mapper>

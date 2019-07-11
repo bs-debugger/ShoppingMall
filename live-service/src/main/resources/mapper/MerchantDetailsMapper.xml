@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.live.dao.MerchantDetailsMapper">
+    <!--获取商户明细列表-->
+    <select id="getList" parameterType="com.xq.live.vo.in.MerchantDetailsInVo" resultType="com.xq.live.vo.out.MerchantDetailsOut">
+        SELECT
+        s.id,
+        s.shop_name,
+        s.mobile,
+        s.city,
+        s.create_time,
+        i.`name` as prefectureName,
+        (SELECT COUNT(1) from order_write_off WHERE shop_id=s.id) as orderCount,
+        (SELECT SUM(real_shop_unit_price) from order_write_off where shop_id=s.id) as orderSum,
+        (SELECT COUNT(1) from account_log  where type=1 and  order_coupon_code is null and remark not like '%提现%' and account_id=c.id ) as orderQuantityCount,
+        ((SELECT SUM((CASE account_log.operate_type WHEN 1 THEN 0-operate_amount else account_log.operate_type END)
+        ) from account_log where type=1 and  order_coupon_code is null and remark not like '%提现%' and account_id=c.id)) as orderQuantitySum
+        FROM
+        shop s
+        LEFT JOIN shop_zone_item i
+        on s.shop_zone_item_id = i.id
+        LEFT JOIN user_account c
+        on c.shop_id=s.id
+        WHERE  c.user_account_type = 1
+        <if test="keywords != null and keywords != '' ">
+            AND
+            (
+            s.id LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+            s.shop_name LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%')
+            )
+        </if>
+        <if test="position != null and position != ''">
+            AND i.`name`=#{position}
+        </if>
+        <if test="beginTime !=null and beginTime!='' and endTime !=null and endTime!=''">
+            and s.create_time BETWEEN DATE_FORMAT(#{beginTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+            and DATE_FORMAT(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+        </if>
+    <if test="page!=null and rows>0">
+        limit #{start}, #{rows}
+    </if>
+    </select>
+
+    <!--获取商户明细列表条数-->
+    <select id="getListCount" parameterType="com.xq.live.vo.in.MerchantDetailsInVo" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        FROM
+        shop s
+        LEFT JOIN shop_zone_item i
+        on s.shop_zone_item_id = i.id
+        LEFT JOIN user_account c
+        on c.shop_id=s.id
+        WHERE  c.user_account_type = 1
+        <if test="keywords != null and keywords != '' ">
+            AND
+            (
+            s.id LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%') or
+            s.shop_name LIKE CONCAT('%',#{keywords , jdbcType=VARCHAR},'%')
+            )
+        </if>
+        <if test="position != null and position != ''">
+            AND i.`name`=#{position}
+        </if>
+        <if test="beginTime !=null and beginTime!='' and endTime !=null and endTime!=''">
+            and s.create_time BETWEEN DATE_FORMAT(#{beginTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+            and DATE_FORMAT(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+        </if>
+    </select>
+
+    <!--获取商户明细图表数据-->
+    <select id="getTableList" parameterType="com.xq.live.vo.in.MerchantDetailsInVo" resultType="map">
+        SELECT
+        IFNULL(count(1),0) as orderCount,
+        IFNULL(SUM(o.real_shop_unit_price),0) as orderSum
+        FROM
+        shop s
+        LEFT JOIN shop_zone_item i
+        on s.shop_zone_item_id = i.id
+        LEFT JOIN order_write_off o
+        on o.shop_id=s.id
+        LEFT JOIN shop_cashier  c
+        on c.shop_id=s.id
+        WHERE c.is_admin=1 and c.is_deleted=0
+        <if test="beginTime !=null and endTime != ''">
+            and (s.create_time BETWEEN #{beginTime} and #{endTime})
+        </if>
+    </select>
+
+    <!--商户明细详情-->
+    <select id="getDetails"  parameterType="com.xq.live.vo.in.MerchantDetailsInVo" resultType="com.xq.live.vo.out.MerchantDetailsOut">
+    SELECT
+     fo.order_code,
+     sk.sku_name,
+     o.service_amount,
+     fo.flag_type,
+     o.real_unit_price,
+     o.real_shop_unit_price,
+     o.create_time
+    FROM
+    order_write_off o
+    LEFT JOIN shop s ON s.id = o.shop_id
+    LEFT JOIN shop_cashier  c
+    on c.shop_id=s.id
+    LEFT JOIN order_info fo
+    on fo.id=o.order_id
+    LEFT JOIN goods_sku sk
+    on o.goods_sku_id= sk.id
+    WHERE c.is_admin=1 and c.is_deleted=0
+    <if test="id != null and id != ''">
+    AND s.id=#{id}
+    </if>
+    <if test="page!=null and rows>0">
+            limit #{start}, #{rows}
+    </if>
+    </select>
+
+
+    <select id="getDetailsCount" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        FROM
+        order_write_off o
+        LEFT JOIN shop s ON s.id = o.shop_id
+        LEFT JOIN shop_cashier  c
+        on c.shop_id=s.id
+        LEFT JOIN order_info fo
+        on fo.id=o.order_id
+        LEFT JOIN goods_sku sk
+        on o.goods_sku_id= sk.id
+        WHERE c.is_admin=1 and c.is_deleted=0
+        <if test="id != null and id != ''">
+            AND s.id=#{id}
+        </if>
+    </select>
+
+    <!--商户详情非订单-->
+    <select id="getNoDetails" parameterType="com.xq.live.vo.in.MerchantDetailsInVo" resultType="com.xq.live.vo.out.MerchantDetailsOut">
+    SELECT
+    l.operate_amount,
+    l.remark,
+    l.operate_type,
+    l.create_time
+    from shop s
+    LEFT JOIN user_account  c
+    on c.shop_id=s.id
+    LEFT JOIN account_log l
+    on  c.id =l.account_id
+    WHERE l.order_coupon_code is null and l.remark not like '%提现%' and c.user_account_type = 1
+    <if test="id != null and id != ''">
+    and    s.id=#{id}
+    </if>
+    <if test="page!=null and rows>0">
+            limit #{start}, #{rows}
+    </if>
+    </select>
+
+    <!--订单明细非订单详情count-->
+    <select id="getNoDetailsCount" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        from shop s
+        LEFT JOIN user_account  c
+        on c.shop_id=s.id
+        LEFT JOIN account_log l
+        on  c.id =l.account_id
+        WHERE l.order_coupon_code is null and l.remark not like '%提现%' and c.user_account_type = 1
+        <if test="id != null and id != ''">
+        and  s.id=#{id}
+        </if>
+    </select>
+    <resultMap id="BaseResultMap" type="com.xq.live.model.ShopZone">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="city" jdbcType="VARCHAR" property="city" />
+        <result column="region_name" jdbcType="VARCHAR" property="regionName" />
+        <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+        <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+    <resultMap id="ShopZoneOutOutResultMap" extends="BaseResultMap" type="com.xq.live.vo.out.ShopZoneOut">
+        <collection property="ShopZoneItem" ofType="com.xq.live.vo.out.ShopZoneItemOut">
+            <id column="szi_id" jdbcType="BIGINT" property="id" />
+            <result column="shop_zone_id" jdbcType="BIGINT" property="shopZoneId" />
+            <result column="name" jdbcType="VARCHAR" property="name" />
+            <result column="szi_pic_url" jdbcType="VARCHAR" property="picUrl" />
+            <result column="address" jdbcType="VARCHAR" property="address" />
+            <result column="phone" jdbcType="VARCHAR" property="phone" />
+            <result column="location_x" jdbcType="DECIMAL" property="locationX" />
+            <result column="location_y" jdbcType="DECIMAL" property="locationY" />
+            <result column="zone_info" jdbcType="VARCHAR" property="zoneInfo" />
+            <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+        </collection>
+    </resultMap>
+    <!--获取专区信息-->
+    <select id="listAllShopZone" resultMap="ShopZoneOutOutResultMap">
+        select sz.*,szi.id szi_id,szi.shop_zone_id ,szi.name,szi.pic_url szi_pic_url,szi.address,szi.phone,szi.location_x,szi.location_y,szi.zone_info
+        from shop_zone sz
+        left join shop_zone_item szi on szi.shop_zone_id=sz.id
+        where 1=1
+        and szi.is_deleted=0
+        and sz.is_deleted=0
+        order by sz.id,szi.id
+    </select>
+
+    <!--操作日志-->
+    <insert id="insertOperationLog" parameterType="com.xq.live.model.OperationLog">
+        insert into  sys_operation_log (type,remake,create_time) values(#{type},#{remake},now())
+    </insert>
+</mapper>
